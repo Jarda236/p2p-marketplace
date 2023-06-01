@@ -1,0 +1,61 @@
+@startuml P2P Marketplace
+
+entity Offer {
+    * id: <<uuid>>
+    --
+    * userId: <<FK>>
+    * name: string
+    * description: string
+    * price: decimal
+    * category: string
+    * pictures: <<url>>
+    * created_at: datetime
+
+    transactionId: <<FK>>
+    updated_at: datetime
+    deleted_at: datetime
+
+}
+
+entity User {
+    * id: <<uuid>>
+    --
+    * loginId: <<FK>>
+    * name: string
+    * email: string
+    * password: string
+    * phone: string
+    * address: string
+    * created_at: datetime
+    updated_at: datetime
+    deleted_at: datetime
+}
+
+entity Transaction {
+    * id: <<uuid>>
+    --
+    * sellerId: <<FK>>
+    * buyerId: <<FK>>
+    * amount: decimal
+    * status: string
+    * created_at: datetime
+    updated_at: datetime
+}
+
+entity FundsAccount {
+    * id: <<uuid>>
+    --
+    * userId: <<FK>>
+    * balance: decimal
+/'    * currency: string '/
+    * created_at: datetime
+    updated_at: datetime
+}
+
+User ||--o{ Offer : offers  
+User ||--o{ Transaction : recieved
+User ||--o{ Transaction : sent
+Offer ||--|| Transaction : has
+User ||--|| FundsAccount : owns
+
+@enduml
