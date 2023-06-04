@@ -1,6 +1,7 @@
 import React, {FC} from "react";
 import {Route, Routes} from "react-router-dom";
-import Overview from "./Offer/Overview/Overview";
+import OfferDetail from "./Offer/Detail/OfferDetail";
+import OfferOverview from "./Offer/Overview/OfferOverview";
 import WelcomePage from "./WelcomePage";
 
 export const App: FC = () => {
@@ -12,7 +13,8 @@ export const App: FC = () => {
             <main>
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />
-                    <Route path="/offers" element={<Overview />} />
+                    <Route path="/offers" element={<OfferOverview />} />
+                    <Route path="/offers/:offerId" element={<OfferDetail />} />
                 </Routes>
             </main>
         </>
