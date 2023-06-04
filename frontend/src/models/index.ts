@@ -1,3 +1,5 @@
+import {number, string} from "yup";
+
 export interface User {
     id: string;
     name: string;
@@ -13,8 +15,18 @@ export interface Offer {
     userId: string;
     userName: string;
     createdAt: number;
+    endDate: number,
     startingBid: number;
     topBid: number;
     instantBuyAmount: number;
     sold: boolean;
+    [key: string]: string | number | boolean;
+}
+
+export interface OfferCreateBody {
+    name: string;
+    description: string;
+    endDate: Date;
+    startingBid?: number;
+    instantBuyAmount?: number;
 }
