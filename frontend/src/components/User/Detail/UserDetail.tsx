@@ -2,7 +2,7 @@ import {FC} from "react";
 
 const UserDetail: FC = () => {
     return <>
-        <h2>User detail</h2>
+        <h2>User dedtail</h2>
 
     </>
 }
