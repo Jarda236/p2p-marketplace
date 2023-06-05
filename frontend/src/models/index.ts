@@ -33,9 +33,7 @@ export interface CounterOffer {
 export interface OfferCreateBody {
     name: string;
     description: string;
-    endDate: Date;
-    startingBid?: number;
-    instantBuyAmount?: number;
+    price: number;
 }
 
 export interface FromState {

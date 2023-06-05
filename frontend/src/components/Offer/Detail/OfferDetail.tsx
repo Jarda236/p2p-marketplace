@@ -18,9 +18,8 @@ const OfferDetail: FC = () => {
             <p>Description: {offer.description}</p>
                 <p>Seller: <NavLink to={"/users/".concat(offer.sellerId)}>{offer.userName}</NavLink></p>
             <p>Created at: {offer.createdAt}</p>
-            <p>Starting bid: {offer.startingBid}</p>
-            <p>Top bid: {offer.topBid}</p>
-            <p>Instant buy for {offer.instantBuyAmount}</p>
+            <p>Top offer: {offer.topOffer}</p>
+            <p>Price: {offer.price}</p>
             {offer?.sold ?
                 <p>SOLD</p> :
                 <>
