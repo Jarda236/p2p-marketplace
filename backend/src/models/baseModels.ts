@@ -10,7 +10,7 @@ export type ModelId = z.infer<typeof ModelIdSchema>;
 
 export const BaseModelSchema = z.object({
     createdAt: z.date(),
-    updatedAt: z.date().optional(),
+    updatedAt: z.date().nullable().optional(),
 }).merge(ModelIdSchema);
 
 export type BaseModel = z.infer<typeof BaseModelSchema>;
