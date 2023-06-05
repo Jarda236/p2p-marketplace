@@ -11,7 +11,6 @@ export const OfferSchema = z.object({
     category: z.string({ required_error: 'Property `category` is required' }).nonempty(),
     picture: z.string({ required_error: 'Property `picture` is required' }).nonempty(),
     sold_at: z.date().optional(),
-
 }).merge(BaseModelSchema)
 
 export type Offer = z.infer<typeof OfferSchema>;

@@ -3,25 +3,29 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String    @id @default(uuid()) //TODO add passwords?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id            String        @id @default(uuid())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  deletedAt     DateTime?
+  name          String
+  password_hash String
+  email         String
+  phone         String
+  address       String
+  rating_sum    Float
+  rating_count  Int
+  image         String?
 
-  name  String
-  email String
-
-  fundsAccount FundsAccount? //TODO: make this mandatory..
-  transactions Transaction[]
-  offers       Offer[]
-  CounterOffer CounterOffer[]
+  fundsAccount  FundsAccount? //TODO: make this mandatory..
+  transactions  Transaction[]
+  offers        Offer[]
+  CounterOffer  CounterOffer[]
 }
-
 model Category {
   id        String   @id @default(uuid())
   name String
