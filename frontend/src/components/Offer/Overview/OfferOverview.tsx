@@ -71,7 +71,7 @@ const OfferOverview: FC<Props> = (props) => {
     const handleOrderChange = (column: string, order: boolean) => {
         const updatedSortCriteria: ColumnToSort[] = sortCriteria.map(item => {
             if (item.column === column) {
-                return { ...item, order: !order };
+                return {...item, order: !order};
             }
             return item;
         });
@@ -79,15 +79,59 @@ const OfferOverview: FC<Props> = (props) => {
         changeSortCriteria(updatedSortCriteria);
     }
 
+    const getFilterIndex = (column: string): string => {
+        const index = sortCriteria.findIndex(o => o.column === column);
+        if (index === -1) {
+            return "OFF";
+        }
+        return sortCriteria[index].order ? "DESC" : "ASC";
+    }
+
+    const [sortList, showSortList] = useState<boolean>(false);
+    const filterComponent = <div style={{
+        display: "inline",
+        position: "absolute",
+        background: "whitesmoke"
+    }}>
+        <ul>
+            <li>
+                <p onClick={() => changeSortingDirection("name")}>Name {getFilterIndex("name")}</p>
+            </li>
+            <li>
+                <p onClick={() => changeSortingDirection("sellerName")}>Seller {getFilterIndex("sellerName")}</p>
+            </li>
+            <li>
+                <p onClick={() => changeSortingDirection("createdAt")}>Created at {getFilterIndex("createdAt")}</p>
+            </li>
+            <li>
+                <p onClick={() => changeSortingDirection("topOffer")}>Top offer {getFilterIndex("topOffer")}</p>
+            </li>
+            <li>
+                <p onClick={() => changeSortingDirection("price")}>Price {getFilterIndex("price")}</p>
+            </li>
+            <li>
+                <p onClick={() => changeSortingDirection("sold")}>Sold {getFilterIndex("sold")}</p>
+            </li>
+        </ul>
+    </div>
+
+    const [categoryList, showCategoryList] = useState<boolean>(false);
+    const categoryComponent = <div style={{
+        display: "inline",
+        position: "absolute",
+        background: "whitesmoke"
+    }}>
+
+    </div>
+
     const filteredOffers: Offer[] = filterOffers();
-/*<th onClick={() => changeSortingDirection("name")}>Name</th>
-                        <th onClick={() => changeSortingDirection("userName")}>Created by</th>
-                        <th onClick={() => changeSortingDirection("createdAt")}>Created at</th>
-                        <th onClick={() => changeSortingDirection("topOffer")}>Top offer</th>
-                        <th onClick={() => changeSortingDirection("instantBuyAmount")}>Price</th>
-                        <th onClick={() => changeSortingDirection("sold")}>Status</th>*/
-    return <>
+    return <div style={{position: "relative"}}>
         <h2>Offers Overview</h2>
+        <NavLink to="/offers/create">Create offer</NavLink>
+        <button type="button" onClick={() => showSortList(!sortList)}>Sort by</button>
+        {sortList && filterComponent}
+        <button type="button" onClick={() => showSortList(!sortList)}>Category</button>
+        {sortList && filterComponent}
         <div>
             <input
                 type="search"
@@ -96,26 +140,30 @@ const OfferOverview: FC<Props> = (props) => {
                 placeholder="Search"
             />
             {<p>Ordered by: {sortCriteria.map(item => <span key={item.column}
-                onDoubleClick={() => deleteSorting(item.column)}>{item.column.concat(" ".concat(item.order ? "d " : "a "))}</span>)}</p>}
+                                                            onDoubleClick={() => deleteSorting(item.column)}>{item.column.concat(" ")}</span>)}</p>}
             <table>
                 <thead>
-                    <p>Offers:</p>
+                <tr>
+                    <td>
+                        Offers:
+                    </td>
+                </tr>
                 </thead>
                 <tbody>
                 {filteredOffers?.map(offer =>
-                        <tr key={offer.id} onClick={() => handleClick(offer.id)}>
-                            <td>{offer.name}</td>
-                            <td>{offer.userName}</td>
-                            <td>{offer.createdAt}</td>
-                            <td>{offer.topOffer}</td>
-                            <td>{offer.price}</td>
-                            <td>{offer.sold ? "SOLD" : "OPEN"}</td>
-                        </tr>)}
+                    <tr key={offer.id} onClick={() => handleClick(offer.id)}>
+                        <td>{offer.name}</td>
+                        <td>{offer.userName}</td>
+                        <td>{offer.createdAt}</td>
+                        <td>{offer.topOffer}</td>
+                        <td>{offer.price}</td>
+                        <td>{offer.sold ? "SOLD" : "OPEN"}</td>
+                    </tr>)}
                 </tbody>
             </table>
         </div>
         <NavLink to="/">Home</NavLink>
-    </>
+    </div>
 }
 
 export default OfferOverview;

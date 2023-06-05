@@ -4,6 +4,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {date, number, object, string} from "yup";
 import {OffersApi} from "../../../services";
 import {OfferCreateBody} from "../../../models";
+import {NavLink} from "react-router-dom";
 
 const OfferCreateSchema = object().shape({
     name: string()
@@ -58,6 +59,7 @@ const OfferCreate: FC = () => {
                     <h3>Unable to create offer.</h3>
                     <p>Reason: {reason}</p>
                 </>}
+        <NavLink to="/offers">Back</NavLink>
     </>
 }
 

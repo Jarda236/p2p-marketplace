@@ -11,7 +11,7 @@ export interface Offer {
     name: string;
     description: string;
     sellerId: string;
-    userName: string;
+    sellerName: string;
     createdAt: number;
     endDate: number;
     topOffer: number;
