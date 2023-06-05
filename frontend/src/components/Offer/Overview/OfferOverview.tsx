@@ -4,6 +4,8 @@ import {useQuery} from "@tanstack/react-query";
 import {CategoriesApi, OffersApi, UsersApi} from "../../../services"
 import {Category, Offer, User} from "../../../models";
 import OfferOverviewItem from "./Item/OfferOverviewItem";
+import {RecoilLoadable} from "recoil";
+import of = RecoilLoadable.of;
 
 interface ColumnToSort {
     column: string;
@@ -27,7 +29,7 @@ const OfferOverview: FC<Props> = (props) => {
     const [showCategoryFilter, toggleShowCategoryFilter] = useState<boolean>(false);
     const [showPriceFilter, toggleShowPriceFilter] = useState<boolean>(false);
 
-    const {data: offers} = useQuery({
+    const {data: offers, refetch} = useQuery({
         queryKey: ['offers'],
         queryFn: () => OffersApi.getOffers()
     })
@@ -200,17 +202,18 @@ const OfferOverview: FC<Props> = (props) => {
                 </tbody>
             </table>
         </div>
+        <hr/>
+        <hr/>
         <div>
             <h5>Offers:</h5>
             <hr/>
             <ul>
                 {offers ?
-                    offers.map(offer =>
+                    filterOffers().map(offer =>
                     <OfferOverviewItem offer={offer} seller={getSeller(offer.sellerId)} />):
                     <span>Loading...</span>}
             </ul>
         </div>
-        <NavLink to="/">Home</NavLink>
     </div>
 }
 

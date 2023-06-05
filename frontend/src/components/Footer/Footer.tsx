@@ -1,8 +1,9 @@
-import {FC} from "react";
+import React, {FC} from "react";
+import {NavLink} from "react-router-dom";
 
 const Footer: FC = () => {
     return <>
-        <p>@P2P Marketplace</p>
+        <NavLink to="/"><p>@P2P Marketplace</p></NavLink>
     </>
 }
 
