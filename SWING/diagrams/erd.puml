@@ -52,10 +52,24 @@ entity FundsAccount {
     updated_at: datetime
 }
 
+entity CounterOffer {
+    *id: <<uuid>>
+    --
+    *offerId: <<FK>>
+    *userId: <<FK>>
+    offers: Offer[]
+    payment: decimal
+    *status: string
+    *created_at: datetime
+    updated_at: datetime
+    deleted_at: datetime
+}
+
 User ||--o{ Offer : offers  
 User ||--o{ Transaction : recieved
 User ||--o{ Transaction : sent
-Offer ||--|| Transaction : has
+Offer ||--o| Transaction : has
 User ||--|| FundsAccount : owns
+Offer ||--o| CounterOffer : has
 
 @enduml
