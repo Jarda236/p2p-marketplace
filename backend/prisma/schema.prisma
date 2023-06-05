@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  name        String
+  email       String
+  picture     String?
+  
+  messages    Message[]
+  reactions   MessageReaction[]
+}
+
+model Channel {
+  id           String            @id @default(uuid())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  
+  name         String
+  description  String?
+  
+  deletedAt    DateTime?
+  
+  messages     Message[]
+}
+
+model Emoji {
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  
+  name       String
+  code       String     @unique
+
+  reactions  MessageReaction[]
+}
+
+model Message {
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  
+  content    String
+  
+  deletedAt  DateTime?
+  edited     Boolean    @default(false)
+  
+  channel    Channel    @relation(fields: [channelId], references: [id])
+  channelId  String
+  sender     User       @relation(fields: [senderId], references: [id])
+  senderId   String
+
+  reactions  MessageReaction[]
+}
+
+model MessageReaction {
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  
+  emoji      Emoji      @relation(fields: [emojiId], references: [id])
+  emojiId    String
+  
+  message    Message    @relation(fields: [messageId], references: [id])
+  messageId  String
+  
+  user     User       @relation(fields: [userId], references: [id])
+  userId   String
+}
