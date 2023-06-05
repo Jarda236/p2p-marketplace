@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid()) //TODO add counteroffers, passwords?, etc
+  id        String    @id @default(uuid()) //TODO add passwords?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -22,6 +22,12 @@ model User {
   CounterOffer CounterOffer[]
 }
 
+model Category {
+  id        String   @id @default(uuid())
+  name String
+  Offer Offer[]
+}
+
 model Offer {
   id String @id @default(uuid())
 
@@ -32,7 +38,7 @@ model Offer {
   name        String
   description String
   price       Decimal
-  category    String
+  category    Category[]
   pictures    String
 
   counterOffer   CounterOffer? @relation(name: "a")
