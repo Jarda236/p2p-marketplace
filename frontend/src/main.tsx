@@ -9,6 +9,7 @@ import { App } from './components/app';
  * Import styles
  */
 import './styles/normalize.css';
+import { RecoilRoot } from 'recoil';
 
 const client = new QueryClient();
 
@@ -16,11 +17,13 @@ const client = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <QueryClientProvider client={client}>
-            <BrowserRouter>
-            {
-                <App />
-            }
-            </BrowserRouter>
+            <RecoilRoot>
+                <BrowserRouter>
+                {
+                    <App />
+                }
+                </BrowserRouter>
+                </RecoilRoot>
         </QueryClientProvider>
     </React.StrictMode>
 );
