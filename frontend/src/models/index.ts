@@ -10,6 +10,7 @@ export interface Offer {
     id: string;
     name: string;
     description: string;
+    category: Category;
     sellerId: string;
     sellerName: string;
     createdAt: number;
@@ -19,7 +20,12 @@ export interface Offer {
     sold: boolean;
     buyerId: string | null;
     soldFor: number | null;
-    [key: string]: string | number | boolean | null;
+    [key: string]: string | number | boolean | null | Category;
+}
+
+export interface Category {
+    id: string;
+    name: string;
 }
 
 export interface CounterOffer {
