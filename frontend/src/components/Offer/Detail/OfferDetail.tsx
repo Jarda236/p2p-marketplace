@@ -29,7 +29,7 @@ const OfferDetail: FC = () => {
                 </>
             }
             </> :
-            <p>Loading ...</p>
+            <p>Loading...</p>
         }
         <NavLink to="/offers">Back</NavLink>
     </>

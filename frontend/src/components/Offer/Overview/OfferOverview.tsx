@@ -9,7 +9,11 @@ interface ColumnToSort {
     // true = descending
     order: boolean;
 }
-const OfferOverview: FC = () => {
+
+interface Props {
+    offersByUserId?: string
+}
+const OfferOverview: FC<Props> = (props) => {
     const navigate = useNavigate();
 
     const [searchValue, changeSearchValue] = useState<string>("");
@@ -18,7 +22,7 @@ const OfferOverview: FC = () => {
 
     const {data: offers} = useQuery({
         queryKey: ['offers'],
-        queryFn: () => OffersApi.getOffers()
+        queryFn: () => props?.offersByUserId === undefined ? OffersApi.getOffers() : OffersApi.getOffersByUserId(props.offersByUserId)
     })
 
     const handleClick = (offerId: string) => {
@@ -32,7 +36,6 @@ const OfferOverview: FC = () => {
         return offers.filter(offer => offer.name.toLowerCase().includes(searchValue.toLowerCase()) || offer.description.toLowerCase().includes(searchValue.toLowerCase())).sort((a: Offer, b: Offer) => {
             for (let i = 0; i < sortCriteria.length; i++) {
                 const compare = a[sortCriteria[i].column].toString().toLowerCase().localeCompare(b[sortCriteria[i].column].toString().toLowerCase()) * (sortCriteria[i].order ? -1 : 1);
-                console.log(a[sortCriteria[i].column].toString(), b[sortCriteria[i].column].toString());
                 if (compare !== 0) {
                     return compare;
                 }
@@ -76,7 +79,7 @@ const OfferOverview: FC = () => {
                 onChange={(e) => changeSearchValue(e.target.value)}
                 placeholder="Search"
             />
-            {<p>Ordered by: {sortCriteria.map(item => <span
+            {<p>Ordered by: {sortCriteria.map(item => <span key={item.column}
                 onDoubleClick={() => deleteSorting(item.column)}>{item.column.concat(" ".concat(item.order ? "d " : "a "))}</span>)}</p>}
             <table>
                 <thead>
@@ -87,18 +90,20 @@ const OfferOverview: FC = () => {
                         <th onClick={() => changeSortingDirection("startingBid")}>Starting bid</th>
                         <th onClick={() => changeSortingDirection("topBid")}>Top bid</th>
                         <th onClick={() => changeSortingDirection("instantBuyAmount")}>Instant buy</th>
+                        <th onClick={() => changeSortingDirection("sold")}>Status</th>
                     </tr>
 
                 </thead>
                 <tbody>
                 {filteredOffers?.map(offer =>
-                        <tr onClick={() => handleClick(offer.id)}>
+                        <tr key={offer.id} onClick={() => handleClick(offer.id)}>
                             <td>{offer.name}</td>
                             <td>{offer.userName}</td>
                             <td>{offer.createdAt}</td>
                             <td>{offer.startingBid}</td>
                             <td>{offer.topBid}</td>
                             <td>{offer.instantBuyAmount}</td>
+                            <td>{offer.sold ? "SOLD" : "OPEN"}</td>
                         </tr>)}
                 </tbody>
             </table>

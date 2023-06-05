@@ -19,8 +19,8 @@ const OFFERS: Offer[] = [
         id: "2",
         name: "name2",
         description: "description2",
-        userId: "1",
-        userName: "user1",
+        userId: "2",
+        userName: "user2",
         createdAt: 0,
         endDate: 10,
         startingBid: 60,
@@ -45,19 +45,6 @@ export const getOfferById = async (offerId: string): Promise<Offer | null> => {
 }
 
 export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
-    const newOffer: Offer = {
-        id: (Number(OFFERS[OFFERS.length - 1].id)+1).toString(),
-        name: offer.name,
-        description: offer.description,
-        userId: "1",
-        userName: "user1",
-        createdAt: Date.now(),
-        endDate: offer.endDate.getMilliseconds(),
-        startingBid: offer.startingBid ?? 0,
-        topBid: 0,
-        instantBuyAmount: offer.instantBuyAmount ?? 0,
-        sold: false
-    }
     return;
 
     const response = await axiosInstance.post("/offers", offer, {
@@ -65,5 +52,12 @@ export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
             "Content-Type": "application/json"
         }
     });
+    return response.data;
+}
+
+export const getOffersByUserId = async (userId: string): Promise<Array<Offer>> => {
+    return OFFERS.filter(offer => offer.userId === userId);
+
+    const response = await axiosInstance.get(`/offers/user/${userId}`);
     return response.data;
 }
