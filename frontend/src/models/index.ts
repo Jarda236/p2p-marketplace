@@ -8,19 +8,26 @@ export interface User {
 
 export interface Offer {
     id: string;
-    name: string,
-    description: string,
-    userId: string;
+    name: string;
+    description: string;
+    sellerId: string;
     userName: string;
     createdAt: number;
-    endDate: number,
-    startingBid: number;
-    topBid: number;
-    instantBuyAmount: number;
+    endDate: number;
+    topOffer: number;
+    price: number;
     sold: boolean;
+    buyerId: string | null;
+    soldFor: number | null;
+    [key: string]: string | number | boolean | null;
+}
+
+export interface PriceOffer {
+    id: string;
+    offerId: string;
     buyerId: string;
-    soldFor: number;
-    [key: string]: string | number | boolean;
+    sellerId: string;
+    price: number;
 }
 
 export interface OfferCreateBody {

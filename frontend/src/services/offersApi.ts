@@ -6,27 +6,29 @@ const OFFERS: Offer[] = [
         id: "1",
         name: "name1",
         description: "description1",
-        userId: "1",
+        sellerId: "1",
         userName: "user1",
         createdAt: 0,
         endDate: 10,
-        startingBid: 50,
-        topBid: 0,
-        instantBuyAmount: 400,
-        sold: false
+        topOffer: 0,
+        price: 400,
+        sold: false,
+        buyerId: null,
+        soldFor: null
     },
     {
         id: "2",
         name: "name2",
         description: "description2",
-        userId: "2",
+        sellerId: "2",
         userName: "user2",
         createdAt: 0,
         endDate: 10,
-        startingBid: 60,
-        topBid: 0,
-        instantBuyAmount: 700,
-        sold: false
+        topOffer: 0,
+        price: 700,
+        sold: true,
+        buyerId: "1",
+        soldFor: 700
     }
 ];
 
@@ -55,9 +57,16 @@ export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
     return response.data;
 }
 
-export const getOffersByUserId = async (userId: string): Promise<Array<Offer>> => {
-    return OFFERS.filter(offer => offer.userId === userId);
+export const getOffersBySellerId = async (userId: string): Promise<Array<Offer>> => {
+    return OFFERS.filter(offer => offer.sellerId === userId);
 
-    const response = await axiosInstance.get(`/offers/user/${userId}`);
+    const response = await axiosInstance.get(`/offers/user/seller/${userId}`);
+    return response.data;
+}
+
+export const getOffersByBuyerId = async (userId: string): Promise<Array<Offer>> => {
+    return OFFERS.filter(offer => offer.buyerId === userId && offer.sold);
+
+    const response = await axiosInstance.get(`/offers/user/buyer/${userId}`);
     return response.data;
 }
