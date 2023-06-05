@@ -15,17 +15,14 @@ entity Offer {
     transactionId: <<FK>>
     updated_at: datetime
     deleted_at: datetime
-
 }
 
 entity User {
     * id: <<uuid>>
     --
-    * loginId: <<FK>>
     * name: string
     * password_hash: string
     * email: string
-    * password: string
     * phone: string
     * address: string
     * created_at: datetime
