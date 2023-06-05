@@ -19,8 +19,8 @@ const OfferOverview: FC<Props> = (props) => {
     const navigate = useNavigate();
 
     const [searchValue, changeSearchValue] = useState<string>("");
-
     const [sortCriteria, changeSortCriteria] = useState<ColumnToSort[]>([]);
+    const [priceRange, changePriceRange] = useState<{from: number, to: number}>({from: 0, to: 999999 });
 
     const {data: offers} = useQuery({
         queryKey: ['offers'],
@@ -41,6 +41,7 @@ const OfferOverview: FC<Props> = (props) => {
             return [];
         }
         return offers
+            .filter(offer => offer.price >= priceRange.from && offer.price <= priceRange.to)
             .filter(offer => categoriesFilterArray.findIndex(category => category.id === offer.category.id) === -1)
             .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
             .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
@@ -129,6 +130,16 @@ const OfferOverview: FC<Props> = (props) => {
         </ul>
     </div>
 
+    const [priceRangeComponent, showPriceRangeComponent] = useState<boolean>(false);
+    const priceComponent = <div style={{
+        display: "inline",
+        position: "absolute",
+        background: "whitesmoke"
+    }}>
+        <input type="number" placeholder="From" value={priceRange.from} onChange={(e) => changePriceRange({to: priceRange.to, from: Number(e.target.value) })}/>
+        <input type="number" placeholder="To" value={priceRange.to} onChange={(e) => changePriceRange({from: priceRange.from, to: Number(e.target.value) })}/>
+    </div>
+
     const filteredOffers: Offer[] = filterOffers();
     return <div style={{position: "relative"}}>
         <h2>Offers Overview</h2>
@@ -136,13 +147,21 @@ const OfferOverview: FC<Props> = (props) => {
         <button type="button" onClick={() => {
             showSortList(!sortList);
             showCategoryList(false);
+            showPriceRangeComponent(false);
         }}>Sort by</button>
         {sortList && filterComponent}
         <button type="button" onClick={() => {
             showCategoryList(!categoryList);
             showSortList(false);
+            showPriceRangeComponent(false);
         }}>Category</button>
         {categoryList && categoryComponent}
+        <button type="button" onClick={() => {
+            showCategoryList(false);
+            showSortList(false);
+            showPriceRangeComponent(!priceRangeComponent);
+        }}>Price</button>
+        {priceRangeComponent && priceComponent}
         <div>
             <input
                 type="search"
