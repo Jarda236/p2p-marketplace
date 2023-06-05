@@ -8,7 +8,8 @@ import { App } from './components/app';
 /**
  * Import styles
  */
-import './styles/normalize.css';
+//import './styles/normalize.css';
+import './styles/index.css';
 import { RecoilRoot } from 'recoil';
 
 const client = new QueryClient();
