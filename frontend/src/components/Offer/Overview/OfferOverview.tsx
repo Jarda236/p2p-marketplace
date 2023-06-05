@@ -1,8 +1,9 @@
 import React, {FC, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
-import {CategoriesApi, OffersApi} from "../../../services"
-import {Category, Offer} from "../../../models";
+import {CategoriesApi, OffersApi, UsersApi} from "../../../services"
+import {Category, Offer, User} from "../../../models";
+import OfferOverviewItem from "./Item/OfferOverviewItem";
 
 interface ColumnToSort {
     column: string;
@@ -31,6 +32,10 @@ const OfferOverview: FC<Props> = (props) => {
         queryKey: ['categories'],
         queryFn: () => CategoriesApi.getCategories()
     })
+
+    const getSeller = /*async*/ (sellerId: string) => {
+        return /*await*/ UsersApi.getUserById(sellerId);
+    }
 
     const handleClick = (offerId: string) => {
         navigate("/offers/".concat(offerId))
@@ -192,6 +197,16 @@ const OfferOverview: FC<Props> = (props) => {
                     </tr>)}
                 </tbody>
             </table>
+        </div>
+        <div>
+            <h5>Offers:</h5>
+            <hr/>
+            <ul>
+                {offers ?
+                    offers.map(offer =>
+                    <OfferOverviewItem offer={offer} seller={getSeller(offer.sellerId)} />):
+                    <span>Loading...</span>}
+            </ul>
         </div>
         <NavLink to="/">Home</NavLink>
     </div>

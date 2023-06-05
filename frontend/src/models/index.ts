@@ -4,6 +4,7 @@ export interface User {
     username: string;
     createdAt: number;
     cashAmount: number;
+    rating: number;
 }
 
 export interface Offer {
