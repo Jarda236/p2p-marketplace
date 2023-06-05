@@ -22,7 +22,7 @@ export interface Offer {
     [key: string]: string | number | boolean | null;
 }
 
-export interface PriceOffer {
+export interface CounterOffer {
     id: string;
     offerId: string;
     buyerId: string;

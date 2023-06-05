@@ -65,6 +65,7 @@ export const getOffersBySellerId = async (userId: string): Promise<Array<Offer>>
 }
 
 export const getOffersByBuyerId = async (userId: string): Promise<Array<Offer>> => {
+    console.log(userId)
     return OFFERS.filter(offer => offer.buyerId === userId && offer.sold);
 
     const response = await axiosInstance.get(`/offers/user/buyer/${userId}`);

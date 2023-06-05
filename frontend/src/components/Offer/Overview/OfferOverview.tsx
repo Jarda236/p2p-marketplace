@@ -11,7 +11,8 @@ interface ColumnToSort {
 }
 
 interface Props {
-    offersByUserId?: string
+    offersBySellerId?: string,
+    offersByBuyerId?: string
 }
 const OfferOverview: FC<Props> = (props) => {
     const navigate = useNavigate();
@@ -20,9 +21,9 @@ const OfferOverview: FC<Props> = (props) => {
 
     const [sortCriteria, changeSortCriteria] = useState<ColumnToSort[]>([]);
 
-    const {data: offers} = useQuery({
+    const {data: offers, refetch} = useQuery({
         queryKey: ['offers'],
-        queryFn: () => props?.offersByUserId === undefined ? OffersApi.getOffers() : OffersApi.getOffersBySellerId(props.offersByUserId)
+        queryFn: () => OffersApi.getOffers()
     })
 
     const handleClick = (offerId: string) => {
@@ -33,7 +34,11 @@ const OfferOverview: FC<Props> = (props) => {
         if (offers === undefined) {
             return [];
         }
-        return offers.filter(offer => offer.name.toLowerCase().includes(searchValue.toLowerCase()) || offer.description.toLowerCase().includes(searchValue.toLowerCase())).sort((a: Offer, b: Offer) => {
+        return offers
+            .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
+            .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
+            .filter(offer => offer.name.toLowerCase().includes(searchValue.toLowerCase()) || offer.description.toLowerCase().includes(searchValue.toLowerCase()))
+            .sort((a: Offer, b: Offer) => {
             for (let i = 0; i < sortCriteria.length; i++) {
                 const el1 = a[sortCriteria[i].column];
                 const el2 = b[sortCriteria[i].column];
