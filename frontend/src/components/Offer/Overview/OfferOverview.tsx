@@ -11,7 +11,8 @@ interface ColumnToSort {
 }
 
 interface Props {
-    offersByUserId?: string
+    offersBySellerId?: string,
+    offersByBuyerId?: string
 }
 const OfferOverview: FC<Props> = (props) => {
     const navigate = useNavigate();
@@ -20,9 +21,9 @@ const OfferOverview: FC<Props> = (props) => {
 
     const [sortCriteria, changeSortCriteria] = useState<ColumnToSort[]>([]);
 
-    const {data: offers} = useQuery({
+    const {data: offers, refetch} = useQuery({
         queryKey: ['offers'],
-        queryFn: () => props?.offersByUserId === undefined ? OffersApi.getOffers() : OffersApi.getOffersByUserId(props.offersByUserId)
+        queryFn: () => OffersApi.getOffers()
     })
 
     const handleClick = (offerId: string) => {
@@ -33,9 +34,18 @@ const OfferOverview: FC<Props> = (props) => {
         if (offers === undefined) {
             return [];
         }
-        return offers.filter(offer => offer.name.toLowerCase().includes(searchValue.toLowerCase()) || offer.description.toLowerCase().includes(searchValue.toLowerCase())).sort((a: Offer, b: Offer) => {
+        return offers
+            .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
+            .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
+            .filter(offer => offer.name.toLowerCase().includes(searchValue.toLowerCase()) || offer.description.toLowerCase().includes(searchValue.toLowerCase()))
+            .sort((a: Offer, b: Offer) => {
             for (let i = 0; i < sortCriteria.length; i++) {
-                const compare = a[sortCriteria[i].column].toString().toLowerCase().localeCompare(b[sortCriteria[i].column].toString().toLowerCase()) * (sortCriteria[i].order ? -1 : 1);
+                const el1 = a[sortCriteria[i].column];
+                const el2 = b[sortCriteria[i].column];
+                if (el1 === null || el2 === null) {
+                    continue;
+                }
+                const compare = el1.toString().toLowerCase().localeCompare(el2.toString().toLowerCase()) * (sortCriteria[i].order ? -1 : 1);
                 if (compare !== 0) {
                     return compare;
                 }
@@ -87,9 +97,8 @@ const OfferOverview: FC<Props> = (props) => {
                         <th onClick={() => changeSortingDirection("name")}>Name</th>
                         <th onClick={() => changeSortingDirection("userName")}>Created by</th>
                         <th onClick={() => changeSortingDirection("createdAt")}>Created at</th>
-                        <th onClick={() => changeSortingDirection("startingBid")}>Starting bid</th>
-                        <th onClick={() => changeSortingDirection("topBid")}>Top bid</th>
-                        <th onClick={() => changeSortingDirection("instantBuyAmount")}>Instant buy</th>
+                        <th onClick={() => changeSortingDirection("topOffer")}>Top offer</th>
+                        <th onClick={() => changeSortingDirection("instantBuyAmount")}>Price</th>
                         <th onClick={() => changeSortingDirection("sold")}>Status</th>
                     </tr>
 
@@ -100,9 +109,8 @@ const OfferOverview: FC<Props> = (props) => {
                             <td>{offer.name}</td>
                             <td>{offer.userName}</td>
                             <td>{offer.createdAt}</td>
-                            <td>{offer.startingBid}</td>
-                            <td>{offer.topBid}</td>
-                            <td>{offer.instantBuyAmount}</td>
+                            <td>{offer.topOffer}</td>
+                            <td>{offer.price}</td>
                             <td>{offer.sold ? "SOLD" : "OPEN"}</td>
                         </tr>)}
                 </tbody>

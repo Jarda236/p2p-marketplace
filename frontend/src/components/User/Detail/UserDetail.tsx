@@ -15,7 +15,15 @@ const UserDetail: FC = () => {
     return <>
         <h2>User detail</h2>
         {user ?
-            <OfferOverview offersByUserId={user.id}/> :
+            <>
+                <p>Name: {user.name}</p>
+                <p>Username: {user.username}</p>
+                <p>Member from: {user.createdAt}</p>
+                <h3>Offers by user</h3>
+                <OfferOverview offersBySellerId={user.id}/>
+                <h3>Purchased items</h3>
+                <OfferOverview offersByBuyerId={user.id} />
+            </> :
             <p>Loading...</p>
         }
     </>
