@@ -14,6 +14,7 @@ interface Props {
     offersBySellerId?: string,
     offersByBuyerId?: string
 }
+
 const OfferOverview: FC<Props> = (props) => {
     const navigate = useNavigate();
 
@@ -79,7 +80,12 @@ const OfferOverview: FC<Props> = (props) => {
     }
 
     const filteredOffers: Offer[] = filterOffers();
-
+/*<th onClick={() => changeSortingDirection("name")}>Name</th>
+                        <th onClick={() => changeSortingDirection("userName")}>Created by</th>
+                        <th onClick={() => changeSortingDirection("createdAt")}>Created at</th>
+                        <th onClick={() => changeSortingDirection("topOffer")}>Top offer</th>
+                        <th onClick={() => changeSortingDirection("instantBuyAmount")}>Price</th>
+                        <th onClick={() => changeSortingDirection("sold")}>Status</th>*/
     return <>
         <h2>Offers Overview</h2>
         <div>
@@ -93,15 +99,7 @@ const OfferOverview: FC<Props> = (props) => {
                 onDoubleClick={() => deleteSorting(item.column)}>{item.column.concat(" ".concat(item.order ? "d " : "a "))}</span>)}</p>}
             <table>
                 <thead>
-                    <tr>
-                        <th onClick={() => changeSortingDirection("name")}>Name</th>
-                        <th onClick={() => changeSortingDirection("userName")}>Created by</th>
-                        <th onClick={() => changeSortingDirection("createdAt")}>Created at</th>
-                        <th onClick={() => changeSortingDirection("topOffer")}>Top offer</th>
-                        <th onClick={() => changeSortingDirection("instantBuyAmount")}>Price</th>
-                        <th onClick={() => changeSortingDirection("sold")}>Status</th>
-                    </tr>
-
+                    <p>Offers:</p>
                 </thead>
                 <tbody>
                 {filteredOffers?.map(offer =>
