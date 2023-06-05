@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {Offer, User} from "../../../../models";
 import OfferOverview from "../OfferOverview";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 
 interface OfferOverviewProps {
     offer: Offer,
@@ -31,7 +31,7 @@ const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller}) => {
             <NavLink to={"/users/".concat(seller.id)}>Profile</NavLink>
         </section>
         <section>
-            <NavLink to={"/offers/".concat(offer.id)}>Price offer</NavLink>
+            <NavLink to={"/offers/".concat(offer.id)}>Offer detail</NavLink>
             <button type="button">Price offer</button>
             <button type="button">Buy</button>
         </section>
