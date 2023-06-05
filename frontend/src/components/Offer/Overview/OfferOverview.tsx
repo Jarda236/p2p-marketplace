@@ -41,7 +41,7 @@ const OfferOverview: FC<Props> = (props) => {
             return [];
         }
         return offers
-            .filter(offer => categoriesFilterArray.findIndex(category => category.id === offer.category.id) !== -1)
+            .filter(offer => categoriesFilterArray.findIndex(category => category.id === offer.category.id) === -1)
             .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
             .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
             .filter(offer => offer.name.toLowerCase().includes(searchValue.toLowerCase()) || offer.description.toLowerCase().includes(searchValue.toLowerCase()))
@@ -164,6 +164,7 @@ const OfferOverview: FC<Props> = (props) => {
                 {filteredOffers?.map(offer =>
                     <tr key={offer.id} onClick={() => handleClick(offer.id)}>
                         <td>{offer.name}</td>
+                        <td>{offer.category.name}</td>
                         <td>{offer.sellerName}</td>
                         <td>{offer.createdAt}</td>
                         <td>{offer.topOffer}</td>
