@@ -72,13 +72,14 @@ export const getSingle = async (
 ): Promise<Result<Offer | null, Error>> => {
   try {
     var result = await prisma.offer.findUnique({ where: { id } });
+    if (!result || result.deletedAt) {
+      throw new Error("Offer not found");
+    }
     if (result && result.price) {
       var a = { ...result, price: result.price.toNumber() };
       return Result.ok(a);
     }
-    if (!result || result.deletedAt) {
-      throw new Error("Offer not found");
-    }
+    
 
     return Result.ok(null);
   } catch (error) {
@@ -111,19 +112,22 @@ export const updateSingle = async (
   id: string,
   data: OfferUpdate
 ): Promise<Result<Offer, Error>> => {
-  try {
+  try {console.log("aaaaa");
     return Result.ok(
-      await prisma.$transaction(async (transaction) => {
-        var o = await transaction.offer.findUnique({ where: { id } });
+      
+      await prisma.$transaction(async (tx) => {
+        const o = await tx.offer.findUnique({ where: { id } });
         if (!o || o.deletedAt) {
+          console.log(o);
           throw new Error("Offer not found");
         }
 
-        const result = await transaction.offer.update({ where: { id }, data });
+        const result = await tx.offer.update({ where: { id }, data });
         if (result && result.price) {
           var a = { ...result, price: result.price.toNumber() };
           return a;
         }
+        console.log(result);
         throw new Error("Offer not found");
       })
     );

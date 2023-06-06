@@ -24,9 +24,10 @@ export type OfferCreate = z.infer<typeof OfferCreateSchema>;
 
 
 export const OfferUpdateSchema = z.object({
-    name: z.string({ required_error: 'Property `name` is required' }).nonempty().optional(),
+    userId: z.string({ required_error: 'Property `userId` is required' }).nonempty().optional(),
     price: z.number({ required_error: 'Property `price` is required' }).optional(),
     image: z.string({ required_error: 'Property `picture` is required' }).nonempty().optional(),
+    itemId: z.string({ required_error: 'Property `itemId` is required' }).nonempty().optional(),
 })//.merge(ModelIdSchema)
 
 export type OfferUpdate = z.infer<typeof OfferUpdateSchema>;

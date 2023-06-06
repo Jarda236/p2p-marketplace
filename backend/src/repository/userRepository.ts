@@ -1,6 +1,6 @@
 import { Result } from "@badrap/result";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { User, UserCreate, UserUpdate } from "../models";
+import { FundsAccount, User, UserCreate, UserUpdate } from "../models";
 import prisma from "../client";
 
 export const getAll = async (): Promise<Result<User[], Error>> => {
@@ -100,32 +100,32 @@ export const updateSingle = async (
 ): Promise<Result<User, Error>> => {
   try {
     return Result.ok(
-    await prisma.$transaction(async (transaction) => {
-      var u = await transaction.user.findUnique({
-        where: { id },
-      });
-      if (!u || u.deletedAt) {
+      await prisma.$transaction(async (transaction) => {
+        var u = await transaction.user.findUnique({
+          where: { id },
+        });
+        if (!u || u.deletedAt) {
+          throw new Error("User not found");
+        }
+        const user = await transaction.user.update({
+          where: { id },
+          data,
+          include: { fundsAccount: true },
+        });
+        var a;
+        if (user && user.fundsAccount) {
+          a = {
+            ...user,
+            fundsAccount: {
+              ...user.fundsAccount,
+              balance: user.fundsAccount.balance.toNumber(),
+              balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
+            },
+          };
+          return a;
+        }
         throw new Error("User not found");
-      }   
-      const user = await transaction.user.update({
-        where: { id },
-        data,
-        include: { fundsAccount: true },
-      });
-      var a;
-      if (user && user.fundsAccount) {
-        a = {
-          ...user,
-          fundsAccount: {
-            ...user.fundsAccount,
-            balance: user.fundsAccount.balance.toNumber(),
-            balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
-          },
-        };
-        return a;        
-      }
-      throw new Error("User not found");
-    }),
+      })
     );
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
@@ -139,7 +139,14 @@ export const deleteSingle = async (id: string) => {
   try {
     const user = await prisma.user.update({
       where: { id },
-      data: { deletedAt: new Date() },
+      data: {
+        deletedAt: new Date(),
+        fundsAccount: {
+          update: {
+            deletedAt: new Date(),
+          },
+        },
+      },
     });
     return Result.ok(user);
   } catch (error) {
