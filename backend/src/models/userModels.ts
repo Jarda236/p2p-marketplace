@@ -7,11 +7,11 @@ export const UserSchema = z.object({
     email: z.string({ required_error: 'Property email is required' }).nonempty(),
     phone: z.string({ required_error: 'Property phone is required' }).nonempty(),
     address: z.string({ required_error: 'Property address is required' }).nonempty(),
-    createdAt: z.date(),
-    rating_sum: z.number(),
-    rating_count: z.number(),
-    id: z.string(),
-    image: z.string().nullable().optional(),
+    createdAt: z.date({required_error: 'createdAt required' }),
+    rating_sum: z.number({required_error: 'rating_sum required' }),
+    rating_count: z.number({required_error: 'rating_count required' }),
+    id: z.string({required_error: 'id required' }),
+    image: z.string().nullable().nullable().optional(),
     deletedAt: z.date().nullable().optional(),
     updatedAt: z.date().optional(),
 }).merge(BaseModelSchema);
@@ -25,9 +25,6 @@ export const UserCreateSchema = z.object({
     email: z.string({ required_error: 'Property `email` is required' }).nonempty(),
     phone: z.string({ required_error: 'Property `phone` is required' }).nonempty(),
     address: z.string({ required_error: 'Property `address` is required' }).nonempty(),
-    created_at: z.date(),
-    rating_sum: z.number(),
-    rating_count: z.number(),
     image: z.string().optional(),
     updated_at: z.date().optional(),
     deleted_at: z.date().nullable().optional(),
@@ -46,7 +43,7 @@ export const UserUpdateSchema = z.object({
     rating_count: z.number().optional(),
     image: z.string().optional(),
     deleted_at: z.date().nullable().optional(),
-}).merge(ModelIdSchema)
+})//.merge(ModelIdSchema)
 
 export type UserUpdate = z.infer<typeof UserUpdateSchema>;
 

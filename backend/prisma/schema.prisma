@@ -26,6 +26,7 @@ model User {
   offers               Offer[]
   CounterOffer         CounterOffer[]
 }
+<<<<<<< HEAD
 
 model Category {
   id        String   @id @default(uuid())
@@ -44,6 +45,23 @@ model Offer {
   category       Category[]
   pictures       String
   counterOffer   CounterOffer?  @relation(name: "a")
+=======
+
+model Offer {
+  id String @id @default(uuid())
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  name        String
+  description String
+  price       Decimal
+  category    String[]
+  picture    String
+
+  counterOffer   CounterOffer? @relation(name: "a")
+>>>>>>> 99d37b3b2e419ead25f4b0027766f67fb01851cf
   counterOfferId Int?
   user           User           @relation(fields: [userId], references: [id])
   userId         String
@@ -84,8 +102,8 @@ model CounterOffer {
   offer   Offer  @relation(name: "a", fields: [offerId], references: [id])
   offerId String @unique
 
-  creator   User    @relation(fields: [creatorId], references: [id])
-  creatorId String
+  user   User    @relation(fields: [userId], references: [id])
+  userId String
 
   offers    Offer[] @relation("CounterOfferToOffer")
 

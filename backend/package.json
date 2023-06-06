@@ -22,6 +22,7 @@
     "@badrap/result": "^0.2.13",
     "@prisma/client": "^4.10.0",
     "cors": "^2.8.5",
+    "decimal": "^0.0.2",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "nodemon": "^2.0.16",
