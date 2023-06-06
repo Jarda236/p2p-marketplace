@@ -71,17 +71,18 @@ router.delete(
 
 router.post(
   "/login",
-  validate({ params: LoginRequest }),
+  validate({ body: LoginRequest }),
   async (req, res) => {
-    const { username, password } = req.params;
     const usersResult = await UserRepository.getAll();
     if(usersResult.isErr){
       return handleErrorResp(500, res, usersResult.error.message);
     }
-    const user = usersResult.value.find(u => u.name === username);
-    const passwordHashed = await bcrypt.hash(password, 10);
-    const isMatch = await bcrypt.compare(password, passwordHashed);
-
+    const user = usersResult.value.find(u => u.name === req.body.username);
+    if(!user){
+      return handleErrorResp(401, res, "Invalid username");
+    }
+    const passwordHashed = await bcrypt.hash(req.body.password, user.password_salt!);
+    const isMatch = passwordHashed === user.password_hash;
     if (user && isMatch) {
       const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1h' });
       res.cookie('token', token, { httpOnly: true });
@@ -97,17 +98,19 @@ router.post(
   validate({body: UserCreateSchema }),
   async (req, res) => {
     const body = req.body;
-    
+
     const usersResult = await UserRepository.getAll();
     if(usersResult.isErr){
       return handleErrorResp(500, res, usersResult.error.message);
     }
-    const user = usersResult.value.find(u => u.name === body.name);
+    const user = usersResult.value.length === 0 ? null : usersResult.value.find(u => u.name === body.name);
     if(user){
       return handleErrorResp(401, res, "User already exists");
     }
-    const passwordHashed = await bcrypt.hash(body.password_hash, 10);
+    const salt = await bcrypt.genSalt(10);
+    const passwordHashed = await bcrypt.hash(body.password_hash, salt);
     body.password_hash = passwordHashed;
+    body.password_salt = salt;
     const newUser = await UserRepository.createSingle(body);
     if(newUser.isErr){
       return handleErrorResp(500, res, newUser.error.message);
@@ -116,9 +119,7 @@ router.post(
     const token = jwt.sign({ id: newUser.value.id }, 'secret', { expiresIn: '1h' });
     res.cookie('token', token, { httpOnly: true });
     return handleOkResp(newUser.value, res, `Registered user with id: ${newUser.value.id}`);
-    
   }
 );
-
 
 export default router;

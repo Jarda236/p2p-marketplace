@@ -5,6 +5,7 @@ import { FundsAccount } from './fundsAccountModels';
 export const UserSchema = z.object({
     name: z.string({ required_error: 'Property name is required' }).nonempty(),
     password_hash: z.string({ required_error: 'Property password_hash is required' }).nonempty(),
+    password_salt: z.string().nullable(),
     email: z.string({ required_error: 'Property email is required' }).nonempty(),
     phone: z.string({ required_error: 'Property phone is required' }).nonempty(),
     city: z.string({ required_error: 'Property city is required' }).nonempty(),
@@ -27,6 +28,7 @@ export type User = z.infer<typeof UserSchema>;
 export const UserCreateSchema = z.object({
     name: z.string({ required_error: 'Property `name` is required' }).nonempty(),
     password_hash: z.string({ required_error: 'Property `password_hash` is required' }).nonempty(),
+    password_salt: z.string().nullable().optional(),
     email: z.string({ required_error: 'Property `email` is required' }).nonempty(),
     phone: z.string({ required_error: 'Property `phone` is required' }).nonempty(),
     city: z.string({ required_error: 'Property `address` is required' }).nonempty(),
