@@ -5,6 +5,7 @@ import { handleErrorResp, handleOkResp } from "../utils";
 import { ParamsWithIdSchema } from "../models/baseModels";
 import { validate } from "../utils/middleware/validate";
 import z from "zod";
+import { AuthenticatedRequest, authenticate } from "../utils/middleware/authenticate"
 
 const router = Router();
 
@@ -16,7 +17,7 @@ router.get("/", async (_, res) => {
 });
 
 router.get(
-  "/:id",
+  "/test/:id",
   validate({ params: ParamsWithIdSchema }),
   async (req, res) => {
     const { id } = req.params;
@@ -38,7 +39,7 @@ router.post("/", validate({ body: ItemCreateSchema }), async (req, res) => {
 });
 
 router.put(
-  "/:id",
+  "/test/:id",
   validate({ params: ParamsWithIdSchema, body: ItemUpdateSchema }),
   async (req, res) => {
     try {
@@ -56,13 +57,19 @@ router.put(
 );
 
 router.delete(
-  "/:id",
+  "/test/:id",
   validate({ params: ParamsWithIdSchema }),
   async (req, res) => {
     const { id } = req.params;
     const items = await ItemRepository.deleteSingle(id);
     if (items.isErr) return handleErrorResp(500, res, items.error.message);
     return handleOkResp(items.value, res, `Deleted item with id: ${id}`);
+  }
+);
+
+router.get("/byUser", authenticate, async (req: AuthenticatedRequest, res) => {
+    res.json({ message: 'Authenticated!', user: req.user });
+    console.log(req.user);
   }
 );
 

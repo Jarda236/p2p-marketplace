@@ -9,6 +9,7 @@ import { LoginRequest } from "../models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+require('dotenv').config();
 const router = Router();
 
 router.get("/", async (_, res) => {
@@ -84,7 +85,7 @@ router.post(
     const passwordHashed = await bcrypt.hash(req.body.password, user.password_salt!);
     const isMatch = passwordHashed === user.password_hash;
     if (user && isMatch) {
-      const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1h' });
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
       res.cookie('token', token, { httpOnly: true });
       return handleOkResp(user, res, `Logged in user with id: ${user.id}`);
     }
@@ -115,7 +116,7 @@ router.post(
       return handleErrorResp(500, res, newUser.error.message);
     }
     
-    const token = jwt.sign({ id: newUser.value.id }, 'secret', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: newUser.value.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
     res.cookie('token', token, { httpOnly: true });
     return handleOkResp(newUser.value, res, `Registered user with id: ${newUser.value.id}`);
   }
