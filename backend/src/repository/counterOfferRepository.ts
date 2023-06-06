@@ -8,7 +8,7 @@ export const getAll = async (): Promise<Result<CounterOffer[], Error>> => {
         const result = await prisma.counterOffer.findMany();
         const aa = Array(result.length).fill(undefined);
         for(let i = 0; i < result.length; i++) {
-            aa[i] = { ...result[i], amount: result[i].amount.toNumber() };
+            aa[i] = { ...result[i], amount: result[i].price.toNumber() };
         }
         return Result.ok(aa);
     } catch (error) {
@@ -23,8 +23,8 @@ export const getAll = async (): Promise<Result<CounterOffer[], Error>> => {
 export const getSingle = async (id: string): Promise<Result<CounterOffer | null, Error>> => {
     try {
         var result = await prisma.counterOffer.findUnique({ where: { id } });
-        if (result && result.amount) {
-             var a = { ...result, amount: result.amount.toNumber() };
+        if (result && result.price) {
+             var a = { ...result, price: result.price.toNumber() };
              return Result.ok(a);
           }
           return Result.ok(null);
@@ -40,8 +40,8 @@ export const getSingle = async (id: string): Promise<Result<CounterOffer | null,
 export const createSingle = async (data: CounterOfferCreate): Promise<Result<CounterOffer, Error>> => {
     try {
         const result = await prisma.counterOffer.create({ data });
-        if (result && result.amount) {
-            var a = { ...result, amount: result.amount.toNumber() };
+        if (result && result.price) {
+            var a = { ...result, price: result.price.toNumber() };
             return Result.ok(a);
          }
        return Result.err(new Error(`aaaaaa ${result}`));
@@ -57,8 +57,8 @@ export const createSingle = async (data: CounterOfferCreate): Promise<Result<Cou
 export const updateSingle = async (id: string, data: CounterOfferUpdate): Promise<Result<CounterOffer, Error>> => {
     try {
         const result = await prisma.counterOffer.update({ where: { id }, data });
-        if (result && result.amount) {
-            var a = { ...result, amount: result.amount.toNumber() };
+        if (result && result.price) {
+            var a = { ...result, price: result.price.toNumber() };
             return Result.ok(a);
          }
        return Result.err(new Error(`aaaaaa ${result}`));
