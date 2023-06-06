@@ -73,6 +73,6 @@ User ||--o{ Transaction : recieved
 User ||--o{ Transaction : sent
 Offer ||--o| Transaction : has
 User ||--|| FundsAccount : owns
-Offer ||--o| CounterOffer : has
+Offer ||--o{ CounterOffer : has
 
 @enduml
