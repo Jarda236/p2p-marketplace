@@ -6,7 +6,7 @@ import prisma from "../client";
 export const getAll = async (): Promise<Result<User[], Error>> => {
   try {
     const result = await prisma.user.findMany({
-        include: { fundsAccount: true },
+      include: { fundsAccount: true },
     });
     const aa = Array(result.length).fill(undefined);
     for (let i = 0; i < result.length; i++) {
@@ -63,19 +63,28 @@ export const createSingle = async (
 ): Promise<Result<User, Error>> => {
   try {
     const dataa = { ...data, rating_sum: 0, rating_count: 0 };
-    const user = await prisma.user.create({ data: dataa, include: { fundsAccount: true } });
+    const user = await prisma.user.create({
+      data: {
+        ...dataa,
+        fundsAccount: {
+          create: { balance: 0, balanceBlocked: 0 },
+        },
+      },
+
+      include: { fundsAccount: true },
+    });
     if (user && user.fundsAccount) {
-        var a = {
-          ...user,
-          fundsAccount: {
-            ...user.fundsAccount,
-            balance: user.fundsAccount.balance.toNumber(),
-            balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
-          },
-        };
-        return Result.ok(a);
-      }
-      return Result.err(new Error(`asdasd ${user}`));
+      var a = {
+        ...user,
+        fundsAccount: {
+          ...user.fundsAccount,
+          balance: user.fundsAccount.balance.toNumber(),
+          balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
+        },
+      };
+      return Result.ok(a);
+    }
+    return Result.err(new Error(`asdasd ${user}`));
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       return Result.err(error);
@@ -89,17 +98,21 @@ export const updateSingle = async (
   data: UserUpdate
 ): Promise<Result<User, Error>> => {
   try {
-    const user = await prisma.user.update({ where: { id }, data, include: { fundsAccount: true } });
+    const user = await prisma.user.update({
+      where: { id },
+      data,
+      include: { fundsAccount: true },
+    });
     if (user && user.fundsAccount) {
-        var a = {
-            ...user,
-            fundsAccount: {
-                ...user.fundsAccount,
-                balance: user.fundsAccount.balance.toNumber(),
-                balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
-            },
-        };
-        return Result.ok(a);
+      var a = {
+        ...user,
+        fundsAccount: {
+          ...user.fundsAccount,
+          balance: user.fundsAccount.balance.toNumber(),
+          balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
+        },
+      };
+      return Result.ok(a);
     }
     return Result.err(new Error(`asdasd ${user}`));
   } catch (error) {

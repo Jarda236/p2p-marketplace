@@ -26,6 +26,6 @@ export const CounterOfferUpdateSchema = z.object({
   status: z.boolean({ required_error: "Property `status` is required" }).nullable().optional(),
   price: z.number({ required_error: "Property `price` is required" }).optional(),
   itemsID: z.array(z.string()).optional(),
-}).merge(ModelIdSchema);
+})//.merge(ModelIdSchema);
 
 export type CounterOfferUpdate = z.infer<typeof CounterOfferUpdateSchema>;

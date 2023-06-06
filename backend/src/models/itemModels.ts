@@ -25,10 +25,11 @@ export type ItemCreate = z.infer<typeof ItemCreateSchema>;
 
 
 export const ItemUpdateSchema = z.object({
+    userId: z.string({ required_error: 'Property `userId` is required' }).nonempty().optional(),
     name: z.string({ required_error: 'Property `name` is required' }).nonempty().optional(),
     description: z.string({ required_error: 'Property `description` is required' }).nonempty().optional(),
     category: z.string({ required_error: 'Property `category` is required' }).nonempty().optional(),
     image: z.string({ required_error: 'Property `image` is required' }).nonempty().optional(), 
-}).merge(ModelIdSchema)
+})//.merge(ModelIdSchema)
 
 export type ItemUpdate = z.infer<typeof ItemUpdateSchema>;
