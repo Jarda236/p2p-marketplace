@@ -1,0 +1,88 @@
+@startuml P2P Marketplace
+
+entity Offer {
+    * id: <<uuid>>
+    --
+    * userId: <<FK>>
+    * price: decimal
+    * createdAt: datetime
+    * item: <<FK>>
+    transactionId: <<FK>>
+    updatedAt: datetime
+    deletedAt: datetime
+}
+
+entity Item{
+     * id: <<uuid>>
+    --
+    * userId: <<FK>>
+    * name: string
+    * description: string
+    * category: string
+    * createdAt: datetime
+    * isAvailable: boolean
+    updatedAt: datetime
+    deletedAt: datetime
+}
+
+entity User {
+    * id: <<uuid>>
+    --
+    * name: string
+    * password_hash: string
+    * email: string
+    * phone: string
+    * address: string
+    * createdAt: datetime
+    * rating_sum: float
+    * rating_count: int
+    * image: <<url>>
+/'    freshest token + valid_until ?? '/
+    updatedAt: datetime
+    deletedAt: datetime
+}
+
+entity Transaction {
+    * id: <<uuid>>
+    --
+    * sellerId: <<FK>>
+    * buyerId: <<FK>>
+    * offerId: <<FK>>
+    * createdAt: datetime
+    updatedAt: datetime
+}
+
+entity FundsAccount {
+    * id: <<uuid>>
+    --
+    * userId: <<FK>>
+    * balance: decimal
+/'    * currency: string '/
+    * createdAt: datetime
+    updatedAt: datetime
+}
+
+entity CounterOffer {
+    *id: <<uuid>>
+    --
+    *offerId: <<FK>>
+    *userId: <<FK>>
+    items: Item[]
+    payment: decimal
+    *status: string
+    *createdAt: datetime
+    updatedAt: datetime
+    deletedAt: datetime
+}
+
+User  ||--o{ Offer : offers  
+User  ||--o{ Transaction : recieved
+User  ||--o{ Transaction : sent
+Offer ||--o| Transaction : has
+User  ||--|| FundsAccount : owns
+Offer ||--o{ CounterOffer : has
+User  ||--o{ Item : owns
+Offer ||--|| Item: has
+CounterOffer ||--o{ Item: has
+
+@enduml
