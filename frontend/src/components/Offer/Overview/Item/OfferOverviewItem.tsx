@@ -28,7 +28,7 @@ const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller}) => {
             <span><b>Seller: </b>{seller.name}</span>
             <div className=" flex flex-row">
                 <figure className=" mr-4">
-                    <img src="/pictures/user.jpg"
+                    <img src="/icons/user.jpg"
                     className=" h-12 w-12 object-cover rounded-full"
                     alt={seller.name.concat("-avatar")} />
                 </figure>
