@@ -12,7 +12,9 @@ import prisma from "../client";
 
 export const getAll = async (): Promise<Result<FundsAccount[], Error>> => {
   try {
-    const result = await prisma.fundsAccount.findMany();
+    const result = await prisma.fundsAccount.findMany({
+      where: { deletedAt: null },
+    });
     const aa = Array(result.length).fill(undefined);
     for (let i = 0; i < result.length; i++) {
       aa[i] = { ...result[i], balance: result[i].balance.toNumber() };
@@ -31,6 +33,9 @@ export const getSingle = async (
 ): Promise<Result<FundsAccount | null, Error>> => {
   try {
     var result = await prisma.fundsAccount.findUnique({ where: { id } });
+    if (!result || result.deletedAt) {
+      throw new Error("FundsAccount not found");
+    }
     if (result && result.balance) {
       var a = {
         ...result,
@@ -39,7 +44,7 @@ export const getSingle = async (
       };
       return Result.ok(a);
     }
-    return Result.ok(null);
+    throw new Error("FundsAccount not found");
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       return Result.err(error);
@@ -75,16 +80,27 @@ export const updateSingle = async (
   data: FundsAccountUpdate
 ): Promise<Result<FundsAccount, Error>> => {
   try {
-    const result = await prisma.fundsAccount.update({ where: { id }, data });
-    if (result && result.balance) {
-      var a = {
-        ...result,
-        balance: result.balance.toNumber(),
-        balanceBlocked: result.balanceBlocked.toNumber(),
-      };
-      return Result.ok(a);
-    }
-    return Result.err(new Error(`aaaaaa ${result}`));
+    return Result.ok(
+      await prisma.$transaction(async (transaction) => {
+        const f = await transaction.fundsAccount.findUnique({ where: { id } });
+        if (!f || f.deletedAt) {
+          throw new Error("FundsAccount not found");
+        }
+        const result = await transaction.fundsAccount.update({
+          where: { id },
+          data,
+        });
+        if (result && result.balance) {
+          var a = {
+            ...result,
+            balance: result.balance.toNumber(),
+            balanceBlocked: result.balanceBlocked.toNumber(),
+          };
+          return a;
+        }
+        throw new Error("FundsAccount not found");
+      })
+    );
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       return Result.err(error);
@@ -95,7 +111,10 @@ export const updateSingle = async (
 
 export const deleteSingle = async (id: string) => {
   try {
-    const result = await prisma.fundsAccount.delete({ where: { id } });
+    const result = await prisma.fundsAccount.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
     return Result.ok(result);
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {

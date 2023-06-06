@@ -69,56 +69,57 @@ router.delete(
   }
 );
 
-router.post(
-  "/login",
-  validate({ params: LoginRequest }),
-  async (req, res) => {
-    const { username, password } = req.params;
-    const usersResult = await UserRepository.getAll();
-    if(usersResult.isErr){
-      return handleErrorResp(500, res, usersResult.error.message);
-    }
-    const user = usersResult.value.find(u => u.name === username);
-    const passwordHashed = await bcrypt.hash(password, 10);
-    const isMatch = await bcrypt.compare(password, passwordHashed);
-
-    if (user && isMatch) {
-      const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1h' });
-      res.cookie('token', token, { httpOnly: true });
-      return handleOkResp(user, res, `Logged in user with id: ${user.id}`);
-    }
-    return handleErrorResp(401, res, "Invalid credentials");
+router.post("/login", validate({ params: LoginRequest }), async (req, res) => {
+  const { username, password } = req.params;
+  const usersResult = await UserRepository.getAll();
+  if (usersResult.isErr) {
+    return handleErrorResp(500, res, usersResult.error.message);
   }
-);
+  const user = usersResult.value.find((u) => u.name === username);
+  const passwordHashed = await bcrypt.hash(password, 10);
+  const isMatch = await bcrypt.compare(password, passwordHashed);
 
+  if (user && isMatch) {
+    const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "1h" });
+    res.cookie("token", token, { httpOnly: true });
+    return handleOkResp(user, res, `Logged in user with id: ${user.id}`);
+  }
+  return handleErrorResp(401, res, "Invalid credentials");
+});
 
 router.post(
   "/register",
-  validate({body: UserCreateSchema }),
+  validate({ body: UserCreateSchema }),
   async (req, res) => {
     const body = req.body;
-    
+
     const usersResult = await UserRepository.getAll();
-    if(usersResult.isErr){
+    if (usersResult.isErr) {
       return handleErrorResp(500, res, usersResult.error.message);
     }
-    const user = usersResult.value.find(u => u.name === body.name);
-    if(user){
+    console.log(body.name);
+    const user = usersResult.value.find((u) => u.name === body.name);
+    if (user) {
       return handleErrorResp(401, res, "User already exists");
     }
+    console.log("bbb");
     const passwordHashed = await bcrypt.hash(body.password_hash, 10);
     body.password_hash = passwordHashed;
     const newUser = await UserRepository.createSingle(body);
-    if(newUser.isErr){
+    if (newUser.isErr) {
       return handleErrorResp(500, res, newUser.error.message);
     }
-    
-    const token = jwt.sign({ id: newUser.value.id }, 'secret', { expiresIn: '1h' });
-    res.cookie('token', token, { httpOnly: true });
-    return handleOkResp(newUser.value, res, `Registered user with id: ${newUser.value.id}`);
-    
+
+    const token = jwt.sign({ id: newUser.value.id }, "secret", {
+      expiresIn: "1h",
+    });
+    res.cookie("token", token, { httpOnly: true });
+    return handleOkResp(
+      newUser.value,
+      res,
+      `Registered user with id: ${newUser.value.id}`
+    );
   }
 );
-
 
 export default router;
