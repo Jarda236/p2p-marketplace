@@ -20,8 +20,8 @@ const OfferDetail: FC = () => {
             <p>Created at: {offer.createdAt}</p>
             <p>Top offer: {offer.topOffer}</p>
             <p>Price: {offer.price}</p>
-            {offer?.sold ?
-                <p>SOLD</p> :
+            {offer.buyerId ?
+                <span>SOLD</span> :
                 <>
                     <button>Send offer</button>
                     <button>Buy</button>

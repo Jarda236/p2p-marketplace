@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {Item, Offer, User} from "../../../../models";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 
 interface OfferOverviewProps {
     offer: Offer,
@@ -8,13 +8,18 @@ interface OfferOverviewProps {
     item: Item | undefined
 }
 const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller, item}) => {
+    const navigate = useNavigate();
 
     return (
     <div className=" bg-blue-100 hover:bg-blue-200 flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl
                        pr-2 pb-2">
         <section className=" text-lg flex flex-row h-auto">
             <figure>
-                <img src={item?.image}
+                <img onClick={() => {
+                    if (offer.buyerId === null) {
+                        navigate("/offers/".concat(offer.id))
+                    }
+                }} src={item?.image}
                 className=" h-48 w-48 object-cover rounded-md"
                 alt={item?.name.concat("-image")} />
             </figure>
@@ -29,7 +34,7 @@ const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller, item}) => {
             <span><b>Seller: </b>{seller.username}</span>
             <div className=" flex flex-row">
                 <figure className=" mr-4">
-                    <img src={seller.image}
+                    <img onClick={() => navigate("/users/".concat(seller.id))} src={seller.image}
                     className=" h-12 w-12 object-cover rounded-full"
                     alt={seller.username.concat("-avatar")} />
                 </figure>
@@ -46,8 +51,13 @@ const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller, item}) => {
         </section>
         <section className="flex flex-col my-2 justify-between">
             <NavLink to={"/offers/".concat(offer.id)} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Offer detail</NavLink>
-            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">Price offer</button>
-            <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">Buy</button>
+            {offer.buyerId ?
+                <span>SOLD</span> :
+                <>
+                    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">Price offer</button>
+                    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">Buy</button>
+                </>
+            }
         </section>
     </div>
     )

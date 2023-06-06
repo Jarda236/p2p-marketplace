@@ -213,27 +213,6 @@ const OfferOverview: FC<Props> = (props) => {
             />
             {<p>Ordered by: {columnsToSort.map(item => <span key={item.column}
                                                             onDoubleClick={() => deleteSorting(item.column)}>{item.column.concat(" ")}</span>)}</p>}
-            <table>
-                <thead>
-                <tr>
-                    <td>
-                        Offers:
-                    </td>
-                </tr>
-                </thead>
-                <tbody>
-                {filteredOffers?.map(offer =>
-                    <tr key={offer.id} onClick={() => handleClick(offer.id)}>
-                        <td>{offer.name}</td>
-                        <td>{offer.category}</td>
-                        <td>{offer.sellerName}</td>
-                        <td>{offer.createdAt}</td>
-                        <td>{offer.topOffer}</td>
-                        <td>{offer.price}</td>
-                        <td>{offer.sold ? "SOLD" : "OPEN"}</td>
-                    </tr>)}
-                </tbody>
-            </table>
         </div>
         <hr/>
         <hr/>
@@ -242,7 +221,7 @@ const OfferOverview: FC<Props> = (props) => {
             <hr/>
             <ul>
                 {offers ?
-                    filterOffers().map((offer, index) =>
+                    filteredOffers.map((offer, index) =>
                     <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={items[index].data}/>):
                     <span>Loading...</span>}
             </ul>
