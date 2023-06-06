@@ -14,7 +14,7 @@ import Register from "./Authentification/Register/Register";
 export const App: FC = () => {
 
     return (
-        <div className=" flex flex-col items-center ">
+        <div>
             <Header />
             <main>
                 <Routes>
