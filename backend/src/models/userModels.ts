@@ -11,8 +11,8 @@ export const UserSchema = z.object({
     rating_sum: z.number(),
     rating_count: z.number(),
     id: z.string(),
-    image: z.string().optional(),
-    deleted_at: z.date().nullable().optional(),
+    image: z.string().nullable().optional(),
+    deletedAt: z.date().nullable().optional(),
     updatedAt: z.date().optional(),
 }).merge(BaseModelSchema);
 
