@@ -38,6 +38,11 @@ export interface OfferCreateBody {
     itemId: string;
 }
 
+export interface OfferUpdateBody {
+    price?: number;
+    itemId?: string;
+}
+
 export interface Item {
     id: string;
     userId: string;

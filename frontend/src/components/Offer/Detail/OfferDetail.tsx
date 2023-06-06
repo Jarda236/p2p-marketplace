@@ -2,7 +2,6 @@ import {FC} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {ItemsApi, OffersApi} from "../../../services"
 import {NavLink, useNavigate, useParams} from "react-router-dom";
-import { Item } from "../../../models";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 
@@ -14,12 +13,14 @@ const OfferDetail: FC = () => {
 
     const {data: offer} = useQuery({
         queryKey: ['offer'],
-        queryFn: () => OffersApi.getOfferById(offerId ?? "")
+        queryFn: () => OffersApi.getOfferById(offerId ?? ""),
+        enabled: !!offerId
     })
 
     const {data: item} = useQuery({
         queryKey: ['item'],
-        queryFn: () => ItemsApi.getItemById(offerId ?? "")
+        queryFn: () => ItemsApi.getItemById(offer?.itemId ?? ""),
+        enabled: !!offer
     })
 
     return (
@@ -47,7 +48,7 @@ const OfferDetail: FC = () => {
                                     {user?.id === offer.sellerId ?
                                         <>
                                             <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
-                                                    onClick={() => navigate(`create-counter-offer`)}>
+                                                    onClick={() => navigate(`edit`, {state: {item: item}})}>
                                                 Edit
                                             </button>
                                             <button className="focus:outline-none text-black bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">

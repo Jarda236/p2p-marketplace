@@ -17,13 +17,12 @@ const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, toggleItem}) => {
         queryKey: ['items'],
         queryFn: () => ItemsApi.getItems()
     })
-
     return <div>
         {items ?
             <ul>
                 {items.map(item =>
                         !item.deleted && <li key={item.id}>
-                            <ItemOverviewItem item={item} toggleItem={toggleItem} />
+                            <ItemOverviewItem item={item} toggleItem={toggleItem} checked={checkedItems.findIndex(i => i.id === item.id) !== -1 && true}/>
                         </li>)}
             </ul> :
         <span>Loading...</span>}

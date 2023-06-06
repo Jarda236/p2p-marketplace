@@ -1,39 +1,61 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {number, object} from "yup";
-import {OffersApi} from "../../../services";
-import {Item} from "../../../models";
-import {NavLink} from "react-router-dom";
+import {ItemsApi, OffersApi} from "../../../services";
+import {Item, Offer} from "../../../models";
+import {NavLink, useParams} from "react-router-dom";
 import ItemOverview from "../../Item/Overview/ItemOverview";
+import {useQuery} from "@tanstack/react-query";
+import {data} from "autoprefixer";
 
-interface CreateOfferFormData {
+interface UpdateOfferFormData {
     price: number
 }
 
-const OfferCreateSchema = object().shape({
+const OfferUpdateSchema = object().shape({
     price: number()
         .default(0)
         .typeError("Price must be a number.") // customize error message for invalid type
         .min(1, "Price must be positive.")
 });
 
-const OfferCreate: FC = () => {
+const OfferUpdate: FC = () => {
+    const {offerId} = useParams();
     const [reason, setReason] = useState<string | null>(null);
+
+    const {data: offer} = useQuery({
+        queryKey: ['offer'],
+        queryFn: () => OffersApi.getOfferById(offerId ?? ""),
+        enabled: !!offerId
+    })
+
+    const {data: item} = useQuery({
+        queryKey: ['item'],
+        queryFn: () => ItemsApi.getItemById(offer?.itemId ?? ""),
+        enabled: !!offer
+    })
 
     const [checkedItems, changeCheckedItems] = useState<Item[]>([]);
 
-    const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<CreateOfferFormData>({
-        resolver: yupResolver(OfferCreateSchema)
+    useEffect(() => {
+        if (item) {
+            changeCheckedItems([item])
+        }
+    }, [item]);
+
+    const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<UpdateOfferFormData>({
+        resolver: yupResolver(OfferUpdateSchema)
     });
 
-    const onSubmit: SubmitHandler<CreateOfferFormData> = async (data) => {
+    const onSubmit: SubmitHandler<UpdateOfferFormData> = async (data) => {
+        console.log(data, checkedItems);
         if (checkedItems.length === 0) {
             setReason("You have to check one item.")
             return;
         }
         checkedItems[0].blocked = true;
-        await OffersApi.createOffer({price: data.price, itemId: checkedItems[0].id}).then(() => setReason("OK")).catch((reason) => setReason(reason.message));
+        await OffersApi.updateOffer(offer?.id ?? "", {price: data.price, itemId: checkedItems[0].id}).then(() => setReason("OK")).catch((reason) => setReason(reason.message));
     }
 
     const toggleItem = (item: Item): boolean => {
@@ -51,7 +73,7 @@ const OfferCreate: FC = () => {
     return <>
         {reason === null ?
             <>
-                <h1>Create offer</h1>
+                <h1>Edit offer</h1>
                 <span>Choose your item.</span>
                 <ItemOverview
                     checkedItems={checkedItems}
@@ -69,13 +91,13 @@ const OfferCreate: FC = () => {
                 </form>
             </> :
             reason === "OK" ?
-                <h3>Offer created!</h3> :
+                <h3>Offer updated!</h3> :
                 <>
-                    <h3>Unable to create offer.</h3>
+                    <h3>Unable to update offer.</h3>
                     <p>Reason: {reason}</p>
                 </>}
-        <NavLink to="/offers">Back</NavLink>
+        <NavLink to={"/offers/".concat(offerId ?? "")}>Back</NavLink>
     </>
 }
 
-export default OfferCreate;
+export default OfferUpdate;

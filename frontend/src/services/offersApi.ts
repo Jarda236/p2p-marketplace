@@ -1,5 +1,5 @@
 import axiosInstance from "./base";
-import {Offer, OfferCreateBody} from "../models";
+import {Offer, OfferCreateBody, OfferUpdateBody} from "../models";
 
 const OFFERS: Offer[] = [
     {
@@ -65,9 +65,22 @@ export const getOffersBySellerId = async (userId: string): Promise<Array<Offer>>
 }
 
 export const getOffersByBuyerId = async (userId: string): Promise<Array<Offer>> => {
-    console.log(userId)
     return OFFERS.filter(offer => offer.buyerId === userId && offer.sold);
 
     const response = await axiosInstance.get(`/offers/buyer/${userId}`);
+    return response.data;
+}
+
+export const deleteOfferById = async (offerId: string): Promise<void> => {
+    const response = await axiosInstance.delete(`/offers/${offerId}`);
+    return response.data;
+}
+
+export const updateOffer = async (offerId: string, offer: OfferUpdateBody): Promise<void> => {
+    const response = await axiosInstance.put(`/offers/${offerId}`, offer, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
     return response.data;
 }

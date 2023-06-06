@@ -14,6 +14,7 @@ import {atom, useRecoilState} from "recoil";
 import {userState} from "../state/atoms";
 import NotFound from "./NotFound";
 import CounterOfferCreate from "./CounterOffer/Create/CounterOfferCreate";
+import OfferUpdate from "./Offer/Edit/OfferUpdate";
 export const App: FC = () => {
     const [user, setUser] = useRecoilState(userState);
 
@@ -30,6 +31,7 @@ export const App: FC = () => {
                         <>
                             <Route path="/offers/:offerId" element={<OfferDetail />} />
                             <Route path="/offers/create" element={<OfferCreate />} />
+                            <Route path="/offers/:offerId/edit" element={<OfferUpdate />} />
                             <Route path="/users" element={<UserOverview />} />
                             <Route path="/users/:userId" element={<UserDetail />} />
                             <Route path="/offers/:offerId/create-counter-offer" element={<CounterOfferCreate />} />

@@ -3,13 +3,14 @@ import {Item} from "../../../../models";
 
 interface ItemOverviewItemProps {
     item: Item,
-    toggleItem: (item: Item) => boolean
+    toggleItem: (item: Item) => boolean,
+    checked: boolean
 }
-const ItemOverviewItem: FC<ItemOverviewItemProps> = ({item, toggleItem}) => {
-    const [checked, toggleChecked] = useState<boolean>(false);
+const ItemOverviewItem: FC<ItemOverviewItemProps> = ({item, toggleItem, checked}) => {
+    /*const [checked, toggleChecked] = useState<boolean>(toggleCheck ?? false);*/
     return <div
         onClick={() => {
-            toggleChecked(!item.blocked && toggleItem(item) && !checked);
+            !item.blocked && toggleItem(item) && !checked
         }}
         className={
         "flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl pr-2 pb-2 ".concat(checked ? "bg-red-100 hover:bg-red-200" : (item.blocked ? "bg-yellow-100 hover:bg-yellow-200" : "bg-blue-100 hover:bg-blue-200"))

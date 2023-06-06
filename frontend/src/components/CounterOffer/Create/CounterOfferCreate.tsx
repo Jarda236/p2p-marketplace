@@ -40,7 +40,7 @@ const CounterOfferCreate: FC = () => {
         await CounterOffersApi.createCounterOffer({offerId: offerId ?? "", price: data.price, itemsId: checkedItems.map(i => {
             i.blocked = true;
             return i.id;
-            })}).then(() => setReason("OK")).catch((reason) => setReason(reason));
+            })}).then(() => setReason("OK")).catch((reason) => setReason(reason.message));
     }
 
     const toggleItem = (item: Item): boolean => {
