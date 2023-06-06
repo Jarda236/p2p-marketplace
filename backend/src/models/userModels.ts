@@ -7,7 +7,7 @@ export const UserSchema = z.object({
     password_hash: z.string({ required_error: 'Property password_hash is required' }).nonempty(),
     email: z.string({ required_error: 'Property email is required' }).nonempty(),
     phone: z.string({ required_error: 'Property phone is required' }).nonempty(),
-    city: z.string({ required_error: 'Property address is required' }).nonempty(),
+    city: z.string({ required_error: 'Property city is required' }).nonempty(),
     createdAt: z.date({required_error: 'createdAt required' }),
     rating_sum: z.number({required_error: 'rating_sum required' }),
     rating_count: z.number({required_error: 'rating_count required' }),

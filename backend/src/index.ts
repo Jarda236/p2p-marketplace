@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
-import { userController, offerController } from "./controller";
+import { userController, offerController, itemController, fundsAccountController } from "./controller";
 
 dotenv.config();
 const api = express();
@@ -12,5 +12,7 @@ api.use(cors());
 
 api.use("/users", userController);
 api.use("/offers", offerController);
+api.use("/items", itemController);
+api.use("/funds", fundsAccountController);
 
 api.listen(port, () => console.log(`[P-2-P Marketplace] is listening on port ${port}`));
