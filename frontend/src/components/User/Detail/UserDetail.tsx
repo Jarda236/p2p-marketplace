@@ -28,7 +28,7 @@ const UserDetail: FC = () => {
 
     const deleteCheckedItems = async () => {
         checkedItems.map(async (item) => {
-            item.blocked = true;
+            item.deleted = true;
             await ItemsApi.deleteItemById(item.id);
         })
         changeCheckedItems([]);

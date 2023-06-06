@@ -22,7 +22,7 @@ const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, toggleItem}) => {
         {items ?
             <ul>
                 {items.map(item =>
-                        <li key={item.id}>
+                        !item.deleted && <li key={item.id}>
                             <ItemOverviewItem item={item} toggleItem={toggleItem} />
                         </li>)}
             </ul> :
