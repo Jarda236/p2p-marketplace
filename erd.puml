@@ -9,12 +9,12 @@ entity Offer {
     * price: decimal
     * category: string
     * pictures: <<url>>
-    * created_at: datetime
-    sold_at: datetime
+    * createdAt: datetime
+    soldAt: datetime
 
     transactionId: <<FK>>
-    updated_at: datetime
-    deleted_at: datetime
+    updatedAt: datetime
+    deletedAt: datetime
 }
 
 entity User {
@@ -25,13 +25,13 @@ entity User {
     * email: string
     * phone: string
     * address: string
-    * created_at: datetime
+    * createdAt: datetime
     *rating_sum: float
     *rating_count: int
     *image: <<url>>
 /'    freshest token + valid_until ?? '/
-    updated_at: datetime
-    deleted_at: datetime
+    updatedAt: datetime
+    deletedAt: datetime
 }
 
 entity Transaction {
@@ -41,8 +41,8 @@ entity Transaction {
     * buyerId: <<FK>>
     * amount: decimal
     * status: string
-    * created_at: datetime
-    updated_at: datetime
+    * createdAt: datetime
+    updatedAt: datetime
 }
 
 entity FundsAccount {
@@ -51,8 +51,8 @@ entity FundsAccount {
     * userId: <<FK>>
     * balance: decimal
 /'    * currency: string '/
-    * created_at: datetime
-    updated_at: datetime
+    * createdAt: datetime
+    updatedAt: datetime
 }
 
 entity CounterOffer {
@@ -63,16 +63,16 @@ entity CounterOffer {
     offers: Offer[]
     payment: decimal
     *status: string
-    *created_at: datetime
-    updated_at: datetime
-    deleted_at: datetime
+    *createdAt: datetime
+    updatedAt: datetime
+    deletedAt: datetime
 }
 
-User ||--o{ Offer : offers  
-User ||--o{ Transaction : recieved
-User ||--o{ Transaction : sent
+User  ||--o{ Offer : offers  
+User  ||--o{ Transaction : recieved
+User  ||--o{ Transaction : sent
 Offer ||--o| Transaction : has
-User ||--|| FundsAccount : owns
+User  ||--|| FundsAccount : owns
 Offer ||--o{ CounterOffer : has
 
 @enduml
