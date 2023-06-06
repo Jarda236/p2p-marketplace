@@ -1,11 +1,18 @@
 import {FC} from "react";
 import {User} from "../../models";
 import {NavLink} from "react-router-dom";
+import {SetterOrUpdater} from "recoil";
 
 interface UserInfoProps {
-    user?: User
+    user?: User,
+    setUser: SetterOrUpdater<User | undefined>
 }
-const UserInfo:FC<UserInfoProps> = ({user}) => {
+const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
+    const handleLogout = () => {
+        setUser(undefined);
+        localStorage.removeItem('token');
+    }
+
     return ( 
     <section>
         <section className=" flex flex-col pb-1">
@@ -20,8 +27,10 @@ const UserInfo:FC<UserInfoProps> = ({user}) => {
                         >{user ? user.username : "Guest"}</span>
                     </div>
                     <div>
-                        {user ? <button type="button"
-                        className="text-black bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-14 py-0"
+                        {user ? <button
+                                type="button"
+                                className="text-black bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-14 py-0"
+                                onClick={handleLogout}
                         >Logout</button> : 
                         <NavLink to="/auth/login"
                         className=" text-black bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-14 py-0"

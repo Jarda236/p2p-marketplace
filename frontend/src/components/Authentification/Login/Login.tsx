@@ -4,6 +4,8 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {object, string, ref} from "yup";
 import { AuthApi } from "../../../services";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
 type LoginFormData = {
     username: string;
@@ -19,17 +21,19 @@ const schema = object().shape({
 const Login: FC = () => {
     const navigate = useNavigate();
 
+    const [user, setUser] = useRecoilState(userState);
+
+    const [success, setSuccess] = useState<boolean | null>(null);
+
     const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<LoginFormData>({
         resolver: yupResolver(schema)
     });
-
-    const [success, setSuccess] = useState<boolean | null>(null);
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
         await AuthApi.login(data.username, data.password)
             .then((response) => {
                 setSuccess(true);
-                //user.setUser(response.user);
+                setUser(response.user);
                 localStorage.setItem('token', response.token);
                 navigate("/");
             })

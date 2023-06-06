@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     <App />
                 }
                 </BrowserRouter>
-                </RecoilRoot>
+            </RecoilRoot>
         </QueryClientProvider>
     </React.StrictMode>
 );

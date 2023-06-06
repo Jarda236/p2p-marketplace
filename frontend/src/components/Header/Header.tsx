@@ -1,7 +1,11 @@
 import {FC} from "react";
 import UserInfo from "./UserInfo";
+import {useRecoilState} from "recoil";
+import {userState} from "../../state/atoms";
 
 const Header:FC = () => {
+    const [user, setUser] = useRecoilState(userState);
+
     return ( 
     <div className="  bg-sky-400 flex flex-row justify-stretch shadow shadow-slate-400">
         <figure className=" grow flex flex-row p-4">
@@ -14,7 +18,7 @@ const Header:FC = () => {
             </figcaption>
         </figure>
         <div className=" pr-4 pt-4 pb-2">
-            <UserInfo />
+            <UserInfo user={user} setUser={setUser}/>
         </div>
     </div>
     );
