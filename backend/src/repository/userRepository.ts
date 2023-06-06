@@ -31,7 +31,8 @@ export const getSingle = async (id: string): Promise<Result<User | null, Error>>
 
 export const createSingle = async (data: UserCreate): Promise<Result<User, Error>> => {
     try {
-        const user = await prisma.user.create({ data });
+        const dataa = { ...data, rating_sum: 0, rating_count: 0}
+        const user = await prisma.user.create( {data: dataa} );
         return Result.ok(user);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
