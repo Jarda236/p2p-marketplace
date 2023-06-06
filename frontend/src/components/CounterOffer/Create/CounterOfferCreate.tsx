@@ -1,9 +1,9 @@
 import {FC, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {date, number, object, string} from "yup";
-import {CounterOffersApi, OffersApi} from "../../../services";
-import {Item, OfferCreateBody} from "../../../models";
+import {number, object} from "yup";
+import {CounterOffersApi} from "../../../services";
+import {Item} from "../../../models";
 import {NavLink, useParams} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
@@ -13,14 +13,16 @@ interface CreateOfferCounterFormData {
     price: number
 }
 
-const CounterOfferCreateSchema = object().shape({
-    price: number()
-        .default(0)
-        .typeError("Price must be a number.") // customize error message for invalid type
-        .min(1, "Price must be positive.")
-});
+const CounterOfferCreate: FC = () => {
+    const [user] = useRecoilState(userState);
+    const CounterOfferCreateSchema = object().shape({
+        price: number()
+            .default(0)
+            .typeError("Price must be a number.") // customize error message for invalid type
+            .min(1, "Price must be positive.")
+            .max(user ? user.account.balance : 0, "Check your balance.")
+    });
 
-const OfferCreate: FC = () => {
     const {offerId} = useParams();
     const [reason, setReason] = useState<string | null>(null);
 
@@ -34,15 +36,24 @@ const OfferCreate: FC = () => {
         await CounterOffersApi.createCounterOffer({offerId: offerId ?? "", price: data.price, itemsId: checkedItems.map(i => i.id)}).then(() => setReason("OK")).catch((reason) => setReason(reason));
     }
 
+    const toggleItem = (item: Item): boolean => {
+        const index = checkedItems.findIndex(i => i.id === item.id);
+        if (index === -1) {
+            changeCheckedItems(p => [...p, item]);
+        } else {
+            changeCheckedItems(p => p.filter((_, i) => i !== index));
+        }
+        return true;
+    }
 
     return <>
         {reason === null ?
             <>
-                <h1>Create offer</h1>
-                <span>Choose your item.</span>
+                <h1>Create counter offer</h1>
+                <span>Choose your items.</span>
                 <ItemOverview
                     checkedItems={checkedItems}
-                    changeCheckedItems={changeCheckedItems} />
+                    toggleItem={toggleItem} />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <label htmlFor="price">Price:</label>
@@ -52,17 +63,17 @@ const OfferCreate: FC = () => {
                             {...register("price")} />
                         {isSubmitted && errors.price && <span>{errors.price.message}</span>}
                     </div>
-                    <button className="green-button" type="submit">Create offer</button>
+                    <button className="green-button" type="submit">Create counter offer</button>
                 </form>
             </> :
             reason === "OK" ?
-                <h3>Offer created!</h3> :
+                <h3>Counter offer created!</h3> :
                 <>
-                    <h3>Unable to create offer.</h3>
+                    <h3>Unable to create counter offer.</h3>
                     <p>Reason: {reason}</p>
                 </>}
         <NavLink to="/offers">Back</NavLink>
     </>
 }
 
-export default OfferCreate;
+export default CounterOfferCreate;

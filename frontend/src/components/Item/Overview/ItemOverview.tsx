@@ -7,10 +7,10 @@ import ItemOverviewItem from "./Item/ItemOverviewItem";
 import {Item} from "../../../models";
 
 interface ItemOverviewProps {
-    checkedItems: Item[]
-    changeCheckedItems: React.Dispatch<React.SetStateAction<Item[]>>
+    checkedItems: Item[],
+    toggleItem: (item: Item) => boolean
 }
-const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, changeCheckedItems}) => {
+const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, toggleItem}) => {
     const [user] = useRecoilState(userState);
 
     const {data: items} = useQuery({
@@ -18,17 +18,7 @@ const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, changeCheckedItems})
         queryFn: () => ItemsApi.getItems()
     })
 
-    const toggleItem = (item: Item) => {
-        const index = checkedItems.findIndex(i => i.id === item.id);
-        if (index === -1) {
-            changeCheckedItems(p => [...p, item]);
-        } else {
-            changeCheckedItems(p => p.filter((_, i) => i !== index));
-        }
-    }
-
     return <div>
-        {checkedItems.map(i => <p key={i.id}>{i.name}</p>)}
         {items ?
             <ul>
                 {items.map(item =>

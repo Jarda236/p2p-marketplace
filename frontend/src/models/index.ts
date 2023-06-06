@@ -43,11 +43,12 @@ export interface Item {
     userId: string;
 
     name: string;
+    blocked: boolean;
     description: string;
     category: string;
     image: string;
 
-    [key: string]: string;
+    [key: string]: string | boolean;
 }
 
 export interface ItemCreateBody {

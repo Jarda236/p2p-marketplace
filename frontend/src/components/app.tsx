@@ -13,6 +13,7 @@ import Register from "./Authentification/Register/Register";
 import {atom, useRecoilState} from "recoil";
 import {userState} from "../state/atoms";
 import NotFound from "./NotFound";
+import CounterOfferCreate from "./CounterOffer/Create/CounterOfferCreate";
 export const App: FC = () => {
     const [user, setUser] = useRecoilState(userState);
 
@@ -31,6 +32,7 @@ export const App: FC = () => {
                             <Route path="/offers/create" element={<OfferCreate />} />
                             <Route path="/users" element={<UserOverview />} />
                             <Route path="/users/:userId" element={<UserDetail />} />
+                            <Route path="/offers/:offerId/create-counter-offer" element={<CounterOfferCreate />} />
                             <Route path="/auth/login" element={<OfferOverview />} />
                             <Route path="/auth/register" element={<OfferOverview />} />
                         </>:
