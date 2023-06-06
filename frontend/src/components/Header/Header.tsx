@@ -1,7 +1,8 @@
 import {FC} from "react";
 import UserInfo from "./UserInfo";
 import {useRecoilState} from "recoil";
-import {userState} from "../../state/atoms";
+import {userState, initialAuth} from "../../state/atoms";
+import { AuthApi } from "../../services";
 
 const Header:FC = () => {
     const [user, setUser] = useRecoilState(userState);

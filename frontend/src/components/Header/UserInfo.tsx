@@ -1,7 +1,9 @@
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import {User} from "../../models";
 import {NavLink} from "react-router-dom";
-import {SetterOrUpdater} from "recoil";
+import {SetterOrUpdater, useRecoilState} from "recoil";
+import {initialAuth} from "../../state/atoms";
+import { AuthApi } from "../../services";
 
 interface UserInfoProps {
     user?: User,
@@ -12,6 +14,21 @@ const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
         setUser(undefined);
         localStorage.removeItem('token');
     }
+
+    const [auth, setAuth] = useRecoilState(initialAuth);
+
+    const runInitialAuth = async () => {
+        if (user === undefined && !auth) {
+            setAuth(true);
+            await AuthApi.isAuthenticated()
+                .then(r => setUser(r))
+                .catch();
+        }
+    }
+
+    useEffect(() => {
+        runInitialAuth();
+    })
 
     return ( 
     <section>
