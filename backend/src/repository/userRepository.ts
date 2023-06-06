@@ -5,8 +5,23 @@ import prisma from "../client";
 
 export const getAll = async (): Promise<Result<User[], Error>> => {
   try {
-    const users = await prisma.user.findMany();
-    return Result.ok(users);
+    const result = await prisma.user.findMany({
+        include: { fundsAccount: true },
+    });
+    const aa = Array(result.length).fill(undefined);
+    for (let i = 0; i < result.length; i++) {
+      if (result[i] && result[i].fundsAccount) {
+        aa[i] = {
+          ...result[i],
+          fundsAccount: {
+            ...result[i].fundsAccount,
+            balance: result[i].fundsAccount!.balance.toNumber(),
+            balanceBlocked: result[i].fundsAccount!.balanceBlocked.toNumber(),
+          },
+        };
+      }
+    }
+    return Result.ok(aa);
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       return Result.err(error);
@@ -19,8 +34,22 @@ export const getSingle = async (
   id: string
 ): Promise<Result<User | null, Error>> => {
   try {
-    const user = await prisma.user.findUnique({ where: { id } });
-    return Result.ok(user);
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: { fundsAccount: true },
+    });
+    if (user && user.fundsAccount) {
+      var a = {
+        ...user,
+        fundsAccount: {
+          ...user.fundsAccount,
+          balance: user.fundsAccount.balance.toNumber(),
+          balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
+        },
+      };
+      return Result.ok(a);
+    }
+    return Result.ok(null);
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       return Result.err(error);
@@ -34,8 +63,19 @@ export const createSingle = async (
 ): Promise<Result<User, Error>> => {
   try {
     const dataa = { ...data, rating_sum: 0, rating_count: 0 };
-    const user = await prisma.user.create({ data: dataa });
-    return Result.ok(user);
+    const user = await prisma.user.create({ data: dataa, include: { fundsAccount: true } });
+    if (user && user.fundsAccount) {
+        var a = {
+          ...user,
+          fundsAccount: {
+            ...user.fundsAccount,
+            balance: user.fundsAccount.balance.toNumber(),
+            balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
+          },
+        };
+        return Result.ok(a);
+      }
+      return Result.err(new Error(`asdasd ${user}`));
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       return Result.err(error);
@@ -49,8 +89,19 @@ export const updateSingle = async (
   data: UserUpdate
 ): Promise<Result<User, Error>> => {
   try {
-    const user = await prisma.user.update({ where: { id }, data });
-    return Result.ok(user);
+    const user = await prisma.user.update({ where: { id }, data, include: { fundsAccount: true } });
+    if (user && user.fundsAccount) {
+        var a = {
+            ...user,
+            fundsAccount: {
+                ...user.fundsAccount,
+                balance: user.fundsAccount.balance.toNumber(),
+                balanceBlocked: user.fundsAccount.balanceBlocked.toNumber(),
+            },
+        };
+        return Result.ok(a);
+    }
+    return Result.err(new Error(`asdasd ${user}`));
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       return Result.err(error);

@@ -1,0 +1,78 @@
+import { Result } from "@badrap/result";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Item, ItemCreate, ItemUpdate } from "../models";
+import prisma from "../client";
+
+export const getAll = async (): Promise<Result<Item[], Error>> => {
+  try {
+    const result = await prisma.item.findMany();
+    return Result.ok(result);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};
+
+export const getSingle = async (
+  id: string
+): Promise<Result<Item | null, Error>> => {
+  try {
+    const item = await prisma.item.findUnique({
+      where: { id },
+    });
+
+    return Result.ok(item);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};
+
+export const createSingle = async (
+  data: ItemCreate
+): Promise<Result<Item, Error>> => {
+  try {
+    const dataa = { ...data,  counterOfferId: null, offerId: null };
+    const item = await prisma.item.create({ data: dataa });
+    return Result.ok(item);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};
+
+export const updateSingle = async (
+  id: string,
+  data: ItemUpdate
+): Promise<Result<Item, Error>> => {
+  try {
+    const item = await prisma.item.update({
+      where: { id },
+      data,
+    });
+    return Result.ok(item);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};
+
+export const deleteSingle = async (id: string) => {
+  try {
+    const item = await prisma.item.delete({ where: { id } });
+    return Result.ok(item);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};

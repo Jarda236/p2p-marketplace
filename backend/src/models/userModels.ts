@@ -1,5 +1,6 @@
 import z from 'zod';
 import { BaseModelSchema, ModelIdSchema } from './baseModels';
+import { FundsAccount } from './fundsAccountModels';
 
 export const UserSchema = z.object({
     name: z.string({ required_error: 'Property name is required' }).nonempty(),
@@ -13,6 +14,11 @@ export const UserSchema = z.object({
     id: z.string({required_error: 'id required' }),
     image: z.string().nullable().nullable().optional(),
     deletedAt: z.date().nullable().optional(),
+    fundsAccount: z.object({
+        userId: z.string({ required_error: "Property `userId` is required" }).nonempty(),
+        balance: z.number({ required_error: "Property `balance` is required" }),
+        balanceBlocked: z.number({ required_error: "Property `balanceBlocked` is required" }),
+      }).merge(BaseModelSchema).nullable()
 }).merge(BaseModelSchema);
 
 export type User = z.infer<typeof UserSchema>;
