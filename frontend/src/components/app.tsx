@@ -10,8 +10,11 @@ import UserOverview from "./User/Overview/UserOverview";
 import UserDetail from "./User/Detail/UserDetail";
 import Login from "./Authentification/Login/Login";
 import Register from "./Authentification/Register/Register";
-import {atom} from "recoil";
+import {atom, useRecoilState} from "recoil";
+import {userState} from "../state/atoms";
+import NotFound from "./NotFound";
 export const App: FC = () => {
+    const [user, setUser] = useRecoilState(userState);
 
     return (
         <div className=" min-h-screen flex flex-col m-0 p-0">
@@ -21,13 +24,23 @@ export const App: FC = () => {
             <main className=" grow">
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />
-                    <Route path="/auth/login" element={<Login />} />
-                    <Route path="/auth/register" element={<Register />} />
                     <Route path="/offers" element={<OfferOverview />} />
-                    <Route path="/offers/:offerId" element={<OfferDetail />} />
-                    <Route path="/offers/create" element={<OfferCreate />} />
-                    <Route path="/users" element={<UserOverview />} />
-                    <Route path="/users/:userId" element={<UserDetail />} />
+                    {user ?
+                        <>
+                            <Route path="/offers/:offerId" element={<OfferDetail />} />
+                            <Route path="/offers/create" element={<OfferCreate />} />
+                            <Route path="/users" element={<UserOverview />} />
+                            <Route path="/users/:userId" element={<UserDetail />} />
+                            <Route path="/auth/login" element={<OfferOverview />} />
+                            <Route path="/auth/register" element={<OfferOverview />} />
+                        </>:
+                        <>
+                            <Route path="/auth/login" element={<Login />} />
+                            <Route path="/auth/register" element={<Register />} />
+                            <Route path="*" element={<Login />}/>
+                        </>
+                    }
+                    <Route path="*" element={<NotFound />}/>
                 </Routes>
             </main>
             <div>
