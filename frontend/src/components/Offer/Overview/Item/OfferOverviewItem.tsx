@@ -3,15 +3,16 @@ import {Offer, User} from "../../../../models";
 import OfferOverview from "../OfferOverview";
 import {NavLink, useNavigate} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
+import {ItemsApi, OffersApi} from "../../../../services";
 
 interface OfferOverviewProps {
     offer: Offer,
     seller: User
 }
 const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller}) => {
-    const {data: item} => useQuery({
+    const {data: item} = useQuery({
         queryKey: ['item'],
-        queryFn: ()
+        queryFn: () => ItemsApi.getItemById(offer.id)
     })
 
     return (
@@ -19,24 +20,24 @@ const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller}) => {
                        pr-2 pb-2">
         <section className=" text-lg flex flex-row h-auto">
             <figure>
-                <img src="/pictures/auto.jpg " 
+                <img src={item?.image}
                 className=" h-48 w-48 object-cover rounded-md"
-                alt={offer.name.concat("-image")} />
+                alt={item?.name.concat("-image")} />
             </figure>
             <div className="flex flex-col mx-4 my-2">
-                <p><b>{offer.name}</b></p>
-                <p>{offer.category.name}</p>
-                <p className="grow text-base">{offer.description}</p>
+                <p><b>{item?.name}</b></p>
+                <p>{item?.category}</p>
+                <p className="grow text-base">{item?.description}</p>
                 <p><b>{offer.price},-</b></p>
             </div>
         </section>
         <section className=" text-lg flex flex-col my-2 justify-between">
-            <span><b>Seller: </b>{seller.name}</span>
+            <span><b>Seller: </b>{seller.username}</span>
             <div className=" flex flex-row">
                 <figure className=" mr-4">
-                    <img src="/icons/user.jpg"
+                    <img src={seller.image}
                     className=" h-12 w-12 object-cover rounded-full"
-                    alt={seller.name.concat("-avatar")} />
+                    alt={seller.username.concat("-avatar")} />
                 </figure>
                 <span>{seller.rating}</span>
                 <figure className=" ml-1">

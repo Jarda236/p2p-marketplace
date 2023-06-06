@@ -14,7 +14,7 @@ const USERS: User[] = [
           balanceBlocked: 300
         },
         rating: 4,
-        image: ""
+        image: "/icons/user.jpg"
     },
     {
         id: "2",
@@ -28,7 +28,7 @@ const USERS: User[] = [
             balanceBlocked: 300
         },
         rating: 5,
-        image: ""
+        image: "/icons/user.jpg"
     }
 ]
 

@@ -20,11 +20,17 @@ export const login = async (username: string, password: string): Promise<LoginRe
     return {
         user: {
             id: "1",
-            name: "name1",
-            username: "user1",
+            username: "username1",
+            email: "user1@a.com",
+            phone: 14433434343,
+            city: "Brno",
             createdAt: 0,
-            cashAmount: 500,
-            rating: 5
+            account: {
+                balance: 500,
+                balanceBlocked: 300
+            },
+            rating: 4,
+            image: "/icons/user.jpg"
         },
         token: "token"
     };
@@ -58,11 +64,17 @@ export const register = async (username: string, password: string):Promise<void>
 export const isAuthenticated = async ():Promise<User> => {
     return {
         id: "1",
-        name: "name1",
-        username: "user1",
+        username: "username1",
+        email: "user1@a.com",
+        phone: 14433434343,
+        city: "Brno",
         createdAt: 0,
-        cashAmount: 500,
-        rating: 5
+        account: {
+            balance: 500,
+            balanceBlocked: 300
+        },
+        rating: 4,
+        image: "/icons/user.jpg"
     };
     /*TODO const response = await axiosAuthInstance.get("", {
         headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}

@@ -4,33 +4,31 @@ import {Offer, OfferCreateBody} from "../models";
 const OFFERS: Offer[] = [
     {
         id: "1",
-        name: "name1",
-        description: "description1",
-        category: {id: "1", name: "car"},
-        sellerId: "1",
-        sellerName: "user1",
         createdAt: 0,
-        endDate: 10,
-        topOffer: 0,
+
         price: 400,
-        sold: false,
+
+        itemId: "1",
+
+        sellerId: "1",
+        sellerName: "username1",
+
         buyerId: null,
-        soldFor: null
+        buyerName: null
     },
     {
         id: "2",
-        name: "name2",
-        description: "description2",
-        category: {id: "1", name: "car"},
-        sellerId: "2",
-        sellerName: "user2",
         createdAt: 0,
-        endDate: 10,
-        topOffer: 0,
+
         price: 700,
-        sold: true,
+
+        itemId: "2",
+
+        sellerId: "2",
+        sellerName: "username2",
+
         buyerId: "1",
-        soldFor: 700
+        buyerName: "username1"
     }
 ];
 
