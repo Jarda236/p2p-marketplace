@@ -37,7 +37,10 @@ const CounterOfferCreate: FC = () => {
             setReason("You have to check one item.")
             return;
         }
-        await CounterOffersApi.createCounterOffer({offerId: offerId ?? "", price: data.price, itemsId: checkedItems.map(i => i.id)}).then(() => setReason("OK")).catch((reason) => setReason(reason));
+        await CounterOffersApi.createCounterOffer({offerId: offerId ?? "", price: data.price, itemsId: checkedItems.map(i => {
+            i.blocked = true;
+            return i.id;
+            })}).then(() => setReason("OK")).catch((reason) => setReason(reason));
     }
 
     const toggleItem = (item: Item): boolean => {

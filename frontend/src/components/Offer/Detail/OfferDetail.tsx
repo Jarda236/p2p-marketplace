@@ -3,10 +3,14 @@ import {useQuery} from "@tanstack/react-query";
 import {ItemsApi, OffersApi} from "../../../services"
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import { Item } from "../../../models";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
 const OfferDetail: FC = () => {
     const navigate = useNavigate();
     const {offerId} = useParams();
+
+    const [user] = useRecoilState(userState);
 
     const {data: offer} = useQuery({
         queryKey: ['offer'],
@@ -40,13 +44,25 @@ const OfferDetail: FC = () => {
                             {offer.buyerId ?
                                 <span className=" text-red-500 font-bold text-xl">SOLD</span> :
                                 <div className=" flex flex-row justify-between">
-                                    <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
-                                    onClick={() => navigate(`create-counter-offer`)}>
-                                        Send offer
-                                    </button>
-                                    <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
-                                        Buy
-                                    </button>
+                                    {user?.id === offer.sellerId ?
+                                        <>
+                                            <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+                                                    onClick={() => navigate(`create-counter-offer`)}>
+                                                Edit
+                                            </button>
+                                            <button className="focus:outline-none text-black bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
+                                                Delete
+                                            </button>
+                                        </>:
+                                        <>
+                                            <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+                                            onClick={() => navigate(`create-counter-offer`)}>
+                                                Send offer
+                                            </button>
+                                            <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
+                                                Buy
+                                            </button>
+                                        </>}
                                 </div>
                             }
                             </div>

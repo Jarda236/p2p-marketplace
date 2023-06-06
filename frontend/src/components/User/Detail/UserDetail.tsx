@@ -1,13 +1,16 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import OfferOverview from "../../Offer/Overview/OfferOverview";
 import {NavLink, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import {ItemsApi, UsersApi} from "../../../services"
 import ItemOverview from "../../Item/Overview/ItemOverview";
 import {Item} from "../../../models";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
 const UserDetail: FC = () => {
     const {userId} = useParams();
+    const [globalUser] = useRecoilState(userState);
 
     const [checkedItems, changeCheckedItems] = useState<Item[]>([]);
 
@@ -34,7 +37,10 @@ const UserDetail: FC = () => {
         changeCheckedItems([]);
     }
 
-    refetch()
+    useEffect(() => {
+        refetch();
+    })
+
     return(
         <div>
             <div className=" bg-blue-100 mx-auto my-4 max-w-3xl rounded-lg shadow-lg shadow-gray-300 p-4">
@@ -80,16 +86,16 @@ const UserDetail: FC = () => {
                         </div>
                         <OfferOverview offersByBuyerId={user.id} />
                     </section>
-                    <section>
+                    {globalUser?.id === userId && <section>
                         <div className="inline-flex items-center justify-center w-full">
                             <hr className=" w-11/12 h-1 my-8 bg-gray-200 border-0 rounded"/>
                             <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2">
-                            <h3>My items</h3>
+                                <h3>My items</h3>
                             </span>
                         </div>
                         <ItemOverview checkedItems={checkedItems} toggleItem={toggleItem} />
                         <button onClick={deleteCheckedItems}>Delete checked</button>
-                    </section>
+                    </section>}
                 </> :
                 <p className=" text-center text-lg">Loading...</p>
             }
