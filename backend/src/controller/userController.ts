@@ -5,6 +5,9 @@ import { handleErrorResp, handleOkResp } from "../utils";
 import { ParamsWithIdSchema } from "../models/baseModels";
 import { validate } from "../utils/middleware/validate";
 import z from "zod";
+import { LoginRequest } from "../models";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
@@ -65,5 +68,57 @@ router.delete(
     return handleOkResp(user.value, res, `Deleted user with id: ${id}`);
   }
 );
+
+router.post(
+  "/login",
+  validate({ params: LoginRequest }),
+  async (req, res) => {
+    const { username, password } = req.params;
+    const usersResult = await UserRepository.getAll();
+    if(usersResult.isErr){
+      return handleErrorResp(500, res, usersResult.error.message);
+    }
+    const user = usersResult.value.find(u => u.name === username);
+    const passwordHashed = await bcrypt.hash(password, 10);
+    const isMatch = await bcrypt.compare(password, passwordHashed);
+
+    if (user && isMatch) {
+      const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1h' });
+      res.cookie('token', token, { httpOnly: true });
+      return handleOkResp(user, res, `Logged in user with id: ${user.id}`);
+    }
+    return handleErrorResp(401, res, "Invalid credentials");
+  }
+);
+
+
+router.post(
+  "/register",
+  validate({body: UserCreateSchema }),
+  async (req, res) => {
+    const body = req.body;
+    
+    const usersResult = await UserRepository.getAll();
+    if(usersResult.isErr){
+      return handleErrorResp(500, res, usersResult.error.message);
+    }
+    const user = usersResult.value.find(u => u.name === body.name);
+    if(user){
+      return handleErrorResp(401, res, "User already exists");
+    }
+    const passwordHashed = await bcrypt.hash(body.password_hash, 10);
+    body.password_hash = passwordHashed;
+    const newUser = await UserRepository.createSingle(body);
+    if(newUser.isErr){
+      return handleErrorResp(500, res, newUser.error.message);
+    }
+    
+    const token = jwt.sign({ id: newUser.value.id }, 'secret', { expiresIn: '1h' });
+    res.cookie('token', token, { httpOnly: true });
+    return handleOkResp(newUser.value, res, `Registered user with id: ${newUser.value.id}`);
+    
+  }
+);
+
 
 export default router;
