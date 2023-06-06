@@ -1,12 +1,15 @@
 import {FC, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
-import {object, ref, string} from "yup";
+import {number, object, ref, string} from "yup";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import { AuthApi } from "../../../services";
 
 type RegisterFormData = {
     username: string;
+    email: string;
+    phone: number;
+    city: string;
     password: string;
     passwordRepeat: string;
 };
@@ -19,6 +22,15 @@ type RegistrationRequest = {
 const schema = object().shape({
     username: string()
         .required("Username is required."),
+    email: string()
+        .email("Enter valid email.")
+        .required("Email is required."),
+    phone: number()
+        .min(900000000, "Enter valid number.")
+        .max(421999999999, "Enter valid number.")
+        .required("Phone number is required."),
+    city: string()
+        .required("City is required."),
     password: string()
         .required("Password is required."),
     passwordRepeat: string()
@@ -50,39 +62,75 @@ const Register: FC = () => {
             Register account
         </h2>
         {success ?
-            <h3>Úspešne ste sa zaregistrovali!</h3> :
+            <h3>Successfully registered!</h3> :
             <form action="#" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                    <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Username:</label>
-                    <input type="text" {...register("username")} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
+                    <label
+                        htmlFor="username"
+                        className="block mb-2 text-sm font-medium text-gray-900">Username:</label>
+                    <input
+                        type="text"
+                        {...register("username")}
+                        placeholder="John Cena"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
                     {isSubmitted && errors.username && <span>{errors.username.message}</span>}
                 </div>
                 <div>
-                    TODO
-                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email:</label>
-                    <input type="email" placeholder="john@gmail.com"        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
+                    <label
+                        htmlFor="email"
+                        className="block mb-2 text-sm font-medium text-gray-900">Email:</label>
+                    <input
+                        type="email"
+                        {...register("email")}
+                        placeholder="john@gmail.com"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
+                    {isSubmitted && errors.email && <span>{errors.email.message}</span>}
                 </div>
                 <div>
-                    TODO
-                    <label htmlFor="phoneNumber" className="block mb-2 text-sm font-medium text-gray-900">Phone number:</label>
-                    <input type="number" placeholder="123123123"          className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
+                    <label
+                        htmlFor="phone"
+                        className="block mb-2 text-sm font-medium text-gray-900">Phone number:</label>
+                    <input
+                        type="number"
+                        {...register("phone")}
+                        placeholder="123123123"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
+                    {isSubmitted && errors.phone && <span>{errors.phone.message}</span>}
                 </div>
                 <div>
-                    TODO
-                    <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900">City:</label>
-                    <input type="text"          className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
+                    <label
+                        htmlFor="city"
+                        className="block mb-2 text-sm font-medium text-gray-900">City:</label>
+                    <input
+                        type="text"
+                        {...register("city")}
+                        placeholder="Carson City"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
+                    {isSubmitted && errors.city && <span>{errors.city.message}</span>}
                 </div>
                 <div>
-                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Password:</label>
-                    <input type="password" {...register("password")} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
+                    <label
+                        htmlFor="password"
+                        className="block mb-2 text-sm font-medium text-gray-900">Password:</label>
+                    <input
+                        type="password"
+                        {...register("password")}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
                     {isSubmitted && errors.password && <span>{errors.password.message}</span>}
                 </div>
                 <div>
-                    <label htmlFor="passwordRepeat" className="block mb-2 text-sm font-medium text-gray-900">Repeat password:</label>
-                    <input type="password" {...register("passwordRepeat")} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1" />
+                    <label
+                        htmlFor="passwordRepeat"
+                        className="block mb-2 text-sm font-medium text-gray-900">Repeat password:</label>
+                    <input
+                        type="password"
+                        {...register("passwordRepeat")}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1" />
                     {isSubmitted && errors.passwordRepeat && <span>{errors.passwordRepeat.message}</span>}
                 </div>
-                <button type="submit" className=" w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-1.5">
+                <button
+                    type="submit"
+                    className=" w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm py-1.5">
                     Register
                 </button>
                 {success === false && <i>Username is taken.</i>}
