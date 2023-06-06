@@ -1,6 +1,6 @@
 import {FC, useEffect} from "react";
 import {User} from "../../models";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {SetterOrUpdater, useRecoilState} from "recoil";
 import {initialAuth} from "../../state/atoms";
 import { AuthApi } from "../../services";
@@ -10,6 +10,7 @@ interface UserInfoProps {
     setUser: SetterOrUpdater<User | undefined>
 }
 const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
+    const navigate = useNavigate();
     const handleLogout = () => {
         setUser(undefined);
         localStorage.removeItem('token');
@@ -19,9 +20,10 @@ const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
     <section>
         <section className=" flex flex-col pb-1">
             <div className="  justify-self-center">
-                <img src="/icons/user.jpg"
-                className=" h-12 w-12 object-cover rounded-full"
-                alt={user ? user.username.concat("-avatar") : "guest-avatar"}/>
+                <img src={user ? user.image : "/icons/user.jpg"}
+                     onClick={() => user !== undefined && navigate("/my-profile")}
+                     className=" h-12 w-12 object-cover rounded-full"
+                     alt={user ? user.username.concat("-avatar") : "guest-avatar"}/>
                 <div className=" felx flex-col">
                     <div className=" pt-1">
                         <span

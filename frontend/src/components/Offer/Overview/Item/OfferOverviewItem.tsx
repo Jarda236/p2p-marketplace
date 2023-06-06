@@ -15,11 +15,7 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
                        pr-2 pb-2">
         <section className=" text-lg flex flex-row h-auto">
             <figure>
-                <img onClick={() => {
-                    if (offer.buyerId === null) {
-                        navigate("/offers/".concat(offer.id))
-                    }
-                }} src={item?.image}
+                <img onClick={() => navigate("/offers/".concat(offer.id))} src={item?.image}
                 className=" h-48 w-48 object-cover rounded-md"
                 alt={item?.name.concat("-image")} />
             </figure>

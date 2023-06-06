@@ -21,6 +21,7 @@ const ITEMS: Item[] = [
         image: "/pictures/auto.jpg",
     }
 ]
+/* Vrati iba userove itemy, nie vsetky*/
 export const getItems = async (): Promise<Array<Item>> => {
     return ITEMS;
 

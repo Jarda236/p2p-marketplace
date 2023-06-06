@@ -35,7 +35,7 @@ export interface Offer {
 
 export interface OfferCreateBody {
     price: number;
-    itemId: string;
+    itemsId: string[];
 }
 
 export interface Item {
