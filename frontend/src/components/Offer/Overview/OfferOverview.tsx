@@ -2,10 +2,8 @@ import React, {FC, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {useQueries, useQuery} from "@tanstack/react-query";
 import {CategoriesApi, ItemsApi, OffersApi, UsersApi} from "../../../services"
-import {Item, Offer} from "../../../models";
+import {Offer} from "../../../models";
 import OfferOverviewItem from "./Item/OfferOverviewItem";
-import {RecoilLoadable} from "recoil";
-import of = RecoilLoadable.of;
 import {filterOffers, getItemByIdFromQuery} from "../../../utils/filtering";
 import PriceFilter from "./Filters/PriceFilter";
 import CategoryFilter from "./Filters/CategoryFilter";
@@ -96,14 +94,36 @@ const OfferOverview: FC<Props> = (props) => {
     return <div style={{position: "relative"}}>
         <h2>Offers Overview</h2>
         <NavLink to="/offers/create">Create offer</NavLink>
-        <button type="button" onClick={() => toggleFilterComponents(FilterComponents.Sort)}>Sort by</button>
-        {showSortFilter && <SortFilter columnsToSort={columnsToSort} changeColumnsToSort={changeColumnsToSort} />}
+        <button
+            type="button"
+            onClick={() => toggleFilterComponents(FilterComponents.Sort)}>
+            Sort by
+        </button>
+        {showSortFilter && <SortFilter
+            columnsToSort={columnsToSort}
+            changeColumnsToSort={changeColumnsToSort} />
+        }
 
-        <button type="button" onClick={() => toggleFilterComponents(FilterComponents.Category)}>Category</button>
-        {showCategoryFilter && <CategoryFilter categoriesToFilter={categoriesToFilter} changeCategoriesToFilter={changeCategoriesToFilter} categories={categories} />}
+        <button
+            type="button"
+            onClick={() => toggleFilterComponents(FilterComponents.Category)}>
+            Category
+        </button>
+        {showCategoryFilter && <CategoryFilter
+            categoriesToFilter={categoriesToFilter}
+            changeCategoriesToFilter={changeCategoriesToFilter}
+            categories={categories} />
+        }
 
-        <button type="button" onClick={() => {toggleFilterComponents(FilterComponents.Price)}}>Price</button>
-        {showPriceFilter && <PriceFilter priceToFilter={priceToFilter} changePriceToFilter={changePriceToFilter} />}
+        <button
+            type="button"
+            onClick={() => {toggleFilterComponents(FilterComponents.Price)}}>
+            Price
+        </button>
+        {showPriceFilter && <PriceFilter
+            priceToFilter={priceToFilter}
+            changePriceToFilter={changePriceToFilter} />
+        }
 
         <div>
             <input
