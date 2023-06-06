@@ -1,12 +1,10 @@
 import {FC, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {date, number, object, string} from "yup";
+import {number, object} from "yup";
 import {OffersApi} from "../../../services";
-import {Item, OfferCreateBody} from "../../../models";
+import {Item} from "../../../models";
 import {NavLink} from "react-router-dom";
-import {useRecoilState} from "recoil";
-import {userState} from "../../../state/atoms";
 import ItemOverview from "../../Item/Overview/ItemOverview";
 
 interface CreateOfferFormData {
@@ -30,10 +28,24 @@ const OfferCreate: FC = () => {
     });
 
     const onSubmit: SubmitHandler<CreateOfferFormData> = async (data) => {
-        console.log({price: data.price, itemsId: checkedItems.map(i => i.id)})
-        await OffersApi.createOffer({price: data.price, itemsId: checkedItems.map(i => i.id)}).then(() => setReason("OK")).catch((reason) => setReason(reason));
+        if (checkedItems.length === 0) {
+            setReason("You have to check one item.")
+            return;
+        }
+        await OffersApi.createOffer({price: data.price, itemId: checkedItems[0].id}).then(() => setReason("OK")).catch((reason) => setReason(reason));
     }
 
+    const toggleItem = (item: Item): boolean => {
+        if (checkedItems.length == 1) {
+            if (checkedItems[0].id === item.id) {
+                changeCheckedItems([]);
+                return true;
+            }
+            return false;
+        }
+        changeCheckedItems([item]);
+        return true;
+    }
 
     return <>
         {reason === null ?
@@ -42,7 +54,7 @@ const OfferCreate: FC = () => {
                 <span>Choose your item.</span>
                 <ItemOverview
                     checkedItems={checkedItems}
-                    changeCheckedItems={changeCheckedItems} />
+                    toggleItem={toggleItem} />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <label htmlFor="price">Price:</label>

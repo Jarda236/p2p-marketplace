@@ -1,10 +1,11 @@
 import {FC} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {ItemsApi, OffersApi} from "../../../services"
-import {NavLink, useParams} from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
 import { Item } from "../../../models";
 
 const OfferDetail: FC = () => {
+    const navigate = useNavigate();
     const {offerId} = useParams();
 
     const {data: offer} = useQuery({
@@ -39,7 +40,8 @@ const OfferDetail: FC = () => {
                             {offer.buyerId ?
                                 <span className=" text-red-500 font-bold text-xl">SOLD</span> :
                                 <div className=" flex flex-row justify-between">
-                                    <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
+                                    <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+                                    onClick={() => navigate(`create-counter-offer`)}>
                                         Send offer
                                     </button>
                                     <button className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">

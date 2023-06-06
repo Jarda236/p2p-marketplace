@@ -4,15 +4,14 @@ import {useNavigate} from "react-router-dom";
 
 interface ItemOverviewItemProps {
     item: Item,
-    toggleItem: (item: Item) => void
+    toggleItem: (item: Item) => boolean
 }
 const ItemOverviewItem: FC<ItemOverviewItemProps> = ({item, toggleItem}) => {
     const [checked, toggleChecked] = useState<boolean>(false);
 
     return <div
         onClick={() => {
-            toggleChecked(!checked);
-            toggleItem(item);
+            toggleChecked(toggleItem(item) && !checked);
         }}
         className={
         "flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl pr-2 pb-2 ".concat(checked ? "bg-red-100 hover:bg-red-200" : "bg-blue-100 hover:bg-blue-200")

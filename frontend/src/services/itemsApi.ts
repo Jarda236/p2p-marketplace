@@ -10,6 +10,7 @@ const ITEMS: Item[] = [
         description: "item decription1  Lorem ipsum is a placeholder text commonly used in the graphic design industry as a dummy text for creating working examples of graphic designs such as websites, magazine layouts, and all kinds of advertising materials.",
         category: "Cars",
         image: "/pictures/auto.jpg",
+        blocked: false
     },
     {
         id: "2",
@@ -19,6 +20,7 @@ const ITEMS: Item[] = [
         description: "item decription2",
         category: "Boats",
         image: "/pictures/auto.jpg",
+        blocked: false
     }
 ]
 /* Vrati iba userove itemy, nie vsetky*/
@@ -38,8 +40,16 @@ export const getItemById = async (itemId: string): Promise<Item> => {
         description: "item decription1",
         category: "Car",
         image: "/pictures/auto.jpg",
+        blocked: false
     };
 
-    /*const response = await axiosInstance.get('/items');
+    /*const response = await axiosInstance.get('/items/${itemId}');
+    return response.data;*/
+}
+
+export const deleteItemById = async (itemId: string):Promise<void> => {
+    return;
+
+    /*const response = await axiosInstance.delete('/items/${itemId}');
     return response.data;*/
 }

@@ -21,7 +21,7 @@ const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
         <section className=" flex flex-col pb-1">
             <div className="  justify-self-center">
                 <img src={user ? user.image : "/icons/user.jpg"}
-                     onClick={() => user !== undefined && navigate("/my-profile")}
+                     onClick={() => user !== undefined && navigate("/users/".concat(user.id))}
                      className=" h-12 w-12 object-cover rounded-full"
                      alt={user ? user.username.concat("-avatar") : "guest-avatar"}/>
                 <div className=" felx flex-col">
