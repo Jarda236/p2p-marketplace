@@ -3,7 +3,7 @@ import UserInfo from "./UserInfo";
 
 const Header:FC = () => {
     return ( 
-    <div className="  bg-sky-400 flex flex-row justify-stretch">
+    <div className="  bg-sky-400 flex flex-row justify-stretch shadow shadow-slate-400">
         <figure className=" grow flex flex-row p-4">
             <img src="/icons/p2picon.png"
             className=" h-24 w-24 object-cover rounded-md"
