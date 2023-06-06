@@ -12,4 +12,4 @@ api.use(cors());
 
 api.use("/users", userController);
 
-api.listen(port, () => console.log(`[Start Wars Slack Server] is listening on port ${port}`));
+api.listen(port, () => console.log(`[P-2-P Marketplace] is listening on port ${port}`));
