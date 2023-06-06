@@ -12,12 +12,12 @@ const UserInfo:FC<UserInfoProps> = ({user}) => {
             <div className="  justify-self-center">
                 <img src="/icons/user.jpg"
                 className=" h-12 w-12 object-cover rounded-full"
-                alt={user ? user.name.concat("-avatar") : "guest-avatar"}/>
+                alt={user ? user.username.concat("-avatar") : "guest-avatar"}/>
                 <div className=" felx flex-col">
                     <div className=" pt-1">
                         <span
                         className=" text-base"
-                        >{user ? user.name : "Guest"}</span>
+                        >{user ? user.username : "Guest"}</span>
                     </div>
                     <div>
                         {user ? <button type="button"
@@ -32,7 +32,7 @@ const UserInfo:FC<UserInfoProps> = ({user}) => {
         </section>
         <hr className="h-px bg-gray-700 border-0"  />
         <section className=" font-medium text-base">
-            <span>Cash: {user ? user.cashAmount : "Login to show."}</span>
+            <span>Cash: {user ? user.account.balance : "Login to show."}</span>
         </section>
     </section>
     );
