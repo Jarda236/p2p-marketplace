@@ -7,7 +7,7 @@ const ITEMS: Item[] = [
         userId: "1",
 
         name: "itemname1",
-        description: "item decription1",
+        description: "item decription1  Lorem ipsum is a placeholder text commonly used in the graphic design industry as a dummy text for creating working examples of graphic designs such as websites, magazine layouts, and all kinds of advertising materials.",
         category: "Cars",
         image: "/pictures/auto.jpg",
     },
