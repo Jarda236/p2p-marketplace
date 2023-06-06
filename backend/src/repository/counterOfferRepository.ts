@@ -33,7 +33,7 @@ export const getSingle = async (
 ): Promise<Result<CounterOffer | null, Error>> => {
   try {
     var result = await prisma.counterOffer.findUnique({ where: { id } });
-    if (result?.deletedAt!==null) {
+    if (result?.deletedAt !== null) {
       return Result.err(new Error(`Deleted record!`));
     }
     if (result && result.price) {
@@ -72,7 +72,10 @@ export const updateSingle = async (
   data: CounterOfferUpdate
 ): Promise<Result<CounterOffer, Error>> => {
   try {
-    const result = await prisma.counterOffer.update({ where: { id }, data });
+    const result = await prisma.counterOffer.update({
+       where: {
+        id,
+        }, data });
     if (result && result.price) {
       var a = { ...result, price: result.price.toNumber() };
       return Result.ok(a);
