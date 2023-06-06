@@ -14,9 +14,11 @@ import Register from "./Authentification/Register/Register";
 export const App: FC = () => {
 
     return (
-        <div className="flex flex-col">
-            <Header />
-            <main>
+        <div className=" min-h-screen flex flex-col m-0 p-0">
+            <div>
+                <Header />
+            </div>
+            <main className=" grow">
                 <Routes>
                     <Route path="/" element={<WelcomePage />} />
                     <Route path="/auth/login" element={<Login />} />
@@ -28,7 +30,9 @@ export const App: FC = () => {
                     <Route path="/users/:userId" element={<UserDetail />} />
                 </Routes>
             </main>
-            <Footer />
+            <div>
+                <Footer />
+            </div>
         </div>
     )
 };
