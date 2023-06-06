@@ -38,7 +38,7 @@ export const filterOffers = ({offers, items, priceToFilter = {from: 0, to: 99999
         .filter(offer => sellerId === undefined || offer.sellerId === sellerId)
         .filter(offer => buyerId === undefined || offer.buyerId === buyerId)
         .filter((offer, index) => {
-            if (items[index]?.data === undefined) {
+            if (items[index] === undefined) {
                 return true;
             }
             return items[index]?.name.toLowerCase().includes(searchValue.toLowerCase()) || items[index]?.data?.toLowerCase().includes(searchValue.toLowerCase());

@@ -9,6 +9,7 @@ import of = RecoilLoadable.of;
 import {filterOffers, getItemByIdFromQuery} from "../../../utils/filtering";
 import PriceFilter from "./Filters/PriceFilter";
 import CategoryFilter from "./Filters/CategoryFilter";
+import SortFilter from "./Filters/SortFilter";
 
 interface ColumnToSort {
     column: string;
@@ -19,6 +20,12 @@ interface ColumnToSort {
 interface Props {
     offersBySellerId?: string,
     offersByBuyerId?: string
+}
+
+enum FilterComponents {
+    Sort,
+    Category,
+    Price
 }
 
 const OfferOverview: FC<Props> = (props) => {
@@ -52,50 +59,28 @@ const OfferOverview: FC<Props> = (props) => {
     const getSeller = /*async*/ (sellerId: string) => {
         return /*await*/ UsersApi.getUserById(sellerId);
     }
-    const changeSortingDirection = (column: string) => {
-        const wantedColumn = columnsToSort.findIndex(e => e.column === column);
-        if (wantedColumn !== -1) {
-            handleOrderChange(column, columnsToSort[wantedColumn].order)
-        } else {
-            changeColumnsToSort([...columnsToSort, { column: column, order: true }]);
-        }
-    }
 
-    const deleteSorting = (column: string) => {
-        changeColumnsToSort(p => p.filter(item => item.column !== column));
-    }
-
-    const handleOrderChange = (column: string, order: boolean) => {
-        const updatedSortCriteria: ColumnToSort[] = columnsToSort.map(item => {
-            if (item.column === column) {
-                return {...item, order: !order};
+    const toggleFilterComponents = (component: FilterComponents) => {
+        switch (component) {
+            case FilterComponents.Category: {
+                toggleShowCategoryFilter(!showCategoryFilter);
+                toggleShowSortFilter(false);
+                toggleShowPriceFilter(false);
+                break;
             }
-            return item;
-        });
-
-        changeColumnsToSort(updatedSortCriteria);
-    }
-
-    const getFilterIndex = (column: string): string => {
-        const index = columnsToSort.findIndex(o => o.column === column);
-        if (index === -1) {
-            return " OFF";
+            case FilterComponents.Price: {
+                toggleShowCategoryFilter(false);
+                toggleShowSortFilter(false);
+                toggleShowPriceFilter(!showPriceFilter);
+                break;
+            }
+            case FilterComponents.Sort: {
+                toggleShowCategoryFilter(false);
+                toggleShowSortFilter(!showSortFilter);
+                toggleShowPriceFilter(false);
+            }
         }
-        return columnsToSort[index].order ? " DESC" : " ASC";
     }
-
-    const COLUMNS = [{name: "name", display: "Name"}, {name: "sellerName", display: "Seller"}, {name: "createdAt", display: "Created at"}, {name: "price", display: "Price"}, {name: "buyerId", display: "Sold"}];
-    const filterComponent = <div style={{
-        display: "inline",
-        position: "absolute",
-        background: "whitesmoke"
-    }}>
-        <ul>
-            {COLUMNS.map(item => <li key={item.name}>
-                <span onClick={() => changeSortingDirection(item.name)}>{item.display}{getFilterIndex(item.name)} </span><span onClick={() => deleteSorting(item.name)}>X</span>
-            </li>)}
-        </ul>
-    </div>
 
     const filteredOffers: Offer[] = filterOffers({
         offers: offers,
@@ -111,26 +96,18 @@ const OfferOverview: FC<Props> = (props) => {
     return <div style={{position: "relative"}}>
         <h2>Offers Overview</h2>
         <NavLink to="/offers/create">Create offer</NavLink>
-        <button type="button" onClick={() => {
-            toggleShowSortFilter(!showSortFilter);
-            toggleShowCategoryFilter(false);
-            toggleShowPriceFilter(false);
-        }}>Sort by</button>
-        {showSortFilter && filterComponent}
-        <button type="button" onClick={() => {
-            toggleShowCategoryFilter(!showCategoryFilter);
-            toggleShowSortFilter(false);
-            toggleShowPriceFilter(false);
-        }}>Category</button>
+        <button type="button" onClick={() => toggleFilterComponents(FilterComponents.Sort)}>Sort by</button>
+        {showSortFilter && <SortFilter columnsToSort={columnsToSort} changeColumnsToSort={changeColumnsToSort} />}
+
+        <button type="button" onClick={() => toggleFilterComponents(FilterComponents.Category)}>Category</button>
         {showCategoryFilter && <CategoryFilter categoriesToFilter={categoriesToFilter} changeCategoriesToFilter={changeCategoriesToFilter} categories={categories} />}
-        <button type="button" onClick={() => {
-            toggleShowCategoryFilter(false);
-            toggleShowSortFilter(false);
-            toggleShowPriceFilter(!showPriceFilter);
-        }}>Price</button>
+
+        <button type="button" onClick={() => {toggleFilterComponents(FilterComponents.Price)}}>Price</button>
         {showPriceFilter && <PriceFilter priceToFilter={priceToFilter} changePriceToFilter={changePriceToFilter} />}
+
         <div>
             <input
+                id="search-field"
                 type="search"
                 value={searchValue}
                 onChange={(e) => changeSearchValue(e.target.value)}
