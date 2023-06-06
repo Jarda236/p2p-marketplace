@@ -6,6 +6,7 @@ import {Item, Offer} from "../../../models";
 import OfferOverviewItem from "./Item/OfferOverviewItem";
 import {RecoilLoadable} from "recoil";
 import of = RecoilLoadable.of;
+import {filterOffers} from "../../../utils/filtering";
 
 interface ColumnToSort {
     column: string;
@@ -21,7 +22,7 @@ interface Props {
 const OfferOverview: FC<Props> = (props) => {
     const navigate = useNavigate();
 
-    const [valueToFilter, changeValueToFilter] = useState<string>("");
+    const [searchValue, changeSearchValue] = useState<string>("");
     const [columnsToSort, changeColumnsToSort] = useState<ColumnToSort[]>([]);
     const [priceToFilter, changePriceToFilter] = useState<{from: number, to: number}>({from: 0, to: 999999 });
     const [categoriesToFilter, changeCategoriesToFilter] = useState<string[]>([]);
@@ -56,59 +57,6 @@ const OfferOverview: FC<Props> = (props) => {
         navigate("/offers/".concat(offerId))
     }
 
-    const filterOffers = (): Array<Offer> => {
-        if (offers === undefined || items === undefined) {
-            return [];
-        }
-        return offers
-            .filter(offer => offer.price >= priceToFilter.from && offer.price <= priceToFilter.to)
-            .filter((offer, index) => {
-                if (categoriesToFilter.length === 0){
-                    return true
-                }
-                return categoriesToFilter.findIndex(category => category === items[index].data?.category) !== -1
-            })
-            .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
-            .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
-            .filter((offer, index) => {
-                if (items[index].data === undefined) {
-                    return true;
-                }
-                return items[index].data?.name.toLowerCase().includes(valueToFilter.toLowerCase()) || items[index].data?.description.toLowerCase().includes(valueToFilter.toLowerCase());
-            })
-            .sort((a: Offer, b: Offer) => {
-            for (let i = 0; i < columnsToSort.length; i++) {
-                const el1 = a[columnsToSort[i].column];
-                const el2 = b[columnsToSort[i].column];
-                const item1 = getItemById(a.itemId);
-                const item2 = getItemById(b.itemId);
-                let el3 = ""
-                let el4 = "";
-                if (item1 !== undefined && item2 !== undefined){
-                    el3 = item1[columnsToSort[i].column];
-                    el4 = item2[columnsToSort[i].column];
-                }
-                console.log(el1, el2)
-                if (el1 !== null && el2 !== null && el1 !== undefined && el2 !== undefined) {
-                    const compare = el1.toString().toLowerCase().localeCompare(el2.toString().toLowerCase()) * (columnsToSort[i].order ? -1 : 1);
-                    if (compare !== 0) {
-                        return compare;
-                    }
-                    return 0;
-                }
-                const compare = el3.toString().toLowerCase().localeCompare(el4.toString().toLowerCase()) * (columnsToSort[i].order ? -1 : 1);
-                if (compare !== 0) {
-                    return compare;
-                }
-            }
-            return 0;
-        })
-    }
-
-    const getItemById = (itemId: string): Item | undefined => {
-        return items.find(item => item.data?.id === itemId)?.data;
-    }
-
     const changeSortingDirection = (column: string) => {
         const wantedColumn = columnsToSort.findIndex(e => e.column === column);
         if (wantedColumn !== -1) {
@@ -141,7 +89,7 @@ const OfferOverview: FC<Props> = (props) => {
         return columnsToSort[index].order ? " DESC" : " ASC";
     }
 
-    const COLUMNS = [{name: "name", display: "Name"}, {name: "sellerName", display: "Seller"}, {name: "createdAt", display: "Created at"}, {name: "price", display: "Price"}, {name: "sold", display: "Sold"}];
+    const COLUMNS = [{name: "name", display: "Name"}, {name: "sellerName", display: "Seller"}, {name: "createdAt", display: "Created at"}, {name: "price", display: "Price"}, {name: "buyerId", display: "Sold"}];
     const filterComponent = <div style={{
         display: "inline",
         position: "absolute",
@@ -185,7 +133,21 @@ const OfferOverview: FC<Props> = (props) => {
         <input type="number" placeholder="To" value={priceToFilter.to} onChange={(e) => changePriceToFilter({from: priceToFilter.from, to: Number(e.target.value) })}/>
     </div>
 
-    const filteredOffers: Offer[] = filterOffers();
+    const filteredOffers: Offer[] = filterOffers({
+        offers: offers,
+        items: items.map(item => item.data),
+        priceToFilter: priceToFilter,
+        categoriesToFilter: categoriesToFilter,
+        sellerId: props?.offersBySellerId,
+        buyerId: props?.offersByBuyerId,
+        searchValue: searchValue,
+        columnsToSort: columnsToSort
+    });
+
+    const getItemById = (itemId: string): Item | undefined => {
+        return items.find(item => item.data?.id === itemId)?.data;
+    }
+
     return <div style={{position: "relative"}}>
         <h2>Offers Overview</h2>
         <NavLink to="/offers/create">Create offer</NavLink>
@@ -210,8 +172,8 @@ const OfferOverview: FC<Props> = (props) => {
         <div>
             <input
                 type="search"
-                value={valueToFilter}
-                onChange={(e) => changeValueToFilter(e.target.value)}
+                value={searchValue}
+                onChange={(e) => changeSearchValue(e.target.value)}
                 placeholder="Search"
             />
             {<p>Ordered by: {columnsToSort.map(item => <span key={item.column}
@@ -225,7 +187,7 @@ const OfferOverview: FC<Props> = (props) => {
             <ul>
                 {offers ?
                     filteredOffers.map((offer, index) =>
-                    <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={items[index].data}/>):
+                    <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={getItemById(offer.itemId)}/>):
                     <span>Loading...</span>}
             </ul>
         </section>
