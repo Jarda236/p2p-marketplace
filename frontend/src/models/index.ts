@@ -35,7 +35,7 @@ export interface Offer {
 
 export interface OfferCreateBody {
     price: number;
-    itemsId: string[];
+    itemId: string;
 }
 
 export interface Item {
@@ -63,11 +63,11 @@ export interface CounterOffer {
     buyerId: string;
     price: number;
     status: boolean | null;
-    itemsId: Array<string>[]
+    itemsId: Array<string>
 }
 
 export interface CounterOfferCreateBody {
     offerId: string;
     price: number;
-    itemsId: Array<string>[]
+    itemsId: Array<string>
 }
