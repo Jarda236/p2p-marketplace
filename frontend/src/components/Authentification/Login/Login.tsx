@@ -41,8 +41,8 @@ const Login: FC = () => {
     }
 
     return (
-    <div className="  w-2/4 bg-slate-400 rounded-lg shadow shadow-slate-700 mx-auto p-4 mt-4
-                    flex flex-col space-y-4">
+    <div className="  w-2/4 bg-slate-400 rounded-lg shadow shadow-slate-700 mx-auto p-4 my-4
+                    flex flex-col space-y-4 max-w-sm">
         <h2 className=" text-xl font-bold leading-tight tracking-tight">
             Sign in to your account
         </h2>
