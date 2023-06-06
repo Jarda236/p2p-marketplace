@@ -6,7 +6,9 @@ entity Offer {
     * userId: <<FK>>
     * price: decimal
     * createdAt: datetime
-    * item: <<FK>>
+    * itemId: <<FK>>
+    * sellerId: <<FK>>
+    * buyerId: <<FK>>
     transactionId: <<FK>>
     updatedAt: datetime
     deletedAt: datetime
@@ -18,11 +20,18 @@ entity Item{
     * userId: <<FK>>
     * name: string
     * description: string
-    * category: string
+    * categoryId: <<FK>>
     * createdAt: datetime
     * isAvailable: boolean
+    * img: str
     updatedAt: datetime
     deletedAt: datetime
+}
+
+entity Category{
+    * id: <<uuid>>
+    --
+    *name: string
 }
 
 entity User {
@@ -32,7 +41,7 @@ entity User {
     * password_hash: string
     * email: string
     * phone: string
-    * address: string
+    * city: string
     * createdAt: datetime
     * rating_sum: float
     * rating_count: int
@@ -42,21 +51,12 @@ entity User {
     deletedAt: datetime
 }
 
-entity Transaction {
-    * id: <<uuid>>
-    --
-    * sellerId: <<FK>>
-    * buyerId: <<FK>>
-    * offerId: <<FK>>
-    * createdAt: datetime
-    updatedAt: datetime
-}
-
 entity FundsAccount {
     * id: <<uuid>>
     --
     * userId: <<FK>>
     * balance: decimal
+    * balanceBlocked: decimal
 /'    * currency: string '/
     * createdAt: datetime
     updatedAt: datetime
@@ -76,9 +76,6 @@ entity CounterOffer {
 }
 
 User  ||--o{ Offer : offers  
-User  ||--o{ Transaction : recieved
-User  ||--o{ Transaction : sent
-Offer ||--o| Transaction : has
 User  ||--|| FundsAccount : owns
 Offer ||--o{ CounterOffer : has
 User  ||--o{ Item : owns
