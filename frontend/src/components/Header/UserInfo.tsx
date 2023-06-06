@@ -15,21 +15,6 @@ const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
         localStorage.removeItem('token');
     }
 
-    const [auth, setAuth] = useRecoilState(initialAuth);
-
-    const runInitialAuth = async () => {
-        if (user === undefined && !auth) {
-            setAuth(true);
-            await AuthApi.isAuthenticated()
-                .then(r => setUser(r))
-                .catch();
-        }
-    }
-
-    useEffect(() => {
-        runInitialAuth();
-    })
-
     return ( 
     <section>
         <section className=" flex flex-col pb-1">

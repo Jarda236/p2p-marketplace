@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import UserInfo from "./UserInfo";
 import {useRecoilState} from "recoil";
 import {userState, initialAuth} from "../../state/atoms";
@@ -6,6 +6,21 @@ import { AuthApi } from "../../services";
 
 const Header:FC = () => {
     const [user, setUser] = useRecoilState(userState);
+
+    const [auth, setAuth] = useRecoilState(initialAuth);
+
+    const runInitialAuth = async () => {
+        if (user === undefined && !auth) {
+            setAuth(true);
+            await AuthApi.isAuthenticated()
+                .then(r => setUser(r))
+                .catch();
+        }
+    }
+
+    useEffect(() => {
+        runInitialAuth();
+    })
 
     return ( 
     <div className="  bg-sky-400 flex flex-row justify-stretch shadow shadow-slate-400">
