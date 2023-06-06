@@ -60,6 +60,11 @@ const Login: FC = () => {
                 {success === false && <i>Bad credentials.</i>}
             </form>
         }
+        <p>
+            Don't have an account yet? <NavLink to="/auth/register" className=" font-bold text-black hover:underline">
+                Register
+            </NavLink>
+        </p>
         <NavLink to="/" className=" font-bold text-black hover:underline">
             Back
         </NavLink>
