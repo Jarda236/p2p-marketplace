@@ -48,6 +48,7 @@ model FundsAccount {
   id             String   @id @default(uuid())
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
   user           User     @relation(fields: [userId], references: [id])
   userId         String   @unique
   balance        Decimal
@@ -58,6 +59,7 @@ model CounterOffer {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt DateTime?
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   offerId   String
@@ -71,6 +73,7 @@ model Item {
   id             String       @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt DateTime?
   offerId        String?       @unique
   offer          Offer?
   userId         String
