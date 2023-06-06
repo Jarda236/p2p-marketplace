@@ -63,7 +63,10 @@ const OfferOverview: FC<Props> = (props) => {
         return offers
             .filter(offer => offer.price >= priceToFilter.from && offer.price <= priceToFilter.to)
             .filter((offer, index) => {
-                return categoriesToFilter.findIndex(category => category === items[index].data?.category) === -1
+                if (categoriesToFilter.length === 0){
+                    return true
+                }
+                return categoriesToFilter.findIndex(category => category === items[index].data?.category) !== -1
             })
             .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
             .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
