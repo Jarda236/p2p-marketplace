@@ -15,7 +15,6 @@ export const getAll = async (): Promise<Result<User[], Error>> => {
     }
 }
 
-
 export const getSingle = async (id: string): Promise<Result<User | null, Error>> => {
     try {
         const user = await prisma.user.findUnique({ where: { id } });

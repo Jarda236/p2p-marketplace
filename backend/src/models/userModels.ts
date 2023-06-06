@@ -11,8 +11,8 @@ export const UserSchema = z.object({
     rating_sum: z.number({required_error: 'rating_sum required' }),
     rating_count: z.number({required_error: 'rating_count required' }),
     id: z.string({required_error: 'id required' }),
-    image: z.string().nullable().optional(),
-    deleted_at: z.date().nullable().optional(),
+    image: z.string().nullable().nullable().optional(),
+    deletedAt: z.date().nullable().optional(),
     updatedAt: z.date().optional(),
 }).merge(BaseModelSchema);
 

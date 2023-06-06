@@ -5,12 +5,13 @@ CREATE TABLE "User" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
     "name" TEXT NOT NULL,
+    "password_hash" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "rating_sum" DOUBLE PRECISION NOT NULL,
     "rating_count" INTEGER NOT NULL,
-    "image" TEXT NOT NULL,
+    "image" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -45,7 +46,7 @@ CREATE TABLE "Transaction" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "seller" TEXT NOT NULL,
+    "sellerId" TEXT NOT NULL,
     "buyerId" TEXT NOT NULL,
     "amount" DECIMAL(65,30) NOT NULL,
     "status" TEXT NOT NULL,
@@ -93,6 +94,9 @@ CREATE TABLE "_CounterOfferToOffer" (
 CREATE UNIQUE INDEX "Offer_transactionId_key" ON "Offer"("transactionId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Transaction_sellerId_key" ON "Transaction"("sellerId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "FundsAccount_userId_key" ON "FundsAccount"("userId");
 
 -- CreateIndex
@@ -115,6 +119,9 @@ ALTER TABLE "Offer" ADD CONSTRAINT "Offer_userId_fkey" FOREIGN KEY ("userId") RE
 
 -- AddForeignKey
 ALTER TABLE "Offer" ADD CONSTRAINT "Offer_transactionId_fkey" FOREIGN KEY ("transactionId") REFERENCES "Transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_sellerId_fkey" FOREIGN KEY ("sellerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_buyerId_fkey" FOREIGN KEY ("buyerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

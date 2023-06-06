@@ -8,47 +8,47 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(uuid())
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  deletedAt     DateTime?
-  name          String
-  password_hash String
-  email         String
-  phone         String
-  address       String
-  rating_sum    Float
-  rating_count  Int
-  image         String?
+  id                   String        @id @default(uuid())
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  deletedAt            DateTime?
+  name                 String
+  password_hash        String
+  email                String
+  phone                String
+  address              String
+  rating_sum           Float
+  rating_count         Int
+  image                String?
+  fundsAccount         FundsAccount?
+  transactionsAsBuyer  Transaction[]  @relation("TransactionBuyer")
+  transactionsAsSeller Transaction[]  @relation("TransactionSeller")
+  offers               Offer[]
+  CounterOffer         CounterOffer[]
+}
 
-  fundsAccount  FundsAccount? //TODO: make this mandatory..
-  transactions  Transaction[]
-  offers        Offer[]
-  CounterOffer  CounterOffer[]
+model Category {
+  id    String   @id @default(uuid())
+  name  String
+  Offer Offer[]
 }
 
 model Offer {
-  id String @id @default(uuid())
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-
-  name        String
-  description String
-  price       Decimal
-  category    String[]
-  picture    String
-
-  counterOffer   CounterOffer? @relation(name: "a")
+  id             String        @id @default(uuid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+  name           String
+  description    String
+  price          Decimal
+  category       Category[]
+  pictures       String
+  counterOffer   CounterOffer?  @relation(name: "a")
   counterOfferId Int?
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  transaction   Transaction   @relation(fields: [transactionId], references: [id])
-  transactionId String        @unique
-
+  user           User           @relation(fields: [userId], references: [id])
+  userId         String
+  transaction    Transaction    @relation(fields: [transactionId], references: [id])
+  transactionId  String         @unique
   inCounterOffer CounterOffer[] @relation("CounterOfferToOffer")
 }
 
@@ -56,41 +56,33 @@ model Transaction {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  offer  Offer? //TODO: make this mandatory..
-  seller String
-
-  buyer   User   @relation(fields: [buyerId], references: [id])
-  buyerId String
-
-  amount Decimal
-  status String
+  offer     Offer?
+  sellerId  String   @unique
+  seller    User     @relation("TransactionSeller", fields: [sellerId], references: [id])
+  buyer     User     @relation("TransactionBuyer", fields: [buyerId], references: [id])
+  buyerId   String
+  amount    Decimal
+  status    String
 }
 
 model FundsAccount {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
-
-  balance Decimal
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
+  balance   Decimal
 }
 
 model CounterOffer {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  offer   Offer  @relation(name: "a", fields: [offerId], references: [id])
-  offerId String @unique
-
-  user   User    @relation(fields: [userId], references: [id])
-  userId String
-
-  offers    Offer[] @relation("CounterOfferToOffer")
-
-  amount Decimal
-  status String
+  offer     Offer    @relation(name: "a", fields: [offerId], references: [id])
+  offerId   String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  offers    Offer[]  @relation("CounterOfferToOffer")
+  amount    Decimal
+  status    String
 }
