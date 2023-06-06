@@ -31,6 +31,7 @@ const UserDetail: FC = () => {
             item.blocked = true;
             await ItemsApi.deleteItemById(item.id);
         })
+        changeCheckedItems([]);
     }
 
     refetch()

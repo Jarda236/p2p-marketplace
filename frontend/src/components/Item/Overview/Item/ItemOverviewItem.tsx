@@ -8,13 +8,12 @@ interface ItemOverviewItemProps {
 }
 const ItemOverviewItem: FC<ItemOverviewItemProps> = ({item, toggleItem}) => {
     const [checked, toggleChecked] = useState<boolean>(false);
-
     return <div
         onClick={() => {
-            toggleChecked(toggleItem(item) && !checked);
+            toggleChecked(item.blocked && toggleItem(item) && !checked);
         }}
         className={
-        "flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl pr-2 pb-2 ".concat(checked ? "bg-red-100 hover:bg-red-200" : "bg-blue-100 hover:bg-blue-200")
+        "flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl pr-2 pb-2 ".concat(checked ? "bg-red-100 hover:bg-red-200" : (item.blocked ? "bg-yellow-100 hover:bg-yellow-200" : "bg-blue-100 hover:bg-blue-200"))
     }>
         <section className=" text-lg flex flex-row h-auto">
             <figure>

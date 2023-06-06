@@ -8,7 +8,7 @@ import {Item} from "../../../models";
 
 interface ItemOverviewProps {
     checkedItems: Item[],
-    toggleItem: (item: Item) => boolean
+    toggleItem: (item: Item) => boolean,
 }
 const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, toggleItem}) => {
     const [user] = useRecoilState(userState);

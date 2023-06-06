@@ -43,10 +43,12 @@ export interface Item {
     userId: string;
 
     name: string;
-    blocked: boolean;
     description: string;
     category: string;
     image: string;
+
+    blocked: boolean;
+    deleted: boolean;
 
     [key: string]: string | boolean;
 }
