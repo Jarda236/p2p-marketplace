@@ -5,7 +5,9 @@ import prisma from "../client";
 
 export const getAll = async (): Promise<Result<Item[], Error>> => {
   try {
-    const result = await prisma.item.findMany();
+    const result = await prisma.item.findMany({
+      where: { deletedAt: null },
+    });
     return Result.ok(result);
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
@@ -22,7 +24,9 @@ export const getSingle = async (
     const item = await prisma.item.findUnique({
       where: { id },
     });
-
+    if (!item || item.deletedAt) {
+      throw new Error("Item not found");
+    }
     return Result.ok(item);
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
@@ -36,7 +40,7 @@ export const createSingle = async (
   data: ItemCreate
 ): Promise<Result<Item, Error>> => {
   try {
-    const dataa = { ...data,  counterOfferId: null, offerId: null };
+    const dataa = { ...data, counterOfferId: null, offerId: null };
     const item = await prisma.item.create({ data: dataa });
     return Result.ok(item);
   } catch (error) {
@@ -52,11 +56,20 @@ export const updateSingle = async (
   data: ItemUpdate
 ): Promise<Result<Item, Error>> => {
   try {
-    const item = await prisma.item.update({
-      where: { id },
-      data,
-    });
-    return Result.ok(item);
+    return Result.ok(
+      await prisma.$transaction(async (transaction) => {
+        const i = await transaction.item.findUnique({ where: { id } });
+        if (!i || i.deletedAt) {
+          throw new Error("Item not found");
+        }
+
+        const item = await transaction.item.update({
+          where: { id },
+          data,
+        });
+        return item;
+      })
+    );
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       return Result.err(error);
@@ -67,7 +80,10 @@ export const updateSingle = async (
 
 export const deleteSingle = async (id: string) => {
   try {
-    const item = await prisma.item.delete({ where: { id } });
+    const item = await prisma.item.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
     return Result.ok(item);
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {

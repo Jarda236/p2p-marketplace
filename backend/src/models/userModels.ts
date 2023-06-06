@@ -14,7 +14,7 @@ export const UserSchema = z.object({
     rating_count: z.number({required_error: 'rating_count required' }),
     id: z.string({required_error: 'id required' }),
     image: z.string().nullable().nullable().optional(),
-    deletedAt: z.date().nullable().optional(),
+    deletedAt: z.date().nullable(),
     fundsAccount: z.object({
         userId: z.string({ required_error: "Property `userId` is required" }).nonempty(),
         balance: z.number({ required_error: "Property `balance` is required" }),

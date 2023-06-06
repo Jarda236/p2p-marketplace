@@ -92,15 +92,14 @@ router.post(
   }
 );
 
-
 router.post(
   "/register",
-  validate({body: UserCreateSchema }),
+  validate({ body: UserCreateSchema }),
   async (req, res) => {
     const body = req.body;
 
     const usersResult = await UserRepository.getAll();
-    if(usersResult.isErr){
+    if (usersResult.isErr) {
       return handleErrorResp(500, res, usersResult.error.message);
     }
     const user = usersResult.value.length === 0 ? null : usersResult.value.find(u => u.name === body.name);
@@ -112,7 +111,7 @@ router.post(
     body.password_hash = passwordHashed;
     body.password_salt = salt;
     const newUser = await UserRepository.createSingle(body);
-    if(newUser.isErr){
+    if (newUser.isErr) {
       return handleErrorResp(500, res, newUser.error.message);
     }
     
