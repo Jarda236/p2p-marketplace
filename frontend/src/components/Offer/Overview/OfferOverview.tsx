@@ -6,7 +6,9 @@ import {Item, Offer} from "../../../models";
 import OfferOverviewItem from "./Item/OfferOverviewItem";
 import {RecoilLoadable} from "recoil";
 import of = RecoilLoadable.of;
-import {filterOffers} from "../../../utils/filtering";
+import {filterOffers, getItemByIdFromQuery} from "../../../utils/filtering";
+import PriceFilter from "./Filters/PriceFilter";
+import CategoryFilter from "./Filters/CategoryFilter";
 
 interface ColumnToSort {
     column: string;
@@ -20,8 +22,6 @@ interface Props {
 }
 
 const OfferOverview: FC<Props> = (props) => {
-    const navigate = useNavigate();
-
     const [searchValue, changeSearchValue] = useState<string>("");
     const [columnsToSort, changeColumnsToSort] = useState<ColumnToSort[]>([]);
     const [priceToFilter, changePriceToFilter] = useState<{from: number, to: number}>({from: 0, to: 999999 });
@@ -52,11 +52,6 @@ const OfferOverview: FC<Props> = (props) => {
     const getSeller = /*async*/ (sellerId: string) => {
         return /*await*/ UsersApi.getUserById(sellerId);
     }
-
-    const handleClick = (offerId: string) => {
-        navigate("/offers/".concat(offerId))
-    }
-
     const changeSortingDirection = (column: string) => {
         const wantedColumn = columnsToSort.findIndex(e => e.column === column);
         if (wantedColumn !== -1) {
@@ -97,40 +92,9 @@ const OfferOverview: FC<Props> = (props) => {
     }}>
         <ul>
             {COLUMNS.map(item => <li key={item.name}>
-                <p onClick={() => changeSortingDirection(item.name)}>{item.display}{getFilterIndex(item.name)}</p>
+                <span onClick={() => changeSortingDirection(item.name)}>{item.display}{getFilterIndex(item.name)} </span><span onClick={() => deleteSorting(item.name)}>X</span>
             </li>)}
         </ul>
-    </div>
-
-
-    const toggleCategory = (category: string) => {
-        const index = categoriesToFilter.findIndex(c => c === category);
-        if (index === -1) {
-            changeCategoriesToFilter([...categoriesToFilter, category]);
-        } else {
-            changeCategoriesToFilter(categoriesToFilter.filter(c => c !== category));
-        }
-    }
-    const categoryComponent = <div style={{
-        display: "inline",
-        position: "absolute",
-        background: "whitesmoke"
-    }}>
-        <ul>
-            {categories ? categories.map(category => <li key={category}>
-                <p onClick={() => toggleCategory(category)}>{category}</p>
-            </li>) : "Loading..."}
-        </ul>
-    </div>
-
-
-    const priceComponent = <div style={{
-        display: "inline",
-        position: "absolute",
-        background: "whitesmoke"
-    }}>
-        <input type="number" placeholder="From" value={priceToFilter.from} onChange={(e) => changePriceToFilter({to: priceToFilter.to, from: Number(e.target.value) })}/>
-        <input type="number" placeholder="To" value={priceToFilter.to} onChange={(e) => changePriceToFilter({from: priceToFilter.from, to: Number(e.target.value) })}/>
     </div>
 
     const filteredOffers: Offer[] = filterOffers({
@@ -143,10 +107,6 @@ const OfferOverview: FC<Props> = (props) => {
         searchValue: searchValue,
         columnsToSort: columnsToSort
     });
-
-    const getItemById = (itemId: string): Item | undefined => {
-        return items.find(item => item.data?.id === itemId)?.data;
-    }
 
     return <div style={{position: "relative"}}>
         <h2>Offers Overview</h2>
@@ -162,13 +122,13 @@ const OfferOverview: FC<Props> = (props) => {
             toggleShowSortFilter(false);
             toggleShowPriceFilter(false);
         }}>Category</button>
-        {showCategoryFilter && categoryComponent}
+        {showCategoryFilter && <CategoryFilter categoriesToFilter={categoriesToFilter} changeCategoriesToFilter={changeCategoriesToFilter} categories={categories} />}
         <button type="button" onClick={() => {
             toggleShowCategoryFilter(false);
             toggleShowSortFilter(false);
             toggleShowPriceFilter(!showPriceFilter);
         }}>Price</button>
-        {showPriceFilter && priceComponent}
+        {showPriceFilter && <PriceFilter priceToFilter={priceToFilter} changePriceToFilter={changePriceToFilter} />}
         <div>
             <input
                 type="search"
@@ -176,18 +136,15 @@ const OfferOverview: FC<Props> = (props) => {
                 onChange={(e) => changeSearchValue(e.target.value)}
                 placeholder="Search"
             />
-            {<p>Ordered by: {columnsToSort.map(item => <span key={item.column}
-                                                            onDoubleClick={() => deleteSorting(item.column)}>{item.column.concat(" ")}</span>)}</p>}
         </div>
-        <hr/>
         <hr/>
         <section>
             <h5>Offers:</h5>
             <hr/>
             <ul>
                 {offers ?
-                    filteredOffers.map((offer, index) =>
-                    <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={getItemById(offer.itemId)}/>):
+                    filteredOffers.map((offer) =>
+                    <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
                     <span>Loading...</span>}
             </ul>
         </section>

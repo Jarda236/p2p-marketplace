@@ -1,4 +1,5 @@
 import {Item, Offer} from "../models";
+import {UseQueryResult} from "@tanstack/react-query";
 
 interface PriceFilter {
     from: number;
@@ -85,4 +86,8 @@ export const filterOffers = ({offers, items, priceToFilter = {from: 0, to: 99999
 
 const getItemById = (items: Array<Item | undefined>, itemId: string): Item | undefined => {
     return items.find(item => item?.id === itemId);
+}
+
+export const getItemByIdFromQuery = (items: UseQueryResult<Item>[], itemId: string): Item | undefined => {
+    return items.find(item => item.data?.id === itemId)?.data;
 }

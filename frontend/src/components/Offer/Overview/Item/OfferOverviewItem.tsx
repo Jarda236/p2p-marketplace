@@ -2,12 +2,12 @@ import {FC} from "react";
 import {Item, Offer, User} from "../../../../models";
 import {NavLink, useNavigate} from "react-router-dom";
 
-interface OfferOverviewProps {
+interface OfferOverviewItemProps {
     offer: Offer,
     seller: User,
     item: Item | undefined
 }
-const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller, item}) => {
+const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) => {
     const navigate = useNavigate();
 
     return (
