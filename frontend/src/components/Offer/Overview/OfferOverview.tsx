@@ -204,7 +204,7 @@ const OfferOverview: FC<Props> = (props) => {
         </div>
         <hr/>
         <hr/>
-        <div>
+        <section>
             <h5>Offers:</h5>
             <hr/>
             <ul>
@@ -213,7 +213,7 @@ const OfferOverview: FC<Props> = (props) => {
                     <OfferOverviewItem offer={offer} seller={getSeller(offer.sellerId)} />):
                     <span>Loading...</span>}
             </ul>
-        </div>
+        </section>
     </div>
 }
 
