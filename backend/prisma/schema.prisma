@@ -8,40 +8,35 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-
+  id            String    @id @default(uuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
   name          String
   password_hash String
   email         String
   phone         String
   city          String
-
-  rating_sum   Float
-  rating_count Int
-  image        String?
-  fundsAccount FundsAccount?
-  CounterOffer CounterOffer[]
+  rating_sum    Float
+  rating_count  Int
+  image         String?
+  fundsAccount  FundsAccount?
+  CounterOffer  CounterOffer[]
 }
 
 model Offer {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-
-  item   Item    @relation(fields: [itemId], references: [id])
-  itemId String  @unique
-  price  Decimal
-  image  String
-
-  buyerId   String?
-  buyerName String?
-
-  userName String
-  userId   String
+  id            String    @id @default(uuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  item          Item    @relation(fields: [itemId], references: [id])
+  itemId        String  @unique
+  price         Decimal
+  image         String
+  buyerId       String?
+  buyerName     String?
+  userName      String
+  userId        String
 }
 
 model FundsAccount {
@@ -61,17 +56,16 @@ model CounterOffer {
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   offerId   String
-
-  status Boolean?
-  price  Decimal
-  items  Item[]
+  status    Boolean?
+  price     Decimal
+  items     Item[]
 }
 
 model Item {
-  id             String       @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  offerId        String?       @unique
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  offerId        String?  @unique
   offer          Offer?
   userId         String
   name           String

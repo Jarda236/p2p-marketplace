@@ -23,10 +23,8 @@ CREATE TABLE "Offer" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
     "itemId" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
     "price" DECIMAL(65,30) NOT NULL,
     "image" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
     "buyerId" TEXT,
     "buyerName" TEXT,
     "userName" TEXT NOT NULL,
@@ -54,7 +52,7 @@ CREATE TABLE "CounterOffer" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
     "offerId" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
+    "status" BOOLEAN,
     "price" DECIMAL(65,30) NOT NULL,
 
     CONSTRAINT "CounterOffer_pkey" PRIMARY KEY ("id")
@@ -63,14 +61,16 @@ CREATE TABLE "CounterOffer" (
 -- CreateTable
 CREATE TABLE "Item" (
     "id" TEXT NOT NULL,
-    "offerId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "offerId" TEXT,
     "userId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "category" TEXT NOT NULL,
-    "counterOfferId" TEXT NOT NULL,
+    "counterOfferId" TEXT,
     "image" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
+    "status" BOOLEAN,
 
     CONSTRAINT "Item_pkey" PRIMARY KEY ("id")
 );
@@ -94,4 +94,4 @@ ALTER TABLE "FundsAccount" ADD CONSTRAINT "FundsAccount_userId_fkey" FOREIGN KEY
 ALTER TABLE "CounterOffer" ADD CONSTRAINT "CounterOffer_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Item" ADD CONSTRAINT "Item_counterOfferId_fkey" FOREIGN KEY ("counterOfferId") REFERENCES "CounterOffer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Item" ADD CONSTRAINT "Item_counterOfferId_fkey" FOREIGN KEY ("counterOfferId") REFERENCES "CounterOffer"("id") ON DELETE SET NULL ON UPDATE CASCADE;

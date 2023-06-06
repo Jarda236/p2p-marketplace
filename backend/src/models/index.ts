@@ -4,3 +4,4 @@ export * from "./userModels";
 export * from "./fundsAccountModels";
 export * from "./counterOfferModels";
 export * from "./itemModels";
+export * from "./authModels";
