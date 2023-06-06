@@ -1,12 +1,10 @@
 import {FC, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {date, number, object, string} from "yup";
+import {number, object} from "yup";
 import {OffersApi} from "../../../services";
-import {Item, OfferCreateBody} from "../../../models";
+import {Item} from "../../../models";
 import {NavLink} from "react-router-dom";
-import {useRecoilState} from "recoil";
-import {userState} from "../../../state/atoms";
 import ItemOverview from "../../Item/Overview/ItemOverview";
 
 interface CreateOfferFormData {

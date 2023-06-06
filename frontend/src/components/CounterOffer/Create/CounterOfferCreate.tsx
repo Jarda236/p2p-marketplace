@@ -33,6 +33,10 @@ const CounterOfferCreate: FC = () => {
     });
 
     const onSubmit: SubmitHandler<CreateOfferCounterFormData> = async (data) => {
+        if (checkedItems.length === 0) {
+            setReason("You have to check one item.")
+            return;
+        }
         await CounterOffersApi.createCounterOffer({offerId: offerId ?? "", price: data.price, itemsId: checkedItems.map(i => i.id)}).then(() => setReason("OK")).catch((reason) => setReason(reason));
     }
 
@@ -72,7 +76,7 @@ const CounterOfferCreate: FC = () => {
                     <h3>Unable to create counter offer.</h3>
                     <p>Reason: {reason}</p>
                 </>}
-        <NavLink to="/offers">Back</NavLink>
+        <NavLink to={`/offers/${offerId}`}>Back</NavLink>
     </>
 }
 
