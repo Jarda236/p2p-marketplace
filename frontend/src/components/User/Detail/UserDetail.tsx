@@ -62,26 +62,34 @@ const UserDetail: FC = () => {
 
             {user ?
                 <>
-                    <div className="inline-flex items-center justify-center w-full">
-                        <hr className=" w-11/12 h-1 my-8 bg-gray-200 border-0 rounded"/>
-                        <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2">
-                            <h3>Offers by user</h3>
-                        </span>
-                    </div>
-                    <OfferOverview offersBySellerId={user.id}/>
-                    <div className="inline-flex items-center justify-center w-full">
-                        <hr className=" w-11/12 h-1 my-8 bg-gray-200 border-0 rounded"/>
-                        <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2">
-                        <h3>Purchased items</h3>
-                        </span>
-                    </div>
-                    <OfferOverview offersByBuyerId={user.id} />
                     <section>
-                    <h3>My items</h3>
-                    <ItemOverview checkedItems={checkedItems} toggleItem={toggleItem} />
-                    <button onClick={deleteCheckedItems}>Delete checked</button>
-                </section>
-
+                        <div className="inline-flex items-center justify-center w-full">
+                            <hr className=" w-11/12 h-1 my-8 bg-gray-200 border-0 rounded"/>
+                            <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2">
+                                <h3>Offers by user</h3>
+                            </span>
+                        </div>
+                        <OfferOverview offersBySellerId={user.id}/>
+                    </section>
+                    <section>
+                        <div className="inline-flex items-center justify-center w-full">
+                            <hr className=" w-11/12 h-1 my-8 bg-gray-200 border-0 rounded"/>
+                            <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2">
+                            <h3>Purchased items</h3>
+                            </span>
+                        </div>
+                        <OfferOverview offersByBuyerId={user.id} />
+                    </section>
+                    <section>
+                        <div className="inline-flex items-center justify-center w-full">
+                            <hr className=" w-11/12 h-1 my-8 bg-gray-200 border-0 rounded"/>
+                            <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white left-1/2">
+                            <h3>My items</h3>
+                            </span>
+                        </div>
+                        <ItemOverview checkedItems={checkedItems} toggleItem={toggleItem} />
+                        <button onClick={deleteCheckedItems}>Delete checked</button>
+                    </section>
                 </> :
                 <p className=" text-center text-lg">Loading...</p>
             }
