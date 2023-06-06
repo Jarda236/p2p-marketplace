@@ -1,14 +1,14 @@
 import { Result } from "@badrap/result";
 import { Decimal, PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { CounterOffer, CounterOfferCreate, CounterOfferUpdate } from '../models';
+import { FundsAccount, FundsAccountCreate, FundsAccountUpdate } from '../models';
 import prisma from '../client';
 
-export const getAll = async (): Promise<Result<CounterOffer[], Error>> => {
+export const getAll = async (): Promise<Result<FundsAccount[], Error>> => {
     try {
-        const result = await prisma.counterOffer.findMany();
+        const result = await prisma.fundsAccount.findMany();
         const aa = Array(result.length).fill(undefined);
         for(let i = 0; i < result.length; i++) {
-            aa[i] = { ...result[i], amount: result[i].amount.toNumber() };
+            aa[i] = { ...result[i], balance: result[i].balance.toNumber() };
         }
         return Result.ok(aa);
     } catch (error) {
@@ -20,11 +20,11 @@ export const getAll = async (): Promise<Result<CounterOffer[], Error>> => {
 }
 
 
-export const getSingle = async (id: string): Promise<Result<CounterOffer | null, Error>> => {
+export const getSingle = async (id: string): Promise<Result<FundsAccount | null, Error>> => {
     try {
-        var result = await prisma.counterOffer.findUnique({ where: { id } });
-        if (result && result.amount) {
-             var a = { ...result, amount: result.amount.toNumber() };
+        var result = await prisma.fundsAccount.findUnique({ where: { id } });
+        if (result && result.balance) {
+             var a = { ...result, balance: result.balance.toNumber() };
              return Result.ok(a);
           }
           return Result.ok(null);
@@ -37,11 +37,11 @@ export const getSingle = async (id: string): Promise<Result<CounterOffer | null,
 };
 
 
-export const createSingle = async (data: CounterOfferCreate): Promise<Result<CounterOffer, Error>> => {
+export const createSingle = async (data: FundsAccountCreate): Promise<Result<FundsAccount, Error>> => {
     try {
-        const result = await prisma.counterOffer.create({ data });
-        if (result && result.amount) {
-            var a = { ...result, amount: result.amount.toNumber() };
+        const result = await prisma.fundsAccount.create({ data });
+        if (result && result.balance) {
+            var a = { ...result, balance: result.balance.toNumber() };
             return Result.ok(a);
          }
        return Result.err(new Error(`aaaaaa ${result}`));
@@ -54,11 +54,11 @@ export const createSingle = async (data: CounterOfferCreate): Promise<Result<Cou
 };
 
 
-export const updateSingle = async (id: string, data: CounterOfferUpdate): Promise<Result<CounterOffer, Error>> => {
+export const updateSingle = async (id: string, data: FundsAccountUpdate): Promise<Result<FundsAccount, Error>> => {
     try {
-        const result = await prisma.counterOffer.update({ where: { id }, data });
-        if (result && result.amount) {
-            var a = { ...result, amount: result.amount.toNumber() };
+        const result = await prisma.fundsAccount.update({ where: { id }, data });
+        if (result && result.balance) {
+            var a = { ...result, balance: result.balance.toNumber() };
             return Result.ok(a);
          }
        return Result.err(new Error(`aaaaaa ${result}`));
@@ -73,7 +73,7 @@ export const updateSingle = async (id: string, data: CounterOfferUpdate): Promis
 
 export const deleteSingle = async (id: string) => {
     try {
-        const result = await prisma.counterOffer.delete({ where: { id } });
+        const result = await prisma.fundsAccount.delete({ where: { id } });
         return Result.ok(result);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {

@@ -1,14 +1,14 @@
 import { Result } from "@badrap/result";
 import { Decimal, PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { CounterOffer, CounterOfferCreate, CounterOfferUpdate } from '../models';
+import { Offer, OfferCreate, OfferUpdate } from '../models';
 import prisma from '../client';
 
-export const getAll = async (): Promise<Result<CounterOffer[], Error>> => {
+export const getAll = async (): Promise<Result<Offer[], Error>> => {
     try {
-        const result = await prisma.counterOffer.findMany();
+        const result = await prisma.offer.findMany();
         const aa = Array(result.length).fill(undefined);
         for(let i = 0; i < result.length; i++) {
-            aa[i] = { ...result[i], amount: result[i].amount.toNumber() };
+            aa[i] = { ...result[i], price: result[i].price.toNumber() };
         }
         return Result.ok(aa);
     } catch (error) {
@@ -20,14 +20,14 @@ export const getAll = async (): Promise<Result<CounterOffer[], Error>> => {
 }
 
 
-export const getSingle = async (id: string): Promise<Result<CounterOffer | null, Error>> => {
+export const getSingle = async (id: string): Promise<Result<Offer | null, Error>> => {
     try {
-        var result = await prisma.counterOffer.findUnique({ where: { id } });
-        if (result && result.amount) {
-             var a = { ...result, amount: result.amount.toNumber() };
+        var result = await prisma.offer.findUnique({ where: { id } });
+        if (result && result.price) {
+             var a = { ...result, price: result.price.toNumber() };
              return Result.ok(a);
           }
-          return Result.ok(null);
+        return Result.ok(null);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             return Result.err(error);
@@ -37,11 +37,11 @@ export const getSingle = async (id: string): Promise<Result<CounterOffer | null,
 };
 
 
-export const createSingle = async (data: CounterOfferCreate): Promise<Result<CounterOffer, Error>> => {
+export const createSingle = async (data: OfferCreate): Promise<Result<Offer, Error>> => {
     try {
-        const result = await prisma.counterOffer.create({ data });
-        if (result && result.amount) {
-            var a = { ...result, amount: result.amount.toNumber() };
+        const result = await prisma.offer.create({ data });
+        if (result && result.price) {
+            var a = { ...result, price: result.price.toNumber() };
             return Result.ok(a);
          }
        return Result.err(new Error(`aaaaaa ${result}`));
@@ -54,11 +54,11 @@ export const createSingle = async (data: CounterOfferCreate): Promise<Result<Cou
 };
 
 
-export const updateSingle = async (id: string, data: CounterOfferUpdate): Promise<Result<CounterOffer, Error>> => {
+export const updateSingle = async (id: string, data: OfferUpdate): Promise<Result<Offer, Error>> => {
     try {
-        const result = await prisma.counterOffer.update({ where: { id }, data });
-        if (result && result.amount) {
-            var a = { ...result, amount: result.amount.toNumber() };
+        const result = await prisma.offer.update({ where: { id }, data });
+        if (result && result.price) {
+            var a = { ...result, price: result.price.toNumber() };
             return Result.ok(a);
          }
        return Result.err(new Error(`aaaaaa ${result}`));
@@ -69,11 +69,11 @@ export const updateSingle = async (id: string, data: CounterOfferUpdate): Promis
         return Result.err(new Error(`Unknown error: ${error}`));
     }
 };
-  
+
 
 export const deleteSingle = async (id: string) => {
     try {
-        const result = await prisma.counterOffer.delete({ where: { id } });
+        const result = await prisma.offer.delete({ where: { id } });
         return Result.ok(result);
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {

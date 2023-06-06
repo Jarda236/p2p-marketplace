@@ -26,11 +26,6 @@ model User {
   offers        Offer[]
   CounterOffer  CounterOffer[]
 }
-model Category {
-  id        String   @id @default(uuid())
-  name String
-  Offer Offer[]
-}
 
 model Offer {
   id String @id @default(uuid())
@@ -42,8 +37,8 @@ model Offer {
   name        String
   description String
   price       Decimal
-  category    Category[]
-  pictures    String
+  category    String[]
+  picture    String
 
   counterOffer   CounterOffer? @relation(name: "a")
   counterOfferId Int?

@@ -8,7 +8,7 @@ export const OfferSchema = z.object({
     name: z.string({ required_error: 'Property `name` is required' }).nonempty(),
     description: z.string({ required_error: 'Property `description` is required' }).nonempty(),
     price: z.number({ required_error: 'Property `price` is required' }),
-    category: z.string({ required_error: 'Property `category` is required' }).nonempty(),
+    category: z.array(z.string()),
     picture: z.string({ required_error: 'Property `picture` is required' }).nonempty(),
     sold_at: z.date().optional(),
 }).merge(BaseModelSchema)
@@ -22,8 +22,8 @@ export const OfferCreateSchema = z.object({
     name: z.string({ required_error: 'Property `name` is required' }).nonempty(),
     description: z.string({ required_error: 'Property `description` is required' }).nonempty(),
     price: z.number({ required_error: 'Property `price` is required' }),
-    category: z.string({ required_error: 'Property `category` is required' }).nonempty(),
-    picture: z.string({ required_error: 'Property `picture` is required' }).nonempty().optional(),
+    category: z.array(z.string()),
+    picture: z.string({ required_error: 'Property `picture` is required' }).nonempty(),
 })
 
 export type OfferCreate = z.infer<typeof OfferCreateSchema>;
@@ -33,8 +33,8 @@ export const OfferUpdateSchema = z.object({
     name: z.string({ required_error: 'Property `name` is required' }).nonempty().optional(),
     description: z.string({ required_error: 'Property `description` is required' }).nonempty().optional(),
     price: z.number({ required_error: 'Property `price` is required' }).optional(),
-    category: z.string({ required_error: 'Property `category` is required' }).nonempty().optional(),
-    picture: z.string({ required_error: 'Property `picture` is required' }).nonempty().optional().optional(),
+    category: z.array(z.string()).optional(),
+    picture: z.string({ required_error: 'Property `picture` is required' }).nonempty().optional(),
 }).merge(ModelIdSchema)
 
 export type OfferUpdate = z.infer<typeof OfferUpdateSchema>;
