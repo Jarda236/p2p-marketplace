@@ -46,6 +46,8 @@ export interface Item {
     description: string;
     category: string;
     image: string;
+
+    [key: string]: string;
 }
 
 export interface ItemCreateBody {

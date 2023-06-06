@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {useQueries, useQuery} from "@tanstack/react-query";
 import {CategoriesApi, ItemsApi, OffersApi, UsersApi} from "../../../services"
-import {Offer} from "../../../models";
+import {Item, Offer} from "../../../models";
 import OfferOverviewItem from "./Item/OfferOverviewItem";
 import {RecoilLoadable} from "recoil";
 import of = RecoilLoadable.of;
@@ -62,24 +62,48 @@ const OfferOverview: FC<Props> = (props) => {
         }
         return offers
             .filter(offer => offer.price >= priceToFilter.from && offer.price <= priceToFilter.to)
-            .filter(offer => categoriesToFilter.findIndex(category => category === offer.category) === -1)
+            .filter((offer, index) => {
+                return categoriesToFilter.findIndex(category => category === items[index].data?.category) === -1
+            })
             .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
             .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
-            .filter((offer, index) => items[index].data?.name.toLowerCase().includes(valueToFilter.toLowerCase()) || items[index].data?.description.toLowerCase().includes(valueToFilter.toLowerCase()))
+            .filter((offer, index) => {
+                if (items[index].data === undefined) {
+                    return true;
+                }
+                return items[index].data?.name.toLowerCase().includes(valueToFilter.toLowerCase()) || items[index].data?.description.toLowerCase().includes(valueToFilter.toLowerCase());
+            })
             .sort((a: Offer, b: Offer) => {
             for (let i = 0; i < columnsToSort.length; i++) {
                 const el1 = a[columnsToSort[i].column];
                 const el2 = b[columnsToSort[i].column];
-                if (el1 === null || el2 === null) {
-                    continue;
+                const item1 = getItemById(a.itemId);
+                const item2 = getItemById(b.itemId);
+                let el3 = ""
+                let el4 = "";
+                if (item1 !== undefined && item2 !== undefined){
+                    el3 = item1[columnsToSort[i].column];
+                    el4 = item2[columnsToSort[i].column];
                 }
-                const compare = el1.toString().toLowerCase().localeCompare(el2.toString().toLowerCase()) * (columnsToSort[i].order ? -1 : 1);
+                console.log(el1, el2)
+                if (el1 !== null && el2 !== null && el1 !== undefined && el2 !== undefined) {
+                    const compare = el1.toString().toLowerCase().localeCompare(el2.toString().toLowerCase()) * (columnsToSort[i].order ? -1 : 1);
+                    if (compare !== 0) {
+                        return compare;
+                    }
+                    return 0;
+                }
+                const compare = el3.toString().toLowerCase().localeCompare(el4.toString().toLowerCase()) * (columnsToSort[i].order ? -1 : 1);
                 if (compare !== 0) {
                     return compare;
                 }
             }
             return 0;
         })
+    }
+
+    const getItemById = (itemId: string): Item | undefined => {
+        return items.find(item => item.data?.id === itemId)?.data;
     }
 
     const changeSortingDirection = (column: string) => {
@@ -114,7 +138,7 @@ const OfferOverview: FC<Props> = (props) => {
         return columnsToSort[index].order ? " DESC" : " ASC";
     }
 
-    const COLUMNS = [{name: "name", display: "Name"}, {name: "sellerName", display: "Seller"}, {name: "createdAt", display: "Created at"}, {name: "topOffer", display: "Top offer"}, {name: "price", display: "Price"}, {name: "sold", display: "Sold"}];
+    const COLUMNS = [{name: "name", display: "Name"}, {name: "sellerName", display: "Seller"}, {name: "createdAt", display: "Created at"}, {name: "price", display: "Price"}, {name: "sold", display: "Sold"}];
     const filterComponent = <div style={{
         display: "inline",
         position: "absolute",
@@ -219,7 +243,7 @@ const OfferOverview: FC<Props> = (props) => {
             <ul>
                 {offers ?
                     filterOffers().map((offer, index) =>
-                    <OfferOverviewItem offer={offer} seller={getSeller(offer.sellerId)} item={items[index].data}/>):
+                    <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={items[index].data}/>):
                     <span>Loading...</span>}
             </ul>
         </section>
