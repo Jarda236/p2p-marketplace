@@ -1,8 +1,8 @@
 import React, {FC, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
-import {useQuery} from "@tanstack/react-query";
-import {CategoriesApi, OffersApi, UsersApi} from "../../../services"
-import {Category, Offer, User} from "../../../models";
+import {useQueries, useQuery} from "@tanstack/react-query";
+import {CategoriesApi, ItemsApi, OffersApi, UsersApi} from "../../../services"
+import {Offer} from "../../../models";
 import OfferOverviewItem from "./Item/OfferOverviewItem";
 import {RecoilLoadable} from "recoil";
 import of = RecoilLoadable.of;
@@ -24,15 +24,24 @@ const OfferOverview: FC<Props> = (props) => {
     const [valueToFilter, changeValueToFilter] = useState<string>("");
     const [columnsToSort, changeColumnsToSort] = useState<ColumnToSort[]>([]);
     const [priceToFilter, changePriceToFilter] = useState<{from: number, to: number}>({from: 0, to: 999999 });
-    const [categoriesToFilter, changeCategoriesToFilter] = useState<Category[]>([]);
+    const [categoriesToFilter, changeCategoriesToFilter] = useState<string[]>([]);
     const [showSortFilter, toggleShowSortFilter] = useState<boolean>(false);
     const [showCategoryFilter, toggleShowCategoryFilter] = useState<boolean>(false);
     const [showPriceFilter, toggleShowPriceFilter] = useState<boolean>(false);
 
-    const {data: offers, refetch} = useQuery({
+    const {data: offers} = useQuery({
         queryKey: ['offers'],
         queryFn: () => OffersApi.getOffers()
     })
+
+    const items = useQueries({
+        queries: offers?.map((offer) => {
+            return {
+                queryKey: ["item", offer.itemId],
+                queryFn: () => ItemsApi.getItemById(offer.itemId),
+            };
+        }) || [],
+    });
 
     const {data: categories} = useQuery({
         queryKey: ['categories'],
@@ -48,15 +57,15 @@ const OfferOverview: FC<Props> = (props) => {
     }
 
     const filterOffers = (): Array<Offer> => {
-        if (offers === undefined) {
+        if (offers === undefined || items === undefined) {
             return [];
         }
         return offers
             .filter(offer => offer.price >= priceToFilter.from && offer.price <= priceToFilter.to)
-            .filter(offer => categoriesToFilter.findIndex(category => category.id === offer.category.id) === -1)
+            .filter(offer => categoriesToFilter.findIndex(category => category === offer.category) === -1)
             .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
             .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
-            .filter(offer => offer.name.toLowerCase().includes(valueToFilter.toLowerCase()) || offer.description.toLowerCase().includes(valueToFilter.toLowerCase()))
+            .filter((offer, index) => items[index].data?.name.toLowerCase().includes(valueToFilter.toLowerCase()) || items[index].data?.description.toLowerCase().includes(valueToFilter.toLowerCase()))
             .sort((a: Offer, b: Offer) => {
             for (let i = 0; i < columnsToSort.length; i++) {
                 const el1 = a[columnsToSort[i].column];
@@ -119,12 +128,12 @@ const OfferOverview: FC<Props> = (props) => {
     </div>
 
 
-    const toggleCategory = (category: Category) => {
-        const index = categoriesToFilter.findIndex(c => c.id === category.id);
+    const toggleCategory = (category: string) => {
+        const index = categoriesToFilter.findIndex(c => c === category);
         if (index === -1) {
             changeCategoriesToFilter([...categoriesToFilter, category]);
         } else {
-            changeCategoriesToFilter(categoriesToFilter.filter(c => c.id !== category.id));
+            changeCategoriesToFilter(categoriesToFilter.filter(c => c !== category));
         }
     }
     const categoryComponent = <div style={{
@@ -133,8 +142,8 @@ const OfferOverview: FC<Props> = (props) => {
         background: "whitesmoke"
     }}>
         <ul>
-            {categories ? categories.map(category => <li key={category.id}>
-                <p onClick={() => toggleCategory(category)}>{category.name}</p>
+            {categories ? categories.map(category => <li key={category}>
+                <p onClick={() => toggleCategory(category)}>{category}</p>
             </li>) : "Loading..."}
         </ul>
     </div>
@@ -192,7 +201,7 @@ const OfferOverview: FC<Props> = (props) => {
                 {filteredOffers?.map(offer =>
                     <tr key={offer.id} onClick={() => handleClick(offer.id)}>
                         <td>{offer.name}</td>
-                        <td>{offer.category.name}</td>
+                        <td>{offer.category}</td>
                         <td>{offer.sellerName}</td>
                         <td>{offer.createdAt}</td>
                         <td>{offer.topOffer}</td>
@@ -209,8 +218,8 @@ const OfferOverview: FC<Props> = (props) => {
             <hr/>
             <ul>
                 {offers ?
-                    filterOffers().map(offer =>
-                    <OfferOverviewItem offer={offer} seller={getSeller(offer.sellerId)} />):
+                    filterOffers().map((offer, index) =>
+                    <OfferOverviewItem offer={offer} seller={getSeller(offer.sellerId)} item={items[index].data}/>):
                     <span>Loading...</span>}
             </ul>
         </section>

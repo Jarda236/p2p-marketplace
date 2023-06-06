@@ -1,19 +1,13 @@
 import {FC} from "react";
-import {Offer, User} from "../../../../models";
-import OfferOverview from "../OfferOverview";
-import {NavLink, useNavigate} from "react-router-dom";
-import {useQuery} from "@tanstack/react-query";
-import {ItemsApi, OffersApi} from "../../../../services";
+import {Item, Offer, User} from "../../../../models";
+import {NavLink} from "react-router-dom";
 
 interface OfferOverviewProps {
     offer: Offer,
-    seller: User
+    seller: User,
+    item: Item | undefined
 }
-const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller}) => {
-    const {data: item} = useQuery({
-        queryKey: ['item'],
-        queryFn: () => ItemsApi.getItemById(offer.id)
-    })
+const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller, item}) => {
 
     return (
     <div className=" bg-blue-100 hover:bg-blue-200 flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl

@@ -8,7 +8,7 @@ const ITEMS: Item[] = [
 
         name: "itemname1",
         description: "item decription1",
-        category: "Car",
+        category: "Cars",
         image: "/pictures/auto.jpg",
     },
     {
@@ -17,7 +17,7 @@ const ITEMS: Item[] = [
 
         name: "itemname2",
         description: "item decription2",
-        category: "Boat",
+        category: "Boats",
         image: "/pictures/auto.jpg",
     }
 ]
