@@ -62,7 +62,7 @@ export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
 export const getOffersBySellerId = async (userId: string): Promise<Array<Offer>> => {
     return OFFERS.filter(offer => offer.sellerId === userId);
 
-    const response = await axiosInstance.get(`/offers/user/seller/${userId}`);
+    const response = await axiosInstance.get(`/offers/seller/${userId}`);
     return response.data;
 }
 
@@ -70,6 +70,6 @@ export const getOffersByBuyerId = async (userId: string): Promise<Array<Offer>> 
     console.log(userId)
     return OFFERS.filter(offer => offer.buyerId === userId && offer.sold);
 
-    const response = await axiosInstance.get(`/offers/user/buyer/${userId}`);
+    const response = await axiosInstance.get(`/offers/buyer/${userId}`);
     return response.data;
 }

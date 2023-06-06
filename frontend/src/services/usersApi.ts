@@ -4,19 +4,31 @@ import {User} from "../models";
 const USERS: User[] = [
     {
         id: "1",
-        name: "name1",
-        username: "user1",
+        username: "username1",
+        email: "user1@a.com",
+        phone: 14433434343,
+        city: "Brno",
         createdAt: 0,
-        cashAmount: 500,
-        rating: 5
+        account: {
+          balance: 500,
+          balanceBlocked: 300
+        },
+        rating: 4,
+        image: ""
     },
     {
         id: "2",
-        name: "name2",
-        username: "user2",
+        username: "username2",
+        email: "user2@a.com",
+        phone: 14433434343,
+        city: "Zilina",
         createdAt: 0,
-        cashAmount: 5000,
-        rating: 5
+        account: {
+            balance: 500,
+            balanceBlocked: 300
+        },
+        rating: 5,
+        image: ""
     }
 ]
 

@@ -2,12 +2,18 @@ import {FC} from "react";
 import {Offer, User} from "../../../../models";
 import OfferOverview from "../OfferOverview";
 import {NavLink, useNavigate} from "react-router-dom";
+import {useQuery} from "@tanstack/react-query";
 
 interface OfferOverviewProps {
     offer: Offer,
     seller: User
 }
 const OfferOverviewItem: FC<OfferOverviewProps> = ({offer, seller}) => {
+    const {data: item} => useQuery({
+        queryKey: ['item'],
+        queryFn: ()
+    })
+
     return (
     <div className=" bg-blue-100 hover:bg-blue-200 flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl
                        pr-2 pb-2">

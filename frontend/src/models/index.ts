@@ -1,16 +1,19 @@
 export interface User {
     id: string;
-    name: string;
     username: string;
     email: string;
+    phone: number;
     city: string;
     createdAt: number;
-
-    balance: number;
-    balanceBlocked: number;
+    account: Account
 
     rating: number;
     image: string;
+}
+
+export interface Account {
+    balance: number;
+    balanceBlocked: number;
 }
 
 export interface Offer {
@@ -18,7 +21,6 @@ export interface Offer {
     createdAt: number;
 
     price: number;
-    sold: boolean;
 
     itemId: string;
 
@@ -28,7 +30,7 @@ export interface Offer {
     buyerId: string | null;
     buyerName: string | null;
 
-    [key: string]: string | number | boolean | null | Category;
+    [key: string]: string | number | boolean | null;
 }
 
 export interface OfferCreateBody {
@@ -42,29 +44,23 @@ export interface Item {
 
     name: string;
     description: string;
-    categoryId: string;
+    category: string;
     image: string;
-
-    offerId: string | null;
-    counterOfferId: string | null;
 }
 
 export interface ItemCreateBody {
     name: string;
     description: string;
-    categoryId: string;
+    category: string;
     image: string;
-}
-
-export interface Category {
-    id: string;
-    name: string;
 }
 
 export interface CounterOffer {
     id: string;
     offerId: string;
+    buyerId: string;
     price: number;
+    status: boolean | null;
     itemsId: Array<string>[]
 }
 
