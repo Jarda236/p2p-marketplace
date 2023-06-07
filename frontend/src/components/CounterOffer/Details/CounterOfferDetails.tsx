@@ -48,7 +48,7 @@ const CounterOfferDetails: FC = () => {
     }
 
     return <>
-        <h2>Counter offer details</h2>
+        <h2>Counter-offer details</h2>
         {counter && items ?
             <>
                 <section>
