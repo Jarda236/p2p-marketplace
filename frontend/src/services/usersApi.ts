@@ -4,12 +4,12 @@ import {User} from "../models";
 const USERS: User[] = [
     {
         id: "1",
-        username: "username1",
+        name: "username1",
         email: "user1@a.com",
         phone: 14433434343,
         city: "Brno",
         createdAt: 0,
-        account: {
+        fundsAccount: {
           balance: 500,
           balanceBlocked: 300
         },
@@ -18,12 +18,12 @@ const USERS: User[] = [
     },
     {
         id: "2",
-        username: "username2",
+        name: "username2",
         email: "user2@a.com",
         phone: 14433434343,
         city: "Zilina",
         createdAt: 0,
-        account: {
+        fundsAccount: {
             balance: 500,
             balanceBlocked: 300
         },

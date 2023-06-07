@@ -65,8 +65,8 @@ const OfferDetails: FC = () => {
                                                 onClick={() => navigate(`create-counter-offer`)}
                                             >Send offer</button>
                                             <button
-                                                className={"focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2".concat((user?.account.balance ?? 0) >= offer.price ? "" : " cursor-not-allowed")}
-                                                onClick={() => (user?.account.balance ?? 0) >= offer.price && navigate('buy')}>Buy</button>
+                                                className={"focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2".concat((user?.fundsAccount.balance ?? 0) >= offer.price ? "" : " cursor-not-allowed")}
+                                                onClick={() => (user?.fundsAccount.balance ?? 0) >= offer.price && navigate('buy')}>Buy</button>
                                         </>}
                                 </div>
                             }

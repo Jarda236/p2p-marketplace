@@ -20,7 +20,7 @@ const CounterOfferCreate: FC = () => {
             .default(0)
             .typeError("Price must be a number.") // customize error message for invalid type
             .min(1, "Price must be positive.")
-            .max(user ? user.account.balance : 0, "Check your balance.")
+            .max(user ? user.fundsAccount.balance : 0, "Check your balance.")
     });
 
     const {offerId} = useParams();

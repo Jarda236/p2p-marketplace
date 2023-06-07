@@ -23,12 +23,12 @@ const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
                 <img src={user ? user.image : "/icons/user.jpg"}
                      onClick={() => user !== undefined && navigate("/users/".concat(user.id))}
                      className=" h-12 w-12 object-cover rounded-full"
-                     alt={user ? user.username.concat("-avatar") : "guest-avatar"}/>
+                     alt={user ? user.name.concat("-avatar") : "guest-avatar"}/>
                 <div className=" felx flex-col">
                     <div className=" pt-1">
                         <span
                         className=" text-base"
-                        >{user ? user.username : "Guest"}</span>
+                        >{user ? user.name : "Guest"}</span>
                     </div>
                     <div>
                         {user ? <button
@@ -45,7 +45,7 @@ const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
         </section>
         <hr className="h-px bg-gray-700 border-0"  />
         <section className=" font-medium text-base">
-            <span>Cash: {user ? user.account.balance : "Login to show."}</span>
+            <span>Cash: {user ? user.fundsAccount.balance : "Login to show."}</span>
         </section>
     </section>
     );
