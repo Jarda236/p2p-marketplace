@@ -125,12 +125,17 @@ export const acceptSingle = async (
         where: { id },
         data: { status: true, updatedAt: new Date() },
       });
-
+      
+      const items = await transaction.item.findMany({
+        where: { counterOfferId: counterOffer.id },
+      });
+      
       const buyer = await transaction.user.update({
         where: { id: counterOffer.userId },
-        data: {},
+        data: { items: { connect: items.map(item => ({ id: item.id })) } },
       });
-      var pom = { ...counterOffer, price: counterOffer.price.toNumber() };
+      
+      var pom = { ...counterOffer, price: counterOffer.price.toNumber(), items };
       return Result.ok(pom);
     });
   } catch (error) {
