@@ -1,12 +1,19 @@
-import {FC, useState} from "react";
-import {number, object, string} from "yup";
-import ItemOverview from "../Overview/ItemOverview";
+import {
+    ChangeEvent,
+    ChangeEventHandler,
+    DetailedHTMLProps,
+    FC,
+    InputHTMLAttributes,
+    SetStateAction,
+    useState
+} from "react";
+import {object, string} from "yup";
 import {NavLink, useParams} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
-import {CategoriesApi, ItemsApi } from "../../../services";
+import {CategoriesApi, ItemsApi} from "../../../services";
 import {useQuery} from "@tanstack/react-query";
 import CategoryFilter from "../../Offer/Overview/Filters/CategoryFilter";
 
@@ -21,12 +28,13 @@ const ItemCreateSchema = object().shape({
 });
 
 
-const ItemCreate:FC = () => {
+const ItemCreate: FC = () => {
     const [reason, setReason] = useState<string | null>(null);
     const [showCategories, toggleShowCategories] = useState<boolean>(false);
     const [selectedCategory, changeSelectedCategory] = useState<string[]>([]);
     const {userId} = useParams();
     const [user] = useRecoilState(userState);
+    const [image, setImage] = useState<File | null>(null);
 
     const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<CreateItemFormData>({
         resolver: yupResolver(ItemCreateSchema)
@@ -36,7 +44,12 @@ const ItemCreate:FC = () => {
         if (selectedCategory.length === 0) {
             setReason("You have to check one category.");
         }
-        await ItemsApi.createItem({name: data.name, description: data.description, image: "", category: selectedCategory[0]}).then(() => {
+        await ItemsApi.createItem({
+            name: data.name,
+            description: data.description,
+            image: image,
+            category: selectedCategory[0]
+        }).then(() => {
             setReason("OK");
         }).catch((reason) => setReason(reason.message));
     }
@@ -49,6 +62,10 @@ const ItemCreate:FC = () => {
     const toggleCategory = (category: string) => {
         changeSelectedCategory([category]);
         return true;
+    }
+
+    const onImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setImage(e.target.files ? e.target.files[0] : null );
     }
 
     if (user?.id !== userId) {
@@ -79,6 +96,7 @@ const ItemCreate:FC = () => {
                     </div>
                     <button type="button" onClick={() => toggleShowCategories(!showCategories)} >Categories</button>
                     {showCategories && <CategoryFilter toggleCategory={toggleCategory} categories={categories} />}
+                    <input type="file" accept="image/jpeg" onChange={onImageChange}/>
                     <button className="green-button" type="submit">Create item</button>
                 </form>
             </> :

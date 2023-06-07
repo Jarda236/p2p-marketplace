@@ -62,14 +62,14 @@ export interface ItemCreateBody {
     name: string;
     description: string;
     category: string;
-    image: string;
+    image: File | null;
 }
 
 export interface ItemUpdateBody {
     name: string;
     description: string;
     category: string;
-    image: string;
+    image: File | null;
 }
 
 export interface CounterOffer {

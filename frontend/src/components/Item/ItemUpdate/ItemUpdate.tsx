@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 import {object, string} from "yup";
 import {NavLink, useParams} from "react-router-dom";
 import {useRecoilState} from "recoil";
