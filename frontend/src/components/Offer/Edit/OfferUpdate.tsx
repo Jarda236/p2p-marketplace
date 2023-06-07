@@ -107,7 +107,10 @@ const OfferUpdate: FC = () => {
 
             </div> :
             reason === "OK" ?
-                <h3>Offer updated!</h3> :
+                <div className="mt-4 mx-10 bg-green-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
+                    <h3>Offer updated!</h3>
+                </div>
+                :
                 <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
                     <h3>Unable to update offer.</h3>
                     <p>Reason: {reason}</p>
