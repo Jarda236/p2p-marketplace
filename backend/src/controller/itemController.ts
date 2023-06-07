@@ -67,10 +67,13 @@ router.delete(
   }
 );
 
-router.get("/byUser", authenticate, async (req: AuthenticatedRequest, res) => {
-    res.json({ message: 'Authenticated!', user: req.user });
-    console.log(req.user);
+router.get("/logged-user", authenticate, 
+  async (req: AuthenticatedRequest, res) => {
+    const items = await ItemRepository.getAll();
+    if(items.isErr) return handleErrorResp(500, res, items.error.message);
+    const result = items.value.filter(x => x.id === req.user!.id);
+    return handleOkResp(result, res, `Listed ${result.length}`);
   }
 );
-
+    
 export default router;
