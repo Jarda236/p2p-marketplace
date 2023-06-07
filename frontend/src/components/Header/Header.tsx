@@ -29,7 +29,7 @@ const Header:FC = () => {
         <NavLink to="/" className="grow my-2 mt-2">
             <figure className=" flex flex-row" onClick={() => navigate("/")}>
                 <img src="/icons/p2picon.png"
-                className=" h-10 w-10 sm:w-24 sm:h-24 object-cover rounded-md cursor-pointer"
+                className=" h-10 w-10 sm:w-24 sm:h-24 object-scale-down cursor-pointer"
                 alt="p2p-marketplace-logo" />
                 <figcaption className="ml-1 text-xs sm:text-base self-center font-bold font-sans cursor-pointer">
                     <h1 className=" text-sm sm:text-lg font-bold">P2P Marketplace</h1>
