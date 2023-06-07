@@ -45,7 +45,8 @@ const CouterOfferUpdate: FC = () => {
             return;
         }
         await CounterOffersApi.updateCounterOffer(counter?.id ?? "", {
-            price: data.price, itemsId: checkedItems.map(i => {
+            price: data.price,
+            itemsId: checkedItems.map(i => {
                 i.blocked = true;
                 return i.id;
             })
