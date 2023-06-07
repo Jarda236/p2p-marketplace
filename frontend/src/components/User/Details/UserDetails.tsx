@@ -94,7 +94,9 @@ const UserDetails: FC = () => {
                                 <h3>My items</h3>
                             </span>
                         </div>
-                        <button type="button" onClick={() => navigate("create-item")}  className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5" >Create item</button>
+                        <button type="button" onClick={() => navigate("create-item")}  className=" ml-10 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5" >
+                            Create item
+                        </button>
                         <ItemOverview checkedItems={checkedItems} toggleItem={toggleItem} />
                         <button onClick={deleteCheckedItems} className="focus:outline-none text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-10 py-2.5 mx-10 mb-5 float-right">
                             Delete checked
