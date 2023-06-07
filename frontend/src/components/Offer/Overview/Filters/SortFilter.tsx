@@ -39,22 +39,29 @@ const SortFilter:FC<SortFilterProps> = ({columnsToSort, changeColumnsToSort}) =>
     const getFilterIndex = (column: string): string => {
         const index = columnsToSort.findIndex(o => o.column === column);
         if (index === -1) {
-            return " OFF";
+            return " ☒"; // OFF
         }
-        return columnsToSort[index].order ? " DESC" : " ASC";
+        return columnsToSort[index].order ? " ▼" : " ▲"; // DESC : ASC
     }
 
-    return <div style={{
-        display: "inline",
-        position: "absolute",
-        background: "whitesmoke"
-    }}>
+    return ( 
+    <div className=" inline absolute bg-slate-200 z-10 mt-6 rounded-md shadow-lg">
         <ul>
-            {COLUMNS.map(item => <li key={item.name}>
-                <span onClick={() => changeSortingDirection(item.name)}>{item.display}{getFilterIndex(item.name)} </span><span onClick={() => deleteSorting(item.name)}>X</span>
+            {COLUMNS.map(item =>
+            <li key={item.name}
+            className=" px-1 py-1 flex justify-between">
+                <span onClick={() => changeSortingDirection(item.name)}
+                className=" hover:cursor-pointer mr-1">
+                    {item.display}{getFilterIndex(item.name)}
+                </span>
+                <span onClick={() => deleteSorting(item.name)}
+                className=" hover:cursor-pointer">
+                    ✖
+                </span>
             </li>)}
         </ul>
     </div>
+    );
 }
 
 export default SortFilter;
