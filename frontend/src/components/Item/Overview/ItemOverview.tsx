@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC} from "react";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 import {useQuery} from "@tanstack/react-query";

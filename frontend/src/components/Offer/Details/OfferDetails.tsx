@@ -35,7 +35,7 @@ const OfferDetails: FC = () => {
                             <p className=" text-lg  font-bold">{item?.name}</p>
                             <p className=" mb-2">Category: {item?.category}</p>
                             <p className=" max-w-xs text-sm">{item?.description}</p>
-                            <p className=" mt-2">Seller: <NavLink to={"/users/".concat(offer.sellerId)} className=" font-bold text-black hover:underline mt-4">
+                            <p className=" mt-2">Seller: <NavLink to={"/users/".concat(offer.userId)} className=" font-bold text-black hover:underline mt-4">
                                 {offer.sellerName}
                                 </NavLink></p>
                             <p>Created at: {offer.createdAt}</p>

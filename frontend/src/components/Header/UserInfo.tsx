@@ -1,9 +1,7 @@
-import {FC, useEffect} from "react";
+import {FC} from "react";
 import {User} from "../../models";
 import {NavLink, useNavigate} from "react-router-dom";
-import {SetterOrUpdater, useRecoilState} from "recoil";
-import {initialAuth} from "../../state/atoms";
-import { AuthApi } from "../../services";
+import {SetterOrUpdater} from "recoil";
 
 interface UserInfoProps {
     user?: User,

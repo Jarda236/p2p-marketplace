@@ -3,11 +3,10 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {number, object} from "yup";
 import {ItemsApi, OffersApi} from "../../../services";
-import {Item, Offer} from "../../../models";
+import {Item} from "../../../models";
 import {NavLink, useParams} from "react-router-dom";
 import ItemOverview from "../../Item/Overview/ItemOverview";
 import {useQuery} from "@tanstack/react-query";
-import {data} from "autoprefixer";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 

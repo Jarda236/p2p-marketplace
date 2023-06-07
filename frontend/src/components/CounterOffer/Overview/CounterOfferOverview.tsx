@@ -2,8 +2,6 @@ import {FC} from "react";
 import {NavLink, useParams} from "react-router-dom";
 import {useQuery} from "@tanstack/react-query";
 import { CounterOffersApi } from "../../../services";
-import {useRecoilState} from "recoil";
-import {userState} from "../../../state/atoms";
 import CounterOfferOverviewItem from "./Item/CounterOfferOverviewItem";
 
 interface CounterOfferOverview {

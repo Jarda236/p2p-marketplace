@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {useQueries, useQuery} from "@tanstack/react-query";
 import {CategoriesApi, ItemsApi, OffersApi, UsersApi} from "../../../services"
 import {Offer} from "../../../models";

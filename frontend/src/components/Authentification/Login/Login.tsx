@@ -32,6 +32,9 @@ const Login: FC = () => {
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
         await AuthApi.login({username: data.username, password: data.password})
             .then((response) => {
+                if (response.token === undefined) {
+                    return;
+                }
                 setSuccess(true);
                 setUser(response.user);
                 localStorage.setItem('token', response.token);
