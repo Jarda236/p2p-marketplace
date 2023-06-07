@@ -84,6 +84,7 @@ const ItemCreate: FC = () => {
                         <input
                             id="name"
                             type="text"
+                            placeholder="Name of item"
                             {...register("name")} />
                         {isSubmitted && errors.name && <span>{errors.name.message}</span>}
                     </div>
@@ -91,12 +92,13 @@ const ItemCreate: FC = () => {
                         <label htmlFor="description">Description:</label>
                         <textarea
                             id="description"
+                            placeholder="Description of item"
                             {...register("description")} />
                         {isSubmitted && errors.description && <span>{errors.description.message}</span>}
                     </div>
                     <button type="button" onClick={() => toggleShowCategories(!showCategories)} >Categories</button>
                     {showCategories && <CategoryFilter toggleCategory={toggleCategory} categories={categories} />}
-                    <input type="file" accept="image/jpeg" onChange={onImageChange}/>
+                    <input type="file" accept="image/png" onChange={onImageChange}/>
                     <button className="green-button" type="submit">Create item</button>
                 </form>
             </> :

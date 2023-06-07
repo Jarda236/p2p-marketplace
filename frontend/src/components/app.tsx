@@ -31,7 +31,7 @@ export const App: FC = () => {
             </div>
             <main className=" grow">
                 <Routes>
-                    <Route path="/" element={<WelcomePage />} />
+                    <Route path="/" element={<OfferOverview />} />
                     <Route path="/offers" element={<OfferOverview />} />
                     {user ?
                         <>

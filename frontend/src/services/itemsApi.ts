@@ -67,6 +67,7 @@ export const createItem = async (item: ItemCreateBody): Promise<void> => {
 }
 
 export const updateItem = async (item: ItemUpdateBody): Promise<void> => {
+    console.log(item)
     const response = await axiosInstance.post("/items", item, {
         headers: {
             "Content-Type": "application/json"
