@@ -56,3 +56,12 @@ export const deleteItemById = async (itemId: string):Promise<void> => {
     /*const response = await axiosInstance.delete('/items/${itemId}');
     return response.data;*/
 }
+
+export const createItem = async (item: ItemCreateBody): Promise<void> => {
+    const response = await axiosInstance.post("/items", item, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    return response.data;
+}
