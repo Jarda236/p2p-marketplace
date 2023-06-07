@@ -103,7 +103,7 @@ const OfferOverview: FC<Props> = (props) => {
 
     return( 
         <>
-        <nav className="bg-gray-300 rounded-lg mx-6 my-4 shadow-lg shadow-gray-300">
+        <nav className="bg-gray-300 rounded-lg mx-6 my-4 shadow-lg shadow-gray-300 relative z-0">
             <div className="max-w-screen-xl px-4 py-3 mx-auto">
                 <div className="flex items-center">
                 <ul className="flex flex-row font-medium mt-0 mr-6 space-x-8 text-sm">
@@ -114,29 +114,30 @@ const OfferOverview: FC<Props> = (props) => {
                         </NavLink>
                     </li>
 
-                    <li>
+                    <li className="flex flex-col">
                     <button
                         type="button"
                         onClick={() => toggleFilterComponents(FilterComponents.Sort)}
                         className="text-black hover:underline">
-                        Sort by
+                        Sort by ᐯ
                     </button>
                     {showSortFilter && <SortFilter
                         columnsToSort={columnsToSort}
                         changeColumnsToSort={changeColumnsToSort} />
                     }
                     </li>
-                    <li>
-                    <button
-                        type="button"
-                        onClick={() => toggleFilterComponents(FilterComponents.Category)}
-                        className="text-black hover:underline">
-                        Category
-                    </button>
-                    {showCategoryFilter && <CategoryFilter
-                        toggleCategory={toggleCategory}
-                        categories={categories} />
-                    }
+
+                    <li className="flex flex-col">
+                        <button
+                            type="button"
+                            onClick={() => toggleFilterComponents(FilterComponents.Category)}
+                            className="text-black hover:underline">
+                            Category ᐯ
+                        </button>
+                        {showCategoryFilter && <CategoryFilter
+                            toggleCategory={toggleCategory}
+                            categories={categories} />
+                        }
                     </li>
 
                     <li>
