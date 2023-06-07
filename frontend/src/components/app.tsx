@@ -14,7 +14,7 @@ import {atom, useRecoilState} from "recoil";
 import {userState} from "../state/atoms";
 import NotFound from "./NotFound";
 import CounterOfferCreate from "./CounterOffer/Create/CounterOfferCreate";
-import OfferUpdate from "./Offer/Edit/OfferUpdate";
+import OfferUpdate from "./Offer/Update/OfferUpdate";
 import OfferDelete from "./Offer/Delete/OfferDelete";
 import CounterOfferOverview from "./CounterOffer/Overview/CounterOfferOverview";
 import CounterOfferDetails from "./CounterOffer/Details/CounterOfferDetails";
