@@ -81,10 +81,10 @@ const OfferCreate: FC = () => {
             </div> :
             reason === "OK" ?
                 <h3>Offer created!</h3> :
-                <>
+                <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
                     <h3>Unable to create offer.</h3>
                     <p>Reason: {reason}</p>
-                </>}
+                </div>}
         
             <div className=" ml-10 my-5">
                 <NavLink to="/offers" className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
