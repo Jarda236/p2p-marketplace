@@ -29,6 +29,20 @@ const OFFERS: Offer[] = [
 
         buyerId: "1",
         buyerName: "username1"
+    },
+    {
+        id: "3",
+        createdAt: 0,
+
+        price: 1100,
+
+        itemId: "2",
+
+        sellerId: "2",
+        sellerName: "username2",
+
+        buyerId: null,
+        buyerName: null
     }
 ];
 
@@ -82,5 +96,10 @@ export const updateOffer = async (offerId: string, offer: OfferUpdateBody): Prom
                 "Content-Type": "application/json"
             }
         })
+    return response.data;
+}
+
+export const offerBuy = async (offerId: string): Promise<void> => {
+    const response = await axiosInstance.post(`/offers/${offerId}/buy`);
     return response.data;
 }

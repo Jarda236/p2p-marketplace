@@ -18,6 +18,7 @@ import OfferUpdate from "./Offer/Edit/OfferUpdate";
 import OfferDelete from "./Offer/Delete/OfferDelete";
 import CounterOfferOverview from "./CounterOffer/Overview/CounterOfferOverview";
 import CounterOfferDetails from "./CounterOffer/Details/CounterOfferDetails";
+import OfferBuy from "./Offer/Buy/OfferBuy";
 export const App: FC = () => {
     const [user, setUser] = useRecoilState(userState);
 
@@ -33,6 +34,7 @@ export const App: FC = () => {
                     {user ?
                         <>
                             <Route path="/offers/:offerId" element={<OfferDetails />} />
+                            <Route path="/offers/:offerId/buy" element={<OfferBuy />} />
                             <Route path="/offers/create" element={<OfferCreate />} />
                             <Route path="/offers/:offerId/edit" element={<OfferUpdate />} />
                             <Route path="/offers/:offerId/delete" element={<OfferDelete />} />
