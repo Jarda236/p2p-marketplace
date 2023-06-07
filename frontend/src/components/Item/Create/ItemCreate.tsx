@@ -89,43 +89,78 @@ const ItemCreate: FC = () => {
 
     return <>
         {reason === null ?
-            <>
-                <h1>Create Item</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div>
-                        <label htmlFor="name">Name:</label>
+            <div className=" bg-slate-400 rounded-lg shadow shadow-slate-700 mx-auto p-4 my-4
+            flex flex-col space-y-4 max-w-md">
+                <h1 className=" text-xl font-bold leading-tight tracking-tight">
+                    Create Item
+                </h1>
+
+                <form onSubmit={handleSubmit(onSubmit)}
+                    className="  text-base font-medium text-black flex flex-col">
+                    <div className="mb-2">
+                        <label htmlFor="name" className="block ">Name:</label>
                         <input
                             id="name"
                             type="text"
                             placeholder="Name of item"
-                            {...register("name")} />
+                            {...register("name")}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"
+                            />
                         {isSubmitted && errors.name && <span>{errors.name.message}</span>}
                     </div>
-                    <div>
-                        <label htmlFor="description">Description:</label>
+
+                    <div className="mb-2">
+                        <label htmlFor="description" className="block">Description:</label>
                         <textarea
                             id="description"
                             placeholder="Description of item"
-                            {...register("description")} />
+                            {...register("description")}
+                            className=" w-full h-28" />
                         {isSubmitted && errors.description && <span>{errors.description.message}</span>}
                     </div>
-                    <button type="button" onClick={() => toggleShowCategories(!showCategories)} >Categories</button>
-                    {showCategories && <CategoryFilter selectedCategories={selectedCategory} toggleCategory={toggleCategory} categories={categories} />}
-                    <input type="file" accept="image/png" onChange={onImageChange}/>
-                    <figure>
-                        <figcaption>Uploaded image:</figcaption>
-                        {image?.preview && <img src={image.preview} alt="image-preview" />}
-                    </figure>
-                    <button className="green-button" type="submit">Create item</button>
+
+                    <div className="mb-2 flex flex-col">
+                        <button type="button"
+                            onClick={() => toggleShowCategories(!showCategories)}
+                            className="w-1/2 text-black hover:underline hover:bg-slate-500 rounded-lg">
+                            Categories ᐯ
+                        </button>
+                        {showCategories && <CategoryFilter selectedCategories={selectedCategory} toggleCategory={toggleCategory} categories={categories} />}
+                    </div>
+
+                    <div className="flex flex-col">
+                        <span className="mb-2">Choose image:</span>
+                        <input type="file" accept="image/png" onChange={onImageChange}/>
+                        <figure className="my-2">
+                            <figcaption>Uploaded image:</figcaption>
+                            {image?.preview && <img src={image.preview} 
+                            className="w-1/2 h-1/2"
+                            alt="image-preview" />}
+                        </figure>
+                    </div>
+
+                    <button type="submit"
+                            className=" w-full center mx-auto text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                            Create item
+                    </button>
                 </form>
-            </> :
+            </div> :
             reason === "OK" ?
-                <h3>Item created!</h3> :
-                <>
+                <div className="mt-4 mx-10 bg-green-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
+                    <h3>Item created!</h3>
+                </div> :
+
+                <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
                     <h3>Unable to create item.</h3>
                     <p>Reason: {reason}</p>
-                </>}
-        <NavLink to={`/users/${userId}`}>Back</NavLink>
+                </div>}
+
+        <div className=" ml-10 my-5">
+            <NavLink to={`/users/${userId}`}
+                className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                Back
+            </NavLink>
+        </div>
     </>
 }
 
