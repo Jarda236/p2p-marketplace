@@ -35,8 +35,8 @@ const OfferDetails: FC = () => {
                             <p className=" text-lg  font-bold">{item?.name}</p>
                             <p className=" mb-2">Category: {item?.category}</p>
                             <p className=" max-w-xs text-sm">{item?.description}</p>
-                            <p className=" mt-2">Seller: <NavLink to={"/users/".concat(offer.sellerId)} className=" font-bold text-black hover:underline mt-4">
-                                {offer.sellerName}
+                            <p className=" mt-2">Seller: <NavLink to={"/users/".concat(offer.userId)} className=" font-bold text-black hover:underline mt-4">
+                                {offer.userName}
                                 </NavLink></p>
                             <p>Created at: {offer.createdAt}</p>
                             <p className="  font-bold">Price: {offer.price}</p>
@@ -44,7 +44,7 @@ const OfferDetails: FC = () => {
                             {offer.buyerId ?
                                 <span className=" text-red-500 font-bold text-xl">SOLD</span> :
                                 <div className=" flex flex-row justify-between">
-                                    {user?.id === offer.sellerId ?
+                                    {user?.id === offer.userId ?
                                         <>
                                             <button
                                                 className="focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
@@ -56,7 +56,7 @@ const OfferDetails: FC = () => {
                                             >Edit</button>
                                             <button
                                                 className="focus:outline-none text-black bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
-                                                onClick={() => navigate("delete")}
+                                                onClick={() => navigate("delete", {state: {sellerId: offer?.userId}})}
                                             >Delete</button>
                                         </>:
                                         <>
@@ -65,8 +65,8 @@ const OfferDetails: FC = () => {
                                                 onClick={() => navigate(`create-counter-offer`)}
                                             >Send offer</button>
                                             <button
-                                                className={"focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2".concat((user?.account.balance ?? 0) >= offer.price ? "" : " cursor-not-allowed")}
-                                                onClick={() => (user?.account.balance ?? 0) >= offer.price && navigate('buy')}>Buy</button>
+                                                className={"focus:outline-none text-black bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-lime-500 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2".concat((user?.fundsAccount.balance ?? 0) >= offer.price ? "" : " cursor-not-allowed")}
+                                                onClick={() => (user?.fundsAccount.balance ?? 0) >= offer.price && navigate('buy')}>Buy</button>
                                         </>}
                                 </div>
                             }

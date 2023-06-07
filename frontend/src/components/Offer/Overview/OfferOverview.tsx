@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {useQueries, useQuery} from "@tanstack/react-query";
 import {CategoriesApi, ItemsApi, OffersApi, UsersApi} from "../../../services"
 import {Offer} from "../../../models";
@@ -174,7 +174,7 @@ const OfferOverview: FC<Props> = (props) => {
                 <ul>
                     {offers ?
                         filteredOffers.map((offer) =>
-                        <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
+                        <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.userId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
                         <span>Loading...</span>}
                 </ul>
             </section>

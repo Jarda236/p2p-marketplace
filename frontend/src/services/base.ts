@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const axiosAuthInstance = axios.create({
-    baseURL: `{env}/auth/`,
+    baseURL: `{env}/api/auth/`,
 });
 
 const axiosInstance = axios.create({

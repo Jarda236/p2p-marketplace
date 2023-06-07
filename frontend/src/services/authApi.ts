@@ -2,34 +2,33 @@ import {axiosAuthInstance} from "./base";
 import {User} from "../models";
 
 interface LoginRequest {
-    username: string,
+    name: string,
     password: string
 }
 
 interface RegistrationRequest {
-    username: string,
+    name: string,
     email: string,
     phone: number,
     city: string,
     password: string
-
 }
 
 type LoginResponse = {
     user: User,
-    token: string
+    token: string | undefined
 }
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
     return {
         user: {
             id: "1",
-            username: "username1",
+            name: "username1",
             email: "user1@a.com",
             phone: 14433434343,
             city: "Brno",
             createdAt: 0,
-            account: {
+            fundsAccount: {
                 balance: 500,
                 balanceBlocked: 300
             },
@@ -38,12 +37,15 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
         },
         token: "token"
     };
-    /*const response = await axiosAuthInstance.post("login", data, {
+    const response = await axiosAuthInstance.post("login", data, {
         headers: {
             "Content-Type": "application/json",
         }
     });
-    return response.data;*/
+
+    const header = response.headers["set-cookie"]?.toString();
+    const token = header?.substring(((header?.indexOf("=") ?? 0) + 1), (header?.indexOf(";")));
+    return {user: response.data, token: token};
 }
 
 export const register = async (data: RegistrationRequest):Promise<void> => {
@@ -58,12 +60,12 @@ export const register = async (data: RegistrationRequest):Promise<void> => {
 export const isAuthenticated = async ():Promise<User> => {
     return {
         id: "1",
-        username: "username1",
+        name: "username1",
         email: "user1@a.com",
         phone: 14433434343,
         city: "Brno",
         createdAt: 0,
-        account: {
+        fundsAccount: {
             balance: 500,
             balanceBlocked: 300
         },

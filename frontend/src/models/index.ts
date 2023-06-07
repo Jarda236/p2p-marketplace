@@ -1,11 +1,11 @@
 export interface User {
     id: string;
-    username: string;
+    name: string;
     email: string;
     phone: number;
     city: string;
     createdAt: number;
-    account: Account
+    fundsAccount: Account
 
     rating: number;
     image: string;
@@ -24,8 +24,8 @@ export interface Offer {
 
     itemId: string;
 
-    sellerId: string;
-    sellerName: string;
+    userId: string;
+    userName: string;
 
     buyerId: string | null;
     buyerName: string | null;

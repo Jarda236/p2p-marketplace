@@ -3,11 +3,10 @@ import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {number, object} from "yup";
 import {ItemsApi, OffersApi} from "../../../services";
-import {Item, Offer} from "../../../models";
+import {Item} from "../../../models";
 import {NavLink, useParams} from "react-router-dom";
 import ItemOverview from "../../Item/Overview/ItemOverview";
 import {useQuery} from "@tanstack/react-query";
-import {data} from "autoprefixer";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 
@@ -78,7 +77,7 @@ const OfferUpdate: FC = () => {
     return (
     <div>
         {reason === null ?
-            user?.id !== offer?.sellerId ?
+            user?.id !== offer?.userId ?
                 <span>This is not your offer!</span> :
             <div className="mt-4">
                 <span className="mx-10 bg-blue-100 rounded-lg px-2 py-2 shadow-lg shadow-gray-300s">

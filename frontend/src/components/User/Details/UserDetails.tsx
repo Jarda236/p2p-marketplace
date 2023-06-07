@@ -52,7 +52,7 @@ const UserDetails: FC = () => {
                     <div className="flex flex-wrap">
                         <img src={user.image} alt="User image" className=" rounded-lg max-w-xs max-h-xs"/>
                         <div className=" ml-4">
-                            <p className=" font-bold text-lg" >{user.username}</p>
+                            <p className=" font-bold text-lg" >{user.name}</p>
                             <div className="flex mb-4">
                                 <p className=" font-bold mr-1">Rating: {user.rating}</p>
                                 <img src="/pictures/star.png" alt="Star" className="w-6 h-6 inline-block"/>
@@ -62,7 +62,7 @@ const UserDetails: FC = () => {
                             <p>City: {user.city}</p>
                             <p>Member from: {user.createdAt}</p>
                         </div>
-                        {(userId === globalUser?.id) && <button type="button" onClick={() => navigate("counter-offers")}>My counter offers</button>}
+                        {(userId === globalUser?.id) && <button type="button" onClick={() => navigate("counter-offers")}>My counter-offers</button>}
                     </div> :
                     <p className=" text-center text-lg">Loading...</p>
                 }

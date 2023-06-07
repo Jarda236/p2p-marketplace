@@ -2,8 +2,6 @@ import {FC, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import { OffersApi } from "../../../services";
 import Popup from "../../Popup/Popup";
-import {useRecoilState} from "recoil";
-import {userState} from "../../../state/atoms";
 
 interface ResultType {
     success: boolean;

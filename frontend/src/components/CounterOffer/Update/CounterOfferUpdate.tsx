@@ -21,7 +21,7 @@ const CouterOfferUpdate: FC = () => {
             .default(0)
             .typeError("Price must be a number.") // customize error message for invalid type
             .min(1, "Price must be positive.")
-            .max(user ? user.account.balance : 0, "Check your balance.")
+            .max(user ? user.fundsAccount.balance : 0, "Check your balance.")
     });
 
     const {counterId} = useParams();
@@ -71,7 +71,7 @@ const CouterOfferUpdate: FC = () => {
         {reason === null ?
             <div className="mt-4">
         <span className="mx-10 bg-blue-100 rounded-lg px-2 py-2 shadow-lg shadow-gray-300s">
-            Editing counter offer, choose your items:
+            Editing counter-offer, choose your items:
         </span>
 
                 <ItemOverview
@@ -94,18 +94,18 @@ const CouterOfferUpdate: FC = () => {
                         <button
                             className="center mx-auto text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5"
                             type="submit">
-                            Edit counter offer
+                            Edit counter-offer
                         </button>
                     </form>
                 </div>
             </div> :
             reason === "OK" ?
                 <div className="mt-4 mx-10 bg-green-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
-                    <h3>Counter offer edited!</h3>
+                    <h3>Counter-offer edited!</h3>
                 </div>
                 :
                 <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
-                    <h3>Unable to edit counter offer.</h3>
+                    <h3>Unable to edit counter-offer.</h3>
                     <p>Reason: {reason}</p>
                 </div>}
 

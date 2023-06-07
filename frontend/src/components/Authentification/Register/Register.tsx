@@ -6,7 +6,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import { AuthApi } from "../../../services";
 
 type RegisterFormData = {
-    username: string;
+    name: string;
     email: string;
     phone: number;
     city: string;
@@ -15,12 +15,12 @@ type RegisterFormData = {
 };
 
 type RegistrationRequest = {
-    username: string;
+    name: string;
     password: string;
 };
 
 const schema = object().shape({
-    username: string()
+    name: string()
         .required("Username is required."),
     email: string()
         .email("Enter valid email.")
@@ -49,7 +49,7 @@ const Register: FC = () => {
 
     const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
         await AuthApi.register({
-            username: data.username,
+            name: data.name,
             email: data.email,
             phone: data.phone,
             city: data.city,
@@ -72,14 +72,14 @@ const Register: FC = () => {
             <form action="#" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
                     <label
-                        htmlFor="username"
+                        htmlFor="name"
                         className="block mb-2 text-sm font-medium text-gray-900">Username:</label>
                     <input
                         type="text"
-                        {...register("username")}
+                        {...register("name")}
                         placeholder="John Cena"
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
-                    {isSubmitted && errors.username && <span>{errors.username.message}</span>}
+                    {isSubmitted && errors.name && <span>{errors.name.message}</span>}
                 </div>
                 <div>
                     <label
