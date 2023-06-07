@@ -112,7 +112,10 @@ const ItemCreate: FC = () => {
                     <button type="button" onClick={() => toggleShowCategories(!showCategories)} >Categories</button>
                     {showCategories && <CategoryFilter selectedCategories={selectedCategory} toggleCategory={toggleCategory} categories={categories} />}
                     <input type="file" accept="image/png" onChange={onImageChange}/>
-                    {image?.preview && <img src={image.preview} alt="image-preview" />}
+                    <figure>
+                        <figcaption>Uploaded image:</figcaption>
+                        {image?.preview && <img src={image.preview} alt="image-preview" />}
+                    </figure>
                     <button className="green-button" type="submit">Create item</button>
                 </form>
             </> :
