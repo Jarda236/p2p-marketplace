@@ -2,12 +2,14 @@ import React, {FC, useState} from "react";
 import {NavLink} from "react-router-dom";
 import {useQueries, useQuery} from "@tanstack/react-query";
 import {CategoriesApi, ItemsApi, OffersApi, UsersApi} from "../../../services"
-import {Offer} from "../../../models";
+import {Offer, User} from "../../../models";
 import OfferOverviewItem from "./Item/OfferOverviewItem";
 import {filterOffers, getItemByIdFromQuery} from "../../../utils/filtering";
 import PriceFilter from "./Filters/PriceFilter";
 import CategoryFilter from "./Filters/CategoryFilter";
 import SortFilter from "./Filters/SortFilter";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
 interface ColumnToSort {
     column: string;
@@ -40,6 +42,8 @@ const OfferOverview: FC<Props> = (props) => {
         queryFn: () => OffersApi.getOffers()
     })
 
+    const [user] = useRecoilState(userState);
+
     const items = useQueries({
         queries: offers?.map((offer) => {
             return {
@@ -54,9 +58,10 @@ const OfferOverview: FC<Props> = (props) => {
         queryFn: () => CategoriesApi.getCategories()
     })
 
-    const getSeller = /*async*/ (sellerId: string) => {
-        return /*await*/ UsersApi.getUserById(sellerId);
-    }
+    const {data: users} = useQuery({
+        queryKey: ['users'],
+        queryFn: () => UsersApi.getUsers()
+    })
 
     const toggleFilterComponents = (component: FilterComponents) => {
         switch (component) {
@@ -172,9 +177,9 @@ const OfferOverview: FC<Props> = (props) => {
         <div>
             <section>
                 <ul>
-                    {offers ?
+                    {(offers && users) ?
                         filteredOffers.map((offer) =>
-                        <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.userId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
+                        <OfferOverviewItem key={offer.id} offer={offer} seller={users?.find(u => u.id === offer.userId) ?? users[0]} item={getItemByIdFromQuery(items,  offer.itemId)}/>):
                         <span>Loading...</span>}
                 </ul>
             </section>

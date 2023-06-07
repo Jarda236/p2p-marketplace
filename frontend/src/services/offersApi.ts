@@ -47,14 +47,14 @@ const OFFERS: Offer[] = [
 ];
 
 export const getOffers = async (): Promise<Array<Offer>> => {
-    return OFFERS;
+    //return OFFERS;
 
     const response = await axiosInstance.get('/offers');
     return response.data;
 }
 
 export const getOfferById = async (offerId: string): Promise<Offer | null> => {
-    return OFFERS.find(offer => offer.id === offerId) ?? null;
+    //return OFFERS.find(offer => offer.id === offerId) ?? null;
 
     const response = await axiosInstance.get(`/offers/${offerId}`);
     return response.data;
