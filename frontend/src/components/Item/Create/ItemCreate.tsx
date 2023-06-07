@@ -72,9 +72,8 @@ const ItemCreate:FC = () => {
                     </div>
                     <div>
                         <label htmlFor="description">Description:</label>
-                        <input
+                        <textarea
                             id="description"
-                            type="text"
                             {...register("description")} />
                         {isSubmitted && errors.description && <span>{errors.description.message}</span>}
                     </div>
