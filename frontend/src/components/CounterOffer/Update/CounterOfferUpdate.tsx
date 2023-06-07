@@ -1,5 +1,5 @@
 import {number, object} from "yup";
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 import {NavLink, useParams} from "react-router-dom";
@@ -24,7 +24,7 @@ const CouterOfferUpdate: FC = () => {
             .max(user ? user.account.balance : 0, "Check your balance.")
     });
 
-    const {offerId, counterId} = useParams();
+    const {counterId} = useParams();
     const [reason, setReason] = useState<string | null>(null);
 
     const [checkedItems, changeCheckedItems] = useState<Item[]>([]);
@@ -85,6 +85,7 @@ const CouterOfferUpdate: FC = () => {
                             <input
                                 id="price"
                                 type="number"
+                                placeholder={counter?.price.toString()}
                                 {...register("price")}
                                 className="mr-4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block p-1"/>
                             {isSubmitted && errors.price && <span>{errors.price.message}</span>}
