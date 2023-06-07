@@ -50,7 +50,7 @@ const OfferOverview: FC<Props> = (props) => {
                 queryKey: ["item", offer.itemId],
                 queryFn: () => ItemsApi.getItemById(offer.itemId),
             };
-        }, refetch()) || [],
+        }) || [],
     });
 
     const {data: categories} = useQuery({
