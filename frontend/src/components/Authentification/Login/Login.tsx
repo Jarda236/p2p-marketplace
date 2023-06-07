@@ -8,12 +8,12 @@ import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 
 type LoginFormData = {
-    username: string;
+    name: string;
     password: string;
 };
 
 const schema = object().shape({
-    username: string()
+    name: string()
         .required("Username is required."),
     password: string()
         .required("Password is required.")
@@ -30,7 +30,7 @@ const Login: FC = () => {
     });
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-        await AuthApi.login({username: data.username, password: data.password})
+        await AuthApi.login({name: data.name, password: data.password})
             .then((response) => {
                 if (response.token === undefined) {
                     return;
@@ -53,8 +53,8 @@ const Login: FC = () => {
             <form action="#" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Your login:</label>
-                    <input type="text" {...register("username")} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1" placeholder="username" />
-                    {isSubmitted && errors.username && <span>{errors.username.message}</span>}
+                    <input type="text" {...register("name")} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1" placeholder="username" />
+                    {isSubmitted && errors.name && <span>{errors.name.message}</span>}
                 </div>
                 <div>
                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Your password:</label>

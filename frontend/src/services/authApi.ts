@@ -2,12 +2,12 @@ import {axiosAuthInstance} from "./base";
 import {User} from "../models";
 
 interface LoginRequest {
-    username: string,
+    name: string,
     password: string
 }
 
 interface RegistrationRequest {
-    username: string,
+    name: string,
     email: string,
     phone: number,
     city: string,

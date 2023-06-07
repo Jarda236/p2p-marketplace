@@ -76,7 +76,7 @@ const OfferUpdate: FC = () => {
 
     return <div>
         {reason === null ?
-            user?.id !== offer?.sellerId ?
+            user?.id !== offer?.userId ?
                 <span>This is not your offer!</span> :
             <div className="mt-4">
                 <span className="mx-10 bg-blue-100 rounded-lg px-2 py-2 shadow-lg shadow-gray-300s">
