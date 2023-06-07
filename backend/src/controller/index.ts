@@ -1,4 +1,5 @@
 export { default as userController } from "./userController";
-export { default as emojiController } from "./emojiController";
-export { default as channelController } from "./channelController";
-export { default as messageController } from "./messageController";
+export { default as offerController } from "./offerController";
+export { default as itemController } from "./itemController";
+export { default as fundsAccountController } from "./fundsAccountController";
+export { default as counterOfferController  } from "./counterOfferController";
