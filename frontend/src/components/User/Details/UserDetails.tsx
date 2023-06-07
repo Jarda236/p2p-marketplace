@@ -94,13 +94,19 @@ const UserDetails: FC = () => {
                             </span>
                         </div>
                         <ItemOverview checkedItems={checkedItems} toggleItem={toggleItem} />
-                        <button onClick={deleteCheckedItems}>Delete checked</button>
+                        <button onClick={deleteCheckedItems} className="focus:outline-none text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-10 py-2.5 mx-10 mb-5 float-right">
+                            Delete checked
+                        </button>
                     </section>}
                 </> :
                 <p className=" text-center text-lg">Loading...</p>
             }
 
-            <NavLink to="/offers">Back</NavLink>
+            <div className=" ml-10 my-5">
+                <NavLink to="/offers" className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                    Back
+                </NavLink>
+            </div>
         </div>
     );
 }
