@@ -2,7 +2,7 @@ import {FC, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {object, string, ref} from "yup";
+import {object, string} from "yup";
 import { AuthApi } from "../../../services";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
@@ -30,7 +30,7 @@ const Login: FC = () => {
     });
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-        await AuthApi.login(data.username, data.password)
+        await AuthApi.login({username: data.username, password: data.password})
             .then((response) => {
                 setSuccess(true);
                 setUser(response.user);

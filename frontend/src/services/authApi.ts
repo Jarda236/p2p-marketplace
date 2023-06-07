@@ -1,22 +1,26 @@
 import {axiosAuthInstance} from "./base";
 import {User} from "../models";
 
-type LoginRequest = {
-    username: string;
-    password: string;
-};
+interface LoginRequest {
+    username: string,
+    password: string
+}
 
-type RegistrationRequest = {
-    username: string;
-    password: string;
-};
+interface RegistrationRequest {
+    username: string,
+    email: string,
+    phone: number,
+    city: string,
+    password: string
+
+}
 
 type LoginResponse = {
     user: User,
     token: string
 }
 
-export const login = async (username: string, password: string): Promise<LoginResponse> => {
+export const login = async (data: LoginRequest): Promise<LoginResponse> => {
     return {
         user: {
             id: "1",
@@ -34,11 +38,7 @@ export const login = async (username: string, password: string): Promise<LoginRe
         },
         token: "token"
     };
-    /*TODO const loginRequest: LoginRequest = {
-        username,
-        password
-    };
-    const response = await axiosAuthInstance.post("login", loginRequest, {
+    /*const response = await axiosAuthInstance.post("login", data, {
         headers: {
             "Content-Type": "application/json",
         }
@@ -46,19 +46,13 @@ export const login = async (username: string, password: string): Promise<LoginRe
     return response.data;*/
 }
 
-export const register = async (username: string, password: string):Promise<void> => {
-    return;
-    /*TODO const regRequest: RegistrationRequest = {
-        username,
-        password,
-    };
-
-    const response = await axiosAuthInstance.post("register", regRequest, {
+export const register = async (data: RegistrationRequest):Promise<void> => {
+    const response = await axiosAuthInstance.post("register", data, {
         headers: {
             "Content-Type": "application/json",
         }
     });
-    return response.data;*/
+    return response.data;
 }
 
 export const isAuthenticated = async ():Promise<User> => {

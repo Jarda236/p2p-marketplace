@@ -48,7 +48,13 @@ const Register: FC = () => {
     });
 
     const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
-        await AuthApi.register(data.username, data.password)
+        await AuthApi.register({
+            username: data.username,
+            email: data.email,
+            phone: data.phone,
+            city: data.city,
+            password: data.password
+        })
             .then(() => {
                 navigate("/auth/login");
             })

@@ -1,11 +1,11 @@
-import {FC, useState} from "react";
+import {ChangeEvent, FC, useState} from "react";
 import {object, string} from "yup";
 import {NavLink, useParams} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {CategoriesApi, ItemsApi} from "../../../services";
+import {CategoriesApi, ImagesApi, ItemsApi} from "../../../services";
 import {useQuery} from "@tanstack/react-query";
 import CategoryFilter from "../../Offer/Overview/Filters/CategoryFilter";
 
@@ -24,6 +24,7 @@ const ItemUpdate:FC = () => {
     const [showCategories, toggleShowCategories] = useState<boolean>(false);
     const [selectedCategory, changeSelectedCategory] = useState<string[]>([]);
     const {userId, itemId} = useParams();
+    const [image, setImage] = useState<{preview: string, data: File}>();
     const [user] = useRecoilState(userState);
 
     const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<UpdateItemFormData>({
@@ -34,9 +35,39 @@ const ItemUpdate:FC = () => {
         if (selectedCategory.length === 0) {
             setReason("You have to check one category.");
         }
-        await ItemsApi.updateItem({name: data.name, description: data.description, image: "", category: selectedCategory[0]}).then(() => {
-            setReason("OK");
-        }).catch((reason) => setReason(reason.message));
+        if (image){
+            await ImagesApi.postImage(image.data)
+                .then(async (response) => await ItemsApi.updateItem({
+                    name: data.name,
+                    description: data.description,
+                    image: response,
+                    category: selectedCategory[0]
+                }).then(() => {
+                    setReason("OK");
+                })
+                    .catch((reason) => setReason(reason.message)))
+                .catch((reason) => setReason(reason.message))
+        } else {
+            await ItemsApi.updateItem({
+                name: data.name,
+                description: data.description,
+                image: "",
+                category: selectedCategory[0]
+            }).then(() => {
+                setReason("OK");
+            })
+                .catch((reason) => setReason(reason.message))
+        }
+    }
+
+    const onImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        new FileReader();
+        if (e.target.files){
+            setImage({
+                preview: URL.createObjectURL(e.target.files[0]),
+                data: e.target.files[0]
+            })
+        }
     }
 
     const {data: categories} = useQuery({
@@ -87,6 +118,11 @@ const ItemUpdate:FC = () => {
                     </div>
                     <button type="button" onClick={() => toggleShowCategories(!showCategories)} >Categories</button>
                     {showCategories && <CategoryFilter selectedCategories={selectedCategory} toggleCategory={toggleCategory} categories={categories} />}
+                    <input type="file" accept="image/png" onChange={onImageChange}/>
+                    <figure>
+                        <figcaption>Uploaded image:</figcaption>
+                        {image?.preview && <img src={image.preview} alt="image-preview" />}
+                    </figure>
                     <button className="green-button" type="submit">Edit item</button>
                 </form>
             </> :
