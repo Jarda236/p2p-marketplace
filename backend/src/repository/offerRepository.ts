@@ -197,17 +197,13 @@ export const buySingle = async (
             buyerName: buyer.name,
           },
         });
-
-
-
-        const result = await tx.offer.update({ where: { id }, data });
-        if (result && result.price) {
-          var a = { ...result, price: result.price.toNumber() };
+        if (updatedOffer && updatedOffer.price) {
+          var a = { ...updatedOffer, price: updatedOffer.price.toNumber() };
           return a;
         }
-        console.log(result);
-        throw new Error("Offer not found");
+        throw new Error("Unreacable code reached!");
       })
+      
     );
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
