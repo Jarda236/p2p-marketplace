@@ -56,9 +56,11 @@ const ItemUpdate:FC = () => {
     }
 
     if (user?.id !== userId || item?.userId !== user?.id) {
-        return <>
+        return(
+        <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
             <span>You can not edit item of another user!</span>
-        </>
+        </div>
+        )
     }
 
     return <>
