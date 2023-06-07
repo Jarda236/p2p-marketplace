@@ -19,5 +19,6 @@ apiRouter.use("/items", itemController);
 apiRouter.use("/images", imageController);
 apiRouter.use("/funds", fundsAccountController);
 apiRouter.use("/counter-offer", counterOfferController);
+apiRouter.use("/auth", authController);
 
 api.listen(port, () => console.log(`[P-2-P Marketplace] is listening on port ${port}`));
