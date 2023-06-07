@@ -42,8 +42,6 @@ const OfferOverview: FC<Props> = (props) => {
         queryFn: () => OffersApi.getOffers()
     })
 
-    const [user] = useRecoilState(userState);
-
     const items = useQueries({
         queries: offers?.map((offer) => {
             return {
