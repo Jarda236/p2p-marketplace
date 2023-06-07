@@ -174,7 +174,7 @@ const OfferOverview: FC<Props> = (props) => {
                 <ul>
                     {offers ?
                         filteredOffers.map((offer) =>
-                        <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
+                        <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.userId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
                         <span>Loading...</span>}
                 </ul>
             </section>

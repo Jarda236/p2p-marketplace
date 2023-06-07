@@ -52,7 +52,7 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
             <NavLink to={"/offers/".concat(offer.id)} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Offer detail</NavLink>
             {offer.buyerId ?
                 <span>SOLD</span> :
-                user?.id === offer.sellerId ?
+                user?.id === offer.userId ?
                     <NavLink to={`/offers/${offer.id}/counter-offers`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Counter offers</NavLink>:
                 <>
                     <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" onClick={() => navigate(`${offer.id}/create-counter-offer`)}>Counter offer</button>

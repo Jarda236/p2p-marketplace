@@ -10,8 +10,8 @@ const OFFERS: Offer[] = [
 
         itemId: "1",
 
-        sellerId: "1",
-        sellerName: "username1",
+        userId: "1",
+        userName: "username1",
 
         buyerId: null,
         buyerName: null
@@ -24,8 +24,8 @@ const OFFERS: Offer[] = [
 
         itemId: "2",
 
-        sellerId: "2",
-        sellerName: "username2",
+        userId: "2",
+        userName: "username2",
 
         buyerId: "1",
         buyerName: "username1"
@@ -38,8 +38,8 @@ const OFFERS: Offer[] = [
 
         itemId: "2",
 
-        sellerId: "2",
-        sellerName: "username2",
+        userId: "2",
+        userName: "username2",
 
         buyerId: null,
         buyerName: null
@@ -72,7 +72,7 @@ export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
 }
 
 export const getOffersBySellerId = async (userId: string): Promise<Array<Offer>> => {
-    return OFFERS.filter(offer => offer.sellerId === userId);
+    return OFFERS.filter(offer => offer.userId === userId);
 
     const response = await axiosInstance.get(`/offers/seller/${userId}`);
     return response.data;

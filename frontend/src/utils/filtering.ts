@@ -35,7 +35,7 @@ export const filterOffers = ({offers, items, priceToFilter = {from: 0, to: 99999
             }
             return categoriesToFilter.findIndex(category => category === items[index]?.category) !== -1
         })
-        .filter(offer => sellerId === undefined || offer.sellerId === sellerId)
+        .filter(offer => sellerId === undefined || offer.userId === sellerId)
         .filter(offer => buyerId === undefined || offer.buyerId === buyerId)
         .filter((offer, index) => {
             if (items[index] === undefined) {

@@ -24,8 +24,8 @@ export interface Offer {
 
     itemId: string;
 
-    sellerId: string;
-    sellerName: string;
+    userId: string;
+    userName: string;
 
     buyerId: string | null;
     buyerName: string | null;
