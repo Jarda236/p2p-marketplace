@@ -91,61 +91,85 @@ const OfferOverview: FC<Props> = (props) => {
         columnsToSort: columnsToSort
     });
 
-    return <div style={{position: "relative"}}>
-        <h2>Offers Overview</h2>
-        <NavLink to="/offers/create">Create offer</NavLink>
-        <button
-            type="button"
-            onClick={() => toggleFilterComponents(FilterComponents.Sort)}>
-            Sort by
-        </button>
-        {showSortFilter && <SortFilter
-            columnsToSort={columnsToSort}
-            changeColumnsToSort={changeColumnsToSort} />
-        }
+    return( 
+        <>
+        <nav className="bg-gray-300 rounded-lg mx-6 my-4 shadow-lg shadow-gray-300">
+            <div className="max-w-screen-xl px-4 py-3 mx-auto">
+                <div className="flex items-center">
+                <ul className="flex flex-row font-medium mt-0 mr-6 space-x-8 text-sm">
+                    <li>
+                        <NavLink to="/offers/create"
+                        className="text-black hover:bg-yellow-400 bg-yellow-300 py-1.5 px-1.5 rounded-lg">
+                            Create offer
+                        </NavLink>
+                    </li>
 
-        <button
-            type="button"
-            onClick={() => toggleFilterComponents(FilterComponents.Category)}>
-            Category
-        </button>
-        {showCategoryFilter && <CategoryFilter
-            categoriesToFilter={categoriesToFilter}
-            changeCategoriesToFilter={changeCategoriesToFilter}
-            categories={categories} />
-        }
+                    <li>
+                    <button
+                        type="button"
+                        onClick={() => toggleFilterComponents(FilterComponents.Sort)}
+                        className="text-black hover:underline">
+                        Sort by
+                    </button>
+                    {showSortFilter && <SortFilter
+                        columnsToSort={columnsToSort}
+                        changeColumnsToSort={changeColumnsToSort} />
+                    }
+                    </li>
+                    <li>
+                    <button
+                        type="button"
+                        onClick={() => toggleFilterComponents(FilterComponents.Category)}
+                        className="text-black hover:underline">
+                        Category
+                    </button>
+                    {showCategoryFilter && <CategoryFilter
+                        categoriesToFilter={categoriesToFilter}
+                        changeCategoriesToFilter={changeCategoriesToFilter}
+                        categories={categories} />
+                    }
+                    </li>
 
-        <button
-            type="button"
-            onClick={() => {toggleFilterComponents(FilterComponents.Price)}}>
-            Price
-        </button>
-        {showPriceFilter && <PriceFilter
-            priceToFilter={priceToFilter}
-            changePriceToFilter={changePriceToFilter} />
-        }
-        <button type="button" onClick={() => refetch()}>Refresh</button>
+                    <li>
+                    <PriceFilter
+                        priceToFilter={priceToFilter}
+                        changePriceToFilter={changePriceToFilter} />
+                    </li>
+
+                    <li>
+                    <div>
+                        <input
+                            id="search-field"
+                            type="search"
+                            value={searchValue}
+                            onChange={(e) => changeSearchValue(e.target.value)}
+                            placeholder="Search"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-1"
+                        />
+                    </div>
+                    </li>
+
+                    <li>
+                    <button type="button" onClick={() => refetch()}
+                    className="text-black hover:underline">Refresh</button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+
         <div>
-            <input
-                id="search-field"
-                type="search"
-                value={searchValue}
-                onChange={(e) => changeSearchValue(e.target.value)}
-                placeholder="Search"
-            />
+            <section>
+                <ul>
+                    {offers ?
+                        filteredOffers.map((offer) =>
+                        <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
+                        <span>Loading...</span>}
+                </ul>
+            </section>
         </div>
-        <hr/>
-        <section>
-            <h5>Offers:</h5>
-            <hr/>
-            <ul>
-                {offers ?
-                    filteredOffers.map((offer) =>
-                    <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
-                    <span>Loading...</span>}
-            </ul>
-        </section>
-    </div>
+        </>
+    );
 }
 
 export default OfferOverview;
