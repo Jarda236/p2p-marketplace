@@ -22,12 +22,6 @@ const OfferDetails: FC = () => {
         queryFn: () => ItemsApi.getItemById(offer?.itemId ?? ""),
         enabled: !!offer
     })
-
-    const deleteOffer = async () => {
-        await OffersApi.deleteOfferById(offer?.id ?? "").catch();
-        navigate("/offers");
-    }
-
     return (
         <div className=" bg-blue-100 mx-auto my-4 max-w-3xl rounded-lg shadow-lg shadow-gray-300 p-4">
             <h2 className=" text-xl font-bold leading-tight tracking-tight text-center mb-4">Offer details</h2>
