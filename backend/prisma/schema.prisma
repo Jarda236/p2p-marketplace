@@ -23,6 +23,7 @@ model User {
   image         String?
   fundsAccount  FundsAccount?
   CounterOffer  CounterOffer[]
+  items         Item[]
 }
 
 model Offer {
@@ -71,12 +72,13 @@ model Item {
   deletedAt DateTime?
   offerId        String?       @unique
   offer          Offer?
-  userId         String
   name           String
   description    String
   category       String
   counterOffer   CounterOffer? @relation(fields: [counterOfferId], references: [id])
   counterOfferId String?
+  user           User          @relation(fields: [userId], references: [id])
+  userId         String
   image          String
   status         Boolean?
 }

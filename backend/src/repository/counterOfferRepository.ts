@@ -140,3 +140,24 @@ export const acceptSingle = async (
     throw new Error(`Unknown error: ${error}`);
   }
 };
+
+
+export const declineSingle = async (
+  id: string
+): Promise<Result<CounterOffer, Error>> => {
+  try {
+    return prisma.$transaction(async (transaction) => {
+      const counterOffer = await transaction.counterOffer.update({
+        where: { id },
+        data: { status: false, updatedAt: new Date() },
+      });
+      var pom = { ...counterOffer, price: counterOffer.price.toNumber() };
+      return Result.ok(pom);
+    });
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    throw new Error(`Unknown error: ${error}`);
+  }
+};
