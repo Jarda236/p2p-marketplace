@@ -27,6 +27,7 @@ export const filterOffers = ({offers, items, priceToFilter = {from: 0, to: 99999
     if (offers === undefined || items === undefined) {
         return [];
     }
+    console.log({offers, items, priceToFilter, categoriesToFilter, sellerId, buyerId, searchValue, columnsToSort})
     return offers
         .filter(offer => offer.price >= priceToFilter.from && offer.price <= priceToFilter.to)
         .filter((offer, index) => {
@@ -41,7 +42,7 @@ export const filterOffers = ({offers, items, priceToFilter = {from: 0, to: 99999
             if (items[index] === undefined) {
                 return true;
             }
-            return items[index]?.name.toLowerCase().includes(searchValue.toLowerCase()) || items[index]?.data?.toLowerCase().includes(searchValue.toLowerCase());
+            return items[index]?.name.toLowerCase().includes(searchValue.toLowerCase()) || items[index]?.description.toLowerCase().includes(searchValue.toLowerCase());
         })
         .sort((a: Offer, b: Offer) => {
             for (let i = 0; i < columnsToSort.length; i++) {
@@ -49,31 +50,45 @@ export const filterOffers = ({offers, items, priceToFilter = {from: 0, to: 99999
                 const el2 = b[columnsToSort[i].column];
                 const item1 = getItemById(items, a.itemId);
                 const item2 = getItemById(items, b.itemId);
-                let el3 = ""
-                let el4 = "";
-                if (item1 !== undefined && item2 !== undefined){
-                    el3 = item1[columnsToSort[i].column];
-                    el4 = item2[columnsToSort[i].column];
+                let el3: string = ""
+                let el4 : string= "";
+                if (item1 !== undefined && item2 !== undefined && item1[columnsToSort[i].column] !== undefined && item2[columnsToSort[i].column] !== undefined){
+                    if (item1[columnsToSort[i].column] === true) {
+                        el3 = "1";
+                    }
+                    if (item1[columnsToSort[i].column] === false) {
+                        el3 = "0";
+                    }
+                    if (item2[columnsToSort[i].column] === true) {
+                        el4 = "1";
+                    }
+                    if (item2[columnsToSort[i].column] === false) {
+                        el4 = "0";
+                    }
+                    el3 = item1[columnsToSort[i].column].toString();
+                    el4 = item2[columnsToSort[i].column].toString();
                 }
                 if (el1 !== undefined && el2 !== undefined) {
                     if (columnsToSort[i].column === "buyerId") {
                         if (el1 === null){
                             if (el2 === null) {
-                                return 0;
+                                continue;
                             }
                             return -1 * (columnsToSort[i].order ? -1 : 1);
                         }
                         if (el2 === null) {
-                            console.log("dsad")
                             return 1 * (columnsToSort[i].order ? -1 : 1);
                         }
-                        return 0;
+                        continue;
+                    }
+                    if (columnsToSort[i].column === "price") {
+                        return (Number(el1) - Number(el2)) * (columnsToSort[i].order ? -1 : 1);
                     }
                     const compare = (el1 ? el1 : "").toString().toLowerCase().localeCompare((el2 ? el2 : "").toString().toLowerCase()) * (columnsToSort[i].order ? -1 : 1);
                     if (compare !== 0) {
                         return compare;
                     }
-                    return 0;
+                    continue;
                 }
                 const compare = el3.toString().toLowerCase().localeCompare(el4.toString().toLowerCase()) * (columnsToSort[i].order ? -1 : 1);
                 if (compare !== 0) {
