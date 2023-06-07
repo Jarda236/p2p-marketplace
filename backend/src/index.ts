@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
-import { userController, offerController, itemController, fundsAccountController, counterOfferController, authController } from "./controller";
+import { userController, offerController, itemController, fundsAccountController, counterOfferController, imageController } from "./controller";
 
 dotenv.config();
 const api = express();
@@ -16,6 +16,7 @@ api.use("/api", apiRouter);
 apiRouter.use("/users", userController);
 apiRouter.use("/offers", offerController);
 apiRouter.use("/items", itemController);
+apiRouter.use("/images", imageController);
 apiRouter.use("/funds", fundsAccountController);
 apiRouter.use("/counter-offer", counterOfferController);
 apiRouter.use("/auth", authController);
