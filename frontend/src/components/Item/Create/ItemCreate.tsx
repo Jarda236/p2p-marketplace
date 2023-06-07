@@ -1,19 +1,11 @@
-import {
-    ChangeEvent,
-    ChangeEventHandler,
-    DetailedHTMLProps,
-    FC,
-    InputHTMLAttributes,
-    SetStateAction,
-    useState
-} from "react";
+import {ChangeEvent, FC, useState} from "react";
 import {object, string} from "yup";
 import {NavLink, useParams} from "react-router-dom";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
-import {CategoriesApi, ItemsApi} from "../../../services";
+import {CategoriesApi, ImagesApi, ItemsApi} from "../../../services";
 import {useQuery} from "@tanstack/react-query";
 import CategoryFilter from "../../Offer/Overview/Filters/CategoryFilter";
 
@@ -34,7 +26,7 @@ const ItemCreate: FC = () => {
     const [selectedCategory, changeSelectedCategory] = useState<string[]>([]);
     const {userId} = useParams();
     const [user] = useRecoilState(userState);
-    const [image, setImage] = useState<string | ArrayBuffer | null>(null);
+    const [image, setImage] = useState<{preview: string, data: File}>();
 
     const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<CreateItemFormData>({
         resolver: yupResolver(ItemCreateSchema)
@@ -44,14 +36,29 @@ const ItemCreate: FC = () => {
         if (selectedCategory.length === 0) {
             setReason("You have to check one category.");
         }
-        await ItemsApi.createItem({
-            name: data.name,
-            description: data.description,
-            image: image,
-            category: selectedCategory[0]
-        }).then(() => {
-            setReason("OK");
-        }).catch((reason) => setReason(reason.message));
+        if (image){
+            await ImagesApi.postImage(image.data)
+                .then(async (response) => await ItemsApi.createItem({
+                    name: data.name,
+                    description: data.description,
+                    image: response,
+                    category: selectedCategory[0]
+                }).then(() => {
+                setReason("OK");
+                })
+                    .catch((reason) => setReason(reason.message)))
+                .catch((reason) => setReason(reason.message))
+        } else {
+            await ItemsApi.createItem({
+                name: data.name,
+                description: data.description,
+                image: "",
+                category: selectedCategory[0]
+            }).then(() => {
+                setReason("OK");
+            })
+                .catch((reason) => setReason(reason.message))
+        }
     }
 
     const {data: categories} = useQuery({
@@ -65,11 +72,13 @@ const ItemCreate: FC = () => {
     }
 
     const onImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const reader = new FileReader();
+        new FileReader();
         if (e.target.files){
-            reader.readAsDataURL(e.target.files[0]);
+            setImage({
+                preview: URL.createObjectURL(e.target.files[0]),
+                data: e.target.files[0]
+            })
         }
-        setImage(reader.result);
     }
 
     if (user?.id !== userId) {
@@ -103,6 +112,7 @@ const ItemCreate: FC = () => {
                     <button type="button" onClick={() => toggleShowCategories(!showCategories)} >Categories</button>
                     {showCategories && <CategoryFilter toggleCategory={toggleCategory} categories={categories} />}
                     <input type="file" accept="image/png" onChange={onImageChange}/>
+                    {image?.preview && <img src={image.preview} alt="image-preview" />}
                     <button className="green-button" type="submit">Create item</button>
                 </form>
             </> :

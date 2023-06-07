@@ -1,6 +1,5 @@
 import axiosInstance from "./base";
-import {CounterOffer, CounterOfferCreateBody, OfferCreateBody} from "../models";
-import CounterOfferOverview from "../components/CounterOffer/Overview/CounterOfferOverview";
+import {CounterOffer, CounterOfferCreateBody} from "../models";
 
 const COUNTERS: CounterOffer[] = [
     {

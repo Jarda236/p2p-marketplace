@@ -27,7 +27,6 @@ export const filterOffers = ({offers, items, priceToFilter = {from: 0, to: 99999
     if (offers === undefined || items === undefined) {
         return [];
     }
-    console.log({offers, items, priceToFilter, categoriesToFilter, sellerId, buyerId, searchValue, columnsToSort})
     return offers
         .filter(offer => offer.price >= priceToFilter.from && offer.price <= priceToFilter.to)
         .filter((offer, index) => {
