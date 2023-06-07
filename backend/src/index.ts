@@ -10,10 +10,13 @@ const port = process.env.BACKEND_PORT ?? 4000;
 api.use(express.json());
 api.use(cors());
 
-api.use("/users", userController);
-api.use("/offers", offerController);
-api.use("/items", itemController);
-api.use("/funds", fundsAccountController);
-api.use("/counter-offer", counterOfferController);
+const apiRouter = express.Router();
+api.use("/api", apiRouter);
+
+apiRouter.use("/users", userController);
+apiRouter.use("/offers", offerController);
+apiRouter.use("/items", itemController);
+apiRouter.use("/funds", fundsAccountController);
+apiRouter.use("/counter-offer", counterOfferController);
 
 api.listen(port, () => console.log(`[P-2-P Marketplace] is listening on port ${port}`));

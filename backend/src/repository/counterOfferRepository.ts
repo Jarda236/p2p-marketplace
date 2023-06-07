@@ -32,7 +32,7 @@ export const getSingle = async (
   id: string
 ): Promise<Result<CounterOffer | null, Error>> => {
   try {
-    var result = await prisma.counterOffer.findUnique({ where: { id } });
+    var result = await prisma.counterOffer.findUnique({ where: { id } });    
     if (!result || result.deletedAt) {
       throw new Error("CounterOffer not found");
     }
@@ -48,6 +48,60 @@ export const getSingle = async (
     return Result.err(new Error(`Unknown error: ${error}`));
   }
 };
+
+
+export const getAllByOfferId = async (
+  id: string
+): Promise<Result<CounterOffer[], Error>> => {
+  try {
+    const results = await prisma.counterOffer.findMany({
+      where: { offerId: id },
+    });
+
+    const validResults = results.filter((result) => !result.deletedAt);
+
+    const offers = validResults.map((result) => {
+      if (result.price) {
+        return { ...result, price: result.price.toNumber() };
+      }
+      throw new Error("Price not found for CounterOffer");
+    });
+
+    return Result.ok(offers);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};
+
+export const getAllByBuyerId = async (
+  id: string
+): Promise<Result<CounterOffer[], Error>> => {
+  try {
+    const results = await prisma.counterOffer.findMany({
+      where: { userId: id },
+    });
+
+    const validResults = results.filter((result) => !result.deletedAt);
+
+    const offers = validResults.map((result) => {
+      if (result.price) {
+        return { ...result, price: result.price.toNumber() };
+      }
+      throw new Error("Price not found for CounterOffer");
+    });
+
+    return Result.ok(offers);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};
+
 
 export const createSingle = async (
   data: CounterOfferCreate

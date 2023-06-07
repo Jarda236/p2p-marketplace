@@ -27,6 +27,28 @@ router.get(
   }
 );
 
+router.get(
+  "offer/:id",
+  validate({ params: ParamsWithIdSchema }),
+  async (req, res) => {
+    const { id } = req.params;
+    const user = await CounterOfferRepository.getAllByOfferId(id);
+    if (user.isErr) return handleErrorResp(500, res, user.error.message);
+    return handleOkResp(user.value, res, `Listed offer with id: ${id}`);
+  }
+);
+
+router.get(
+  "buyer/:id",
+  validate({ params: ParamsWithIdSchema }),
+  async (req, res) => {
+    const { id } = req.params;
+    const user = await CounterOfferRepository.getAllByBuyerId(id);
+    if (user.isErr) return handleErrorResp(500, res, user.error.message);
+    return handleOkResp(user.value, res, `Listed offer with id: ${id}`);
+  }
+);
+
 router.post("/", validate({ body: CounterOfferCreateSchema }), async (req, res) => {
   const data = req.body;
   const user = await CounterOfferRepository.createSingle(data);
@@ -78,8 +100,12 @@ router.post(
 })
 
 router.post(
-    "/:id/decline", authenticate, validate({ params: ParamsWithIdSchema }), async (req, res) => {
-    
+    "/:id/decline", authenticate, validate({ params: ParamsWithIdSchema }),
+    async  (req, res) => {
+      const { id } = req.params;
+      const counterOffer = await CounterOfferRepository.declineSingle(id);
+      if (counterOffer.isErr) return handleErrorResp(500, res, counterOffer.error.message);
+      return handleOkResp(counterOffer.value, res, `DeclinedCounterOffer with id: ${id}`);
 })
 
 export default router;
