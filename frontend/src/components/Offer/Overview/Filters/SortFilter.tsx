@@ -36,12 +36,17 @@ const SortFilter:FC<SortFilterProps> = ({columnsToSort, changeColumnsToSort}) =>
         changeColumnsToSort(updatedSortCriteria);
     }
 
-    const getFilterIndex = (column: string): string => {
+    const getColumnsSortOrder = (column: string): string => {
         const index = columnsToSort.findIndex(o => o.column === column);
         if (index === -1) {
             return " ☒"; // OFF
         }
         return columnsToSort[index].order ? " ▼" : " ▲"; // DESC : ASC
+    }
+
+    const getSortsOrder = (column: string): string => {
+        const index = columnsToSort.findIndex(c => c.column === column);
+        return index === -1 ? " " : (index + 1).toString();
     }
 
     return ( 
@@ -52,13 +57,22 @@ const SortFilter:FC<SortFilterProps> = ({columnsToSort, changeColumnsToSort}) =>
             className=" px-1 py-1 flex justify-between">
                 <span onClick={() => changeSortingDirection(item.name)}
                 className=" hover:cursor-pointer mr-1">
-                    {item.display}{getFilterIndex(item.name)}
+                    {item.display}{getColumnsSortOrder(item.name)}
+                </span>
+                <span>
+                    {getSortsOrder(item.name)}
                 </span>
                 <span onClick={() => deleteSorting(item.name)}
                 className=" hover:cursor-pointer">
                     ✖
                 </span>
             </li>)}
+            <li>
+                <span onClick={() => changeColumnsToSort([])}
+                      className=" hover:cursor-pointer">
+                    ✖
+                </span>
+            </li>
         </ul>
     </div>
     );

@@ -136,7 +136,8 @@ const OfferOverview: FC<Props> = (props) => {
                         </button>
                         {showCategoryFilter && <CategoryFilter
                             toggleCategory={toggleCategory}
-                            categories={categories} />
+                            categories={categories}
+                            selectedCategories={categoriesToFilter}/>
                         }
                     </li>
 
