@@ -86,3 +86,8 @@ export interface CounterOfferCreateBody {
     price: number;
     itemsId: Array<string>
 }
+
+export interface CounterOfferUpdateBody {
+    price: number;
+    itemsId: Array<string>
+}

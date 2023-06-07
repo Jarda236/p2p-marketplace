@@ -6,12 +6,15 @@ import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 import CounterOfferOverviewItem from "./Item/CounterOfferOverviewItem";
 
-const CounterOfferOverview:FC = () => {
+interface CounterOfferOverview {
+    buyerId?: string
+}
+const CounterOfferOverview:FC<CounterOfferOverview> = ({buyerId}) => {
     const {offerId} = useParams();
 
     const {data: counters} = useQuery({
         queryKey: ['counters'],
-        queryFn: () => CounterOffersApi.getCounterOffersByOfferId(offerId ?? ""),
+        queryFn: () => buyerId ? CounterOffersApi.getCounterOffersByBuyerId(buyerId) : CounterOffersApi.getCounterOffersByOfferId(offerId ?? ""),
         enabled: !!offerId
     })
 

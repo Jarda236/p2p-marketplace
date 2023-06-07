@@ -1,11 +1,11 @@
 import axiosInstance from "./base";
-import {CounterOffer, CounterOfferCreateBody} from "../models";
+import {CounterOffer, CounterOfferCreateBody, CounterOfferUpdateBody} from "../models";
 
 const COUNTERS: CounterOffer[] = [
     {
         id: "1",
         offerId: "1",
-        buyerId: "2",
+        buyerId: "1",
         price: 43,
         status: null,
         itemsId: [
@@ -36,10 +36,27 @@ export const getCounterOffersByOfferId = /*TODO async*/ (offerId: string):/* Pro
     return response.data*/
 }
 
+export const getCounterOffersByBuyerId = /*TODO async*/ (buyerId: string):/* Promise*/Array<CounterOffer> => {
+    return COUNTERS.filter(c => c.buyerId === buyerId);
+    /*const response = await axiosInstance.get(`/counter-offers/buyer/${buyerId}`);
+    return response.data*/
+}
+
 export const createCounterOffer = async (counterOffer: CounterOfferCreateBody): Promise<void> => {
     return;
 
     const response = await axiosInstance.post("/counter-offers", counterOffer, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    return response.data;
+}
+
+export const updateCounterOffer = async (counterId: string, counterOffer: CounterOfferUpdateBody): Promise<void> => {
+    return;
+
+    const response = await axiosInstance.put(`/counter-offers/${counterId}`, counterOffer, {
         headers: {
             "Content-Type": "application/json"
         }

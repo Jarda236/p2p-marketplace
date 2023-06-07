@@ -62,6 +62,7 @@ const UserDetails: FC = () => {
                             <p>City: {user.city}</p>
                             <p>Member from: {user.createdAt}</p>
                         </div>
+                        {(userId === globalUser?.id) && <button type="button" onClick={() => navigate("counter-offers")}>My counter offers</button>}
                     </div> :
                     <p className=" text-center text-lg">Loading...</p>
                 }
