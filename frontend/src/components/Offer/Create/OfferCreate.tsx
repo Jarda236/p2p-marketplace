@@ -52,31 +52,45 @@ const OfferCreate: FC = () => {
 
     return <>
         {reason === null ?
-            <>
-                <h1>Create offer</h1>
-                <span>Choose your item.</span>
+            <div className="mt-4">
+                <span className="mx-10 bg-blue-100 rounded-lg px-2 py-2 shadow-lg shadow-gray-300s">
+                    Creating offer, choose your item:
+                </span>
                 <ItemOverview
                     checkedItems={checkedItems}
                     toggleItem={toggleItem} />
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div>
-                        <label htmlFor="price">Price:</label>
-                        <input
-                            id="price"
-                            type="number"
-                            {...register("price")} />
-                        {isSubmitted && errors.price && <span>{errors.price.message}</span>}
-                    </div>
-                    <button className="green-button" type="submit">Create offer</button>
-                </form>
-            </> :
+                
+                <div className="bg-slate-400 rounded-lg shadow shadow-slate-700 ml-10 p-2 max-w-sm">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="flex mb-4">
+                            <label htmlFor="price" className="mb-2 text-sm font-medium text-gray-900 mr-2">Price:</label>
+                            <input
+                                id="price"
+                                type="number"
+                                {...register("price")}
+                                className="mr-4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block p-1"/>
+                            {isSubmitted && errors.price && <span>{errors.price.message}</span>}
+                        </div>
+                        <button type="submit"
+                            className="center mx-auto text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                            Create offer
+                        </button>
+                    </form>
+                </div>
+    
+            </div> :
             reason === "OK" ?
                 <h3>Offer created!</h3> :
                 <>
                     <h3>Unable to create offer.</h3>
                     <p>Reason: {reason}</p>
                 </>}
-        <NavLink to="/offers">Back</NavLink>
+        
+            <div className=" ml-10 my-5">
+                <NavLink to="/offers" className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                    Back
+                </NavLink>
+            </div>
     </>
 }
 
