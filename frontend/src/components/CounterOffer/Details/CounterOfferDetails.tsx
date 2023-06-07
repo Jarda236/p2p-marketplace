@@ -2,13 +2,14 @@ import {FC, useState} from "react";
 import {NavLink, useNavigate, useParams} from "react-router-dom";
 import {useQueries, useQuery} from "@tanstack/react-query";
 import {CounterOffersApi, ItemsApi} from "../../../services";
-import {queryKey} from "@tanstack/react-query/build/lib/__tests__/utils";
 import CounterOfferDetailsItem from "./CounterOfferDetailsItem/CounterOfferDetailsItem";
-import {set} from "react-hook-form";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
 const CounterOfferDetails: FC = () => {
     const {offerId, counterId} = useParams();
     const navigate = useNavigate();
+    const [user] = useRecoilState(userState);
 
     const [reason, setReason] = useState<string | null>(null);
 
@@ -54,23 +55,30 @@ const CounterOfferDetails: FC = () => {
                     <span>Price: {counter?.price}</span>
                     <span>Items:</span>
                     <ul>
-                        {items.map(item => item.data && <CounterOfferDetailsItem item={item.data} key={item.data.id} />)}
+                        {items.map(item => item.data && <CounterOfferDetailsItem item={item.data} key={item.data.id}/>)}
                     </ul>
                 </section>
-                <section>
+                {counter.buyerId === user?.id ?
                     <button
                         type="button"
-                        onClick={acceptOffer}>Accept</button>
-                    <button
-                        type="button"
-                        onClick={declineOffer}>Decline</button>
-                </section>
-                {reason !== null && (reason === "OK" ?
-                <h3>Operation successfully performed!</h3> :
-                    <>
-                        <h3>Unable to perform operation.</h3>
-                        <p>Reason: {reason}</p>
-                    </>)}
+                        onClick={() => navigate("edit")}>Edit</button>
+                    : <>
+                        <section>
+                            <button
+                                type="button"
+                                onClick={acceptOffer}>Accept
+                            </button>
+                            <button
+                                type="button"
+                                onClick={declineOffer}>Decline
+                            </button>
+                        </section>
+                        {reason !== null && (reason === "OK" ?
+                            <h3>Operation successfully performed!</h3> :
+                            <>
+                                <h3>Unable to perform operation.</h3>
+                                <p>Reason: {reason}</p>
+                            </>)}</>}
                 </> :
             <span>Loading...</span>}
         <NavLink to={`/offers/${offerId}/counter-offers`}>Back</NavLink>

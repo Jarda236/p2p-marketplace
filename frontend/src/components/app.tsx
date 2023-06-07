@@ -50,7 +50,7 @@ export const App: FC = () => {
                             <Route path="/users/:userId/item/:itemId/edit" element={<ItemUpdate />} />
                             <Route path="/offers/:offerId/create-counter-offer" element={<CounterOfferCreate />} />
                             <Route path="/users/:userId/counter-offers" element={<UserCounterOfferOverview />} />
-                            <Route path="/users/:userId/counter-offers/:counterId/edit" element={<CounterOfferUpdate />} />
+                            <Route path="/offers/:offerId/counter-offers/:counterId/edit" element={<CounterOfferUpdate />} />
                             <Route path="/auth/login" element={<OfferOverview />} />
                             <Route path="/auth/register" element={<OfferOverview />} />
                         </>:

@@ -1,5 +1,5 @@
 import {number, object} from "yup";
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 import {NavLink, useParams} from "react-router-dom";
@@ -108,7 +108,7 @@ const CouterOfferUpdate: FC = () => {
                 </div>}
 
         <div className=" ml-10 my-5">
-            <NavLink to={`/offers/${offerId}`}
+            <NavLink to={`/offers/${counter?.offerId}/counter-offers/${counter?.id}`}
                      className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
                 Back
             </NavLink>

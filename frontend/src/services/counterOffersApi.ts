@@ -36,7 +36,8 @@ export const getCounterOffersByOfferId = /*TODO async*/ (offerId: string):/* Pro
     return response.data*/
 }
 
-export const getCounterOffersByBuyerId = /*TODO async*/ (buyerId: string):/* Promise*/Array<CounterOffer> => {
+export const getCounterOffersByBuyerId = async (buyerId: string): Promise<Array<CounterOffer>> => {
+    console.log(COUNTERS.filter(c => c.buyerId === buyerId))
     return COUNTERS.filter(c => c.buyerId === buyerId);
     /*const response = await axiosInstance.get(`/counter-offers/buyer/${buyerId}`);
     return response.data*/

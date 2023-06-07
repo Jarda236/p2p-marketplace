@@ -15,7 +15,7 @@ const CounterOfferOverview:FC<CounterOfferOverview> = ({buyerId}) => {
     const {data: counters} = useQuery({
         queryKey: ['counters'],
         queryFn: () => buyerId ? CounterOffersApi.getCounterOffersByBuyerId(buyerId) : CounterOffersApi.getCounterOffersByOfferId(offerId ?? ""),
-        enabled: !!offerId
+        enabled: !!offerId || !!buyerId
     })
 
     return <>
