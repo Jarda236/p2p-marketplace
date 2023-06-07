@@ -9,6 +9,15 @@ import { AuthenticatedRequest, authenticate } from "../utils/middleware/authenti
 
 const router = Router();
 
+router.get("/logged-user", authenticate, 
+  async (req: AuthenticatedRequest, res) => {
+    const items = await ItemRepository.getAll();
+    if(items.isErr) return handleErrorResp(500, res, items.error.message);
+    const result = items.value.filter(x => x.id === req.user!.id);
+    return handleOkResp(result, res, `Listed ${result.length}`);
+  }
+);
+
 router.get("/", async (_, res) => {
   const items = await ItemRepository.getAll();
   if (items.isErr) return handleErrorResp(500, res, items.error.message);
@@ -17,7 +26,7 @@ router.get("/", async (_, res) => {
 });
 
 router.get(
-  "/test/:id",
+  "/:id",
   validate({ params: ParamsWithIdSchema }),
   async (req, res) => {
     const { id } = req.params;
@@ -39,7 +48,7 @@ router.post("/", validate({ body: ItemCreateSchema }), async (req, res) => {
 });
 
 router.put(
-  "/test/:id",
+  "/:id",
   validate({ params: ParamsWithIdSchema, body: ItemUpdateSchema }),
   async (req, res) => {
     try {
@@ -57,7 +66,7 @@ router.put(
 );
 
 router.delete(
-  "/test/:id",
+  "/:id",
   validate({ params: ParamsWithIdSchema }),
   async (req, res) => {
     const { id } = req.params;
@@ -67,13 +76,5 @@ router.delete(
   }
 );
 
-router.get("/logged-user", authenticate, 
-  async (req: AuthenticatedRequest, res) => {
-    const items = await ItemRepository.getAll();
-    if(items.isErr) return handleErrorResp(500, res, items.error.message);
-    const result = items.value.filter(x => x.id === req.user!.id);
-    return handleOkResp(result, res, `Listed ${result.length}`);
-  }
-);
     
 export default router;
