@@ -1,4 +1,4 @@
-import {Item, ItemCreateBody} from "../models";
+import {Item, ItemCreateBody, ItemUpdateBody} from "../models";
 import axiosInstance from "./base";
 
 const ITEMS: Item[] = [
@@ -55,4 +55,22 @@ export const deleteItemById = async (itemId: string):Promise<void> => {
 
     /*const response = await axiosInstance.delete('/items/${itemId}');
     return response.data;*/
+}
+
+export const createItem = async (item: ItemCreateBody): Promise<void> => {
+    const response = await axiosInstance.post("/items", item, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    return response.data;
+}
+
+export const updateItem = async (item: ItemUpdateBody): Promise<void> => {
+    const response = await axiosInstance.post("/items", item, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    return response.data;
 }

@@ -65,6 +65,13 @@ export interface ItemCreateBody {
     image: string;
 }
 
+export interface ItemUpdateBody {
+    name: string;
+    description: string;
+    category: string;
+    image: string;
+}
+
 export interface CounterOffer {
     id: string;
     offerId: string;

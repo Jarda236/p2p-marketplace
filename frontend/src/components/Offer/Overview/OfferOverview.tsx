@@ -80,6 +80,16 @@ const OfferOverview: FC<Props> = (props) => {
         }
     }
 
+    const toggleCategory = (category: string) => {
+        const index = categoriesToFilter.findIndex(c => c === category);
+        if (index === -1) {
+            changeCategoriesToFilter([...categoriesToFilter, category]);
+        } else {
+            changeCategoriesToFilter(categoriesToFilter.filter(c => c !== category));
+        }
+        return true;
+    }
+
     const filteredOffers: Offer[] = filterOffers({
         offers: offers,
         items: items.map(item => item.data),
@@ -124,8 +134,7 @@ const OfferOverview: FC<Props> = (props) => {
                         Category
                     </button>
                     {showCategoryFilter && <CategoryFilter
-                        categoriesToFilter={categoriesToFilter}
-                        changeCategoriesToFilter={changeCategoriesToFilter}
+                        toggleCategory={toggleCategory}
                         categories={categories} />
                     }
                     </li>
