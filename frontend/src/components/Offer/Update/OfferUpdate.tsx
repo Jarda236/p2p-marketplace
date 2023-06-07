@@ -1,38 +1,63 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {number, object} from "yup";
-import {OffersApi} from "../../../services";
-import {Item} from "../../../models";
-import {NavLink} from "react-router-dom";
+import {ItemsApi, OffersApi} from "../../../services";
+import {Item, Offer} from "../../../models";
+import {NavLink, useParams} from "react-router-dom";
 import ItemOverview from "../../Item/Overview/ItemOverview";
+import {useQuery} from "@tanstack/react-query";
+import {data} from "autoprefixer";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
-interface CreateOfferFormData {
+interface UpdateOfferFormData {
     price: number
 }
 
-const OfferCreateSchema = object().shape({
+const OfferUpdateSchema = object().shape({
     price: number()
         .default(0)
         .typeError("Price must be a number.") // customize error message for invalid type
         .min(1, "Price must be positive.")
 });
 
-const OfferCreate: FC = () => {
+const OfferUpdate: FC = () => {
+    const {offerId} = useParams();
+    const [user] = useRecoilState(userState);
     const [reason, setReason] = useState<string | null>(null);
+
+    const {data: offer} = useQuery({
+        queryKey: ['offer'],
+        queryFn: () => OffersApi.getOfferById(offerId ?? ""),
+        enabled: !!offerId
+    })
+
+    const {data: item} = useQuery({
+        queryKey: ['item'],
+        queryFn: () => ItemsApi.getItemById(offer?.itemId ?? ""),
+        enabled: !!offer
+    })
 
     const [checkedItems, changeCheckedItems] = useState<Item[]>([]);
 
-    const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<CreateOfferFormData>({
-        resolver: yupResolver(OfferCreateSchema)
+    useEffect(() => {
+        if (item) {
+            changeCheckedItems([item])
+        }
+    }, [item]);
+
+    const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<UpdateOfferFormData>({
+        resolver: yupResolver(OfferUpdateSchema)
     });
 
-    const onSubmit: SubmitHandler<CreateOfferFormData> = async (data) => {
+    const onSubmit: SubmitHandler<UpdateOfferFormData> = async (data) => {
+        console.log(data, checkedItems);
         if (checkedItems.length === 0) {
             setReason("You have to check one item.")
             return;
         }
-        await OffersApi.createOffer({price: data.price, itemId: checkedItems[0].id}).then(() => {
+        await OffersApi.updateOffer(offer?.id ?? "", {price: data.price, itemId: checkedItems[0].id}).then(() => {
             setReason("OK");
             checkedItems[0].blocked = true;
         }).catch((reason) => setReason(reason.message));
@@ -50,16 +75,18 @@ const OfferCreate: FC = () => {
         return true;
     }
 
-    return <>
+    return <div>
         {reason === null ?
+            user?.id !== offer?.sellerId ?
+                <span>This is not your offer!</span> :
             <div className="mt-4">
                 <span className="mx-10 bg-blue-100 rounded-lg px-2 py-2 shadow-lg shadow-gray-300s">
-                    Creating offer, choose your item:
+                    Editing offer, choose new item:
                 </span>
                 <ItemOverview
                     checkedItems={checkedItems}
                     toggleItem={toggleItem} />
-                
+
                 <div className="bg-slate-400 rounded-lg shadow shadow-slate-700 ml-10 p-2 max-w-sm">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex mb-4">
@@ -67,31 +94,35 @@ const OfferCreate: FC = () => {
                             <input
                                 id="price"
                                 type="number"
-                                {...register("price")}
+                                {...register("price")} 
                                 className="mr-4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block p-1"/>
                             {isSubmitted && errors.price && <span>{errors.price.message}</span>}
                         </div>
-                        <button type="submit"
-                            className="center mx-auto text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5">
-                            Create offer
+                        <button className="center mx-auto text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5" 
+                            type="submit">
+                            Update offer
                         </button>
                     </form>
                 </div>
-    
+
             </div> :
             reason === "OK" ?
-                <h3>Offer created!</h3> :
+                <div className="mt-4 mx-10 bg-green-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
+                    <h3>Offer updated!</h3>
+                </div>
+                :
                 <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
-                    <h3>Unable to create offer.</h3>
+                    <h3>Unable to update offer.</h3>
                     <p>Reason: {reason}</p>
                 </div>}
         
-            <div className=" ml-10 my-5">
-                <NavLink to="/offers" className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
-                    Back
-                </NavLink>
-            </div>
-    </>
+        <div className=" ml-10 my-5">
+            <NavLink to={"/offers/".concat(offerId ?? "")}
+                className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                Back
+            </NavLink>
+        </div>
+    </div>
 }
 
-export default OfferCreate;
+export default OfferUpdate;

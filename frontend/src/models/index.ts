@@ -1,41 +1,93 @@
 export interface User {
     id: string;
-    name: string;
     username: string;
+    email: string;
+    phone: number;
+    city: string;
     createdAt: number;
-    cashAmount: number;
+    account: Account
+
+    rating: number;
+    image: string;
+}
+
+export interface Account {
+    balance: number;
+    balanceBlocked: number;
 }
 
 export interface Offer {
     id: string;
+    createdAt: number;
+
+    price: number;
+
+    itemId: string;
+
+    sellerId: string;
+    sellerName: string;
+
+    buyerId: string | null;
+    buyerName: string | null;
+
+    [key: string]: string | number | boolean | null;
+}
+
+export interface OfferCreateBody {
+    price: number;
+    itemId: string;
+}
+
+export interface OfferUpdateBody {
+    price?: number;
+    itemId?: string;
+}
+
+export interface Item {
+    id: string;
+    userId: string;
+
     name: string;
     description: string;
-    sellerId: string;
-    userName: string;
-    createdAt: number;
-    endDate: number;
-    topOffer: number;
-    price: number;
-    sold: boolean;
-    buyerId: string | null;
-    soldFor: number | null;
-    [key: string]: string | number | boolean | null;
+    category: string;
+    image: string;
+
+    blocked: boolean;
+    deleted: boolean;
+
+    [key: string]: string | boolean;
+}
+
+export interface ItemCreateBody {
+    name: string;
+    description: string;
+    category: string;
+    image: string | ArrayBuffer | null;
+}
+
+export interface ItemUpdateBody {
+    name: string;
+    description: string;
+    category: string;
+    image: string | ArrayBuffer | null;
 }
 
 export interface CounterOffer {
     id: string;
     offerId: string;
     buyerId: string;
-    sellerId: string;
     price: number;
+    status: boolean | null;
+    itemsId: Array<string>
 }
 
-export interface OfferCreateBody {
-    name: string;
-    description: string;
+export interface CounterOfferCreateBody {
+    offerId: string;
     price: number;
+    itemsId: Array<string>
 }
 
-export interface FromState {
-    offersByUserId: string
+export interface CounterOfferUpdateBody {
+    price: number;
+    itemsId: Array<string>
 }

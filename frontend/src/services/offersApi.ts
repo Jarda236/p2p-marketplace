@@ -1,34 +1,48 @@
 import axiosInstance from "./base";
-import {Offer, OfferCreateBody} from "../models";
+import {Offer, OfferCreateBody, OfferUpdateBody} from "../models";
 
 const OFFERS: Offer[] = [
     {
         id: "1",
-        name: "name1",
-        description: "description1",
-        sellerId: "1",
-        userName: "user1",
         createdAt: 0,
-        endDate: 10,
-        topOffer: 0,
+
         price: 400,
-        sold: false,
+
+        itemId: "1",
+
+        sellerId: "1",
+        sellerName: "username1",
+
         buyerId: null,
-        soldFor: null
+        buyerName: null
     },
     {
         id: "2",
-        name: "name2",
-        description: "description2",
-        sellerId: "2",
-        userName: "user2",
         createdAt: 0,
-        endDate: 10,
-        topOffer: 0,
+
         price: 700,
-        sold: true,
+
+        itemId: "2",
+
+        sellerId: "2",
+        sellerName: "username2",
+
         buyerId: "1",
-        soldFor: 700
+        buyerName: "username1"
+    },
+    {
+        id: "3",
+        createdAt: 0,
+
+        price: 1100,
+
+        itemId: "2",
+
+        sellerId: "2",
+        sellerName: "username2",
+
+        buyerId: null,
+        buyerName: null
     }
 ];
 
@@ -60,14 +74,32 @@ export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
 export const getOffersBySellerId = async (userId: string): Promise<Array<Offer>> => {
     return OFFERS.filter(offer => offer.sellerId === userId);
 
-    const response = await axiosInstance.get(`/offers/user/seller/${userId}`);
+    const response = await axiosInstance.get(`/offers/seller/${userId}`);
     return response.data;
 }
 
 export const getOffersByBuyerId = async (userId: string): Promise<Array<Offer>> => {
-    console.log(userId)
     return OFFERS.filter(offer => offer.buyerId === userId && offer.sold);
 
-    const response = await axiosInstance.get(`/offers/user/buyer/${userId}`);
+    const response = await axiosInstance.get(`/offers/buyer/${userId}`);
+    return response.data;
+}
+
+export const deleteOfferById = async (offerId: string): Promise<void> => {
+    const response = await axiosInstance.delete(`/offers/${offerId}`);
+    return response.data;
+}
+
+export const updateOffer = async (offerId: string, offer: OfferUpdateBody): Promise<void> => {
+    const response = await axiosInstance.put(`/offers/${offerId}`, offer, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    return response.data;
+}
+
+export const offerBuy = async (offerId: string): Promise<void> => {
+    const response = await axiosInstance.post(`/offers/${offerId}/buy`);
     return response.data;
 }

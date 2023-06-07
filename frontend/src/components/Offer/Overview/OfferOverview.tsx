@@ -1,8 +1,13 @@
 import React, {FC, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
-import {useQuery} from "@tanstack/react-query";
-import {OffersApi} from "../../../services"
+import {useQueries, useQuery} from "@tanstack/react-query";
+import {CategoriesApi, ItemsApi, OffersApi, UsersApi} from "../../../services"
 import {Offer} from "../../../models";
+import OfferOverviewItem from "./Item/OfferOverviewItem";
+import {filterOffers, getItemByIdFromQuery} from "../../../utils/filtering";
+import PriceFilter from "./Filters/PriceFilter";
+import CategoryFilter from "./Filters/CategoryFilter";
+import SortFilter from "./Filters/SortFilter";
 
 interface ColumnToSort {
     column: string;
@@ -14,110 +19,168 @@ interface Props {
     offersBySellerId?: string,
     offersByBuyerId?: string
 }
+
+enum FilterComponents {
+    Sort,
+    Category,
+    Price
+}
+
 const OfferOverview: FC<Props> = (props) => {
-    const navigate = useNavigate();
-
     const [searchValue, changeSearchValue] = useState<string>("");
-
-    const [sortCriteria, changeSortCriteria] = useState<ColumnToSort[]>([]);
+    const [columnsToSort, changeColumnsToSort] = useState<ColumnToSort[]>([]);
+    const [priceToFilter, changePriceToFilter] = useState<{from: number, to: number}>({from: 0, to: 999999 });
+    const [categoriesToFilter, changeCategoriesToFilter] = useState<string[]>([]);
+    const [showSortFilter, toggleShowSortFilter] = useState<boolean>(false);
+    const [showCategoryFilter, toggleShowCategoryFilter] = useState<boolean>(false);
+    const [showPriceFilter, toggleShowPriceFilter] = useState<boolean>(false);
 
     const {data: offers, refetch} = useQuery({
         queryKey: ['offers'],
         queryFn: () => OffersApi.getOffers()
     })
 
-    const handleClick = (offerId: string) => {
-        navigate("/offers/".concat(offerId))
+    const items = useQueries({
+        queries: offers?.map((offer) => {
+            return {
+                queryKey: ["item", offer.itemId],
+                queryFn: () => ItemsApi.getItemById(offer.itemId),
+            };
+        }, refetch()) || [],
+    });
+
+    const {data: categories} = useQuery({
+        queryKey: ['categories'],
+        queryFn: () => CategoriesApi.getCategories()
+    })
+
+    const getSeller = /*async*/ (sellerId: string) => {
+        return /*await*/ UsersApi.getUserById(sellerId);
     }
 
-    const filterOffers = (): Array<Offer> => {
-        if (offers === undefined) {
-            return [];
-        }
-        return offers
-            .filter(offer => props?.offersBySellerId === undefined || offer.sellerId === props?.offersBySellerId)
-            .filter(offer => props?.offersByBuyerId === undefined || offer.buyerId === props?.offersByBuyerId)
-            .filter(offer => offer.name.toLowerCase().includes(searchValue.toLowerCase()) || offer.description.toLowerCase().includes(searchValue.toLowerCase()))
-            .sort((a: Offer, b: Offer) => {
-            for (let i = 0; i < sortCriteria.length; i++) {
-                const el1 = a[sortCriteria[i].column];
-                const el2 = b[sortCriteria[i].column];
-                if (el1 === null || el2 === null) {
-                    continue;
-                }
-                const compare = el1.toString().toLowerCase().localeCompare(el2.toString().toLowerCase()) * (sortCriteria[i].order ? -1 : 1);
-                if (compare !== 0) {
-                    return compare;
-                }
+    const toggleFilterComponents = (component: FilterComponents) => {
+        switch (component) {
+            case FilterComponents.Category: {
+                toggleShowCategoryFilter(!showCategoryFilter);
+                toggleShowSortFilter(false);
+                toggleShowPriceFilter(false);
+                break;
             }
-            return 0;
-        })
+            case FilterComponents.Price: {
+                toggleShowCategoryFilter(false);
+                toggleShowSortFilter(false);
+                toggleShowPriceFilter(!showPriceFilter);
+                break;
+            }
+            case FilterComponents.Sort: {
+                toggleShowCategoryFilter(false);
+                toggleShowSortFilter(!showSortFilter);
+                toggleShowPriceFilter(false);
+            }
+        }
     }
 
-    const changeSortingDirection = (column: string) => {
-        const wantedColumn = sortCriteria.findIndex(e => e.column === column);
-        if (wantedColumn !== -1) {
-            handleOrderChange(column, sortCriteria[wantedColumn].order)
+    const toggleCategory = (category: string) => {
+        const index = categoriesToFilter.findIndex(c => c === category);
+        if (index === -1) {
+            changeCategoriesToFilter([...categoriesToFilter, category]);
         } else {
-            changeSortCriteria([...sortCriteria, { column: column, order: true }]);
+            changeCategoriesToFilter(categoriesToFilter.filter(c => c !== category));
         }
+        return true;
     }
 
-    const deleteSorting = (column: string) => {
-        changeSortCriteria(p => p.filter(item => item.column !== column));
-    }
+    const filteredOffers: Offer[] = filterOffers({
+        offers: offers,
+        items: items.map(item => item.data),
+        priceToFilter: priceToFilter,
+        categoriesToFilter: categoriesToFilter,
+        sellerId: props?.offersBySellerId,
+        buyerId: props?.offersByBuyerId,
+        searchValue: searchValue,
+        columnsToSort: columnsToSort
+    });
 
-    const handleOrderChange = (column: string, order: boolean) => {
-        const updatedSortCriteria: ColumnToSort[] = sortCriteria.map(item => {
-            if (item.column === column) {
-                return { ...item, order: !order };
-            }
-            return item;
-        });
+    return( 
+        <>
+        <nav className="bg-gray-300 rounded-lg mx-6 my-4 shadow-lg shadow-gray-300 relative z-0">
+            <div className="max-w-screen-xl px-4 py-3 mx-auto">
+                <div className="flex items-center">
+                <ul className="flex flex-row font-medium mt-0 mr-6 space-x-8 text-sm">
+                    <li>
+                        <NavLink to="/offers/create"
+                        className="text-black hover:bg-yellow-400 bg-yellow-300 py-1.5 px-1.5 rounded-lg">
+                            Create offer
+                        </NavLink>
+                    </li>
 
-        changeSortCriteria(updatedSortCriteria);
-    }
+                    <li className="flex flex-col">
+                    <button
+                        type="button"
+                        onClick={() => toggleFilterComponents(FilterComponents.Sort)}
+                        className="text-black hover:underline">
+                        Sort by ᐯ
+                    </button>
+                    {showSortFilter && <SortFilter
+                        columnsToSort={columnsToSort}
+                        changeColumnsToSort={changeColumnsToSort} />
+                    }
+                    </li>
 
-    const filteredOffers: Offer[] = filterOffers();
+                    <li className="flex flex-col">
+                        <button
+                            type="button"
+                            onClick={() => toggleFilterComponents(FilterComponents.Category)}
+                            className="text-black hover:underline">
+                            Category ᐯ
+                        </button>
+                        {showCategoryFilter && <CategoryFilter
+                            toggleCategory={toggleCategory}
+                            categories={categories}
+                            selectedCategories={categoriesToFilter}/>
+                        }
+                    </li>
 
-    return <>
-        <h2>Offers Overview</h2>
+                    <li>
+                    <PriceFilter
+                        priceToFilter={priceToFilter}
+                        changePriceToFilter={changePriceToFilter} />
+                    </li>
+
+                    <li>
+                    <div>
+                        <input
+                            id="search-field"
+                            type="search"
+                            value={searchValue}
+                            onChange={(e) => changeSearchValue(e.target.value)}
+                            placeholder="Search"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-1"
+                        />
+                    </div>
+                    </li>
+
+                    <li>
+                    <button type="button" onClick={() => refetch()}
+                    className="text-black hover:underline">Refresh</button>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+
         <div>
-            <input
-                type="search"
-                value={searchValue}
-                onChange={(e) => changeSearchValue(e.target.value)}
-                placeholder="Search"
-            />
-            {<p>Ordered by: {sortCriteria.map(item => <span key={item.column}
-                onDoubleClick={() => deleteSorting(item.column)}>{item.column.concat(" ".concat(item.order ? "d " : "a "))}</span>)}</p>}
-            <table>
-                <thead>
-                    <tr>
-                        <th onClick={() => changeSortingDirection("name")}>Name</th>
-                        <th onClick={() => changeSortingDirection("userName")}>Created by</th>
-                        <th onClick={() => changeSortingDirection("createdAt")}>Created at</th>
-                        <th onClick={() => changeSortingDirection("topOffer")}>Top offer</th>
-                        <th onClick={() => changeSortingDirection("instantBuyAmount")}>Price</th>
-                        <th onClick={() => changeSortingDirection("sold")}>Status</th>
-                    </tr>
-
-                </thead>
-                <tbody>
-                {filteredOffers?.map(offer =>
-                        <tr key={offer.id} onClick={() => handleClick(offer.id)}>
-                            <td>{offer.name}</td>
-                            <td>{offer.userName}</td>
-                            <td>{offer.createdAt}</td>
-                            <td>{offer.topOffer}</td>
-                            <td>{offer.price}</td>
-                            <td>{offer.sold ? "SOLD" : "OPEN"}</td>
-                        </tr>)}
-                </tbody>
-            </table>
+            <section>
+                <ul>
+                    {offers ?
+                        filteredOffers.map((offer) =>
+                        <OfferOverviewItem key={offer.id} offer={offer} seller={getSeller(offer.sellerId)} item={getItemByIdFromQuery(items, offer.itemId)}/>):
+                        <span>Loading...</span>}
+                </ul>
+            </section>
         </div>
-        <NavLink to="/">Home</NavLink>
-    </>
+        </>
+    );
 }
 
 export default OfferOverview;
