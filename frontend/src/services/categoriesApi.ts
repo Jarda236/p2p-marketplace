@@ -7,8 +7,8 @@ const CATEGORIES: string[] = [
     "Planes"
 ]
 export const getCategories = async (): Promise<Array<string>> => {
-    return CATEGORIES;
+    //return CATEGORIES;
 
-    /*const response = await axiosInstance.get('/categories');
-    return response.data;*/
+    const response = await axiosInstance.get('/categories');
+    return response.data;
 }
