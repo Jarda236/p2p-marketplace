@@ -5,6 +5,7 @@ import { validate } from "../utils/middleware/validate";
 import z from "zod";
 import { CounterOfferRepository } from "../repository";
 import { CounterOfferCreateSchema, CounterOfferUpdateSchema } from "../models";
+import { authenticate } from "../utils/middleware/authenticate";
 
 const router = Router();
 
@@ -67,9 +68,18 @@ router.delete(
 );
 
 
-router.post("/:id/accept", validate({ params: ParamsWithIdSchema }), async (req, res) => {
-    
+router.post(
+    "/:id/accept", authenticate,  validate({ params: ParamsWithIdSchema }),
+    async  (req, res) => {
+        const { id } = req.params;
+        const counterOffer = await CounterOfferRepository.acceptSingle(id);
+        if (counterOffer.isErr) return handleErrorResp(500, res, counterOffer.error.message);
+    return handleOkResp(counterOffer.value, res, `Accepted CounterOffer with id: ${id}`);
 })
 
+router.post(
+    "/:id/decline", authenticate, validate({ params: ParamsWithIdSchema }), async (req, res) => {
+    
+})
 
 export default router;

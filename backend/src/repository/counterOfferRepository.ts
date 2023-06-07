@@ -115,3 +115,28 @@ export const deleteSingle = async (id: string) => {
     return Result.err(new Error(`Unknown error: ${error}`));
   }
 };
+
+export const acceptSingle = async (
+  id: string
+): Promise<Result<CounterOffer, Error>> => {
+  try {
+    return prisma.$transaction(async (transaction) => {
+      const counterOffer = await transaction.counterOffer.update({
+        where: { id },
+        data: { status: true, updatedAt: new Date() },
+      });
+
+      const buyer = await transaction.user.update({
+        where: { id: counterOffer.userId },
+        data: {},
+      });
+      var pom = { ...counterOffer, price: counterOffer.price.toNumber() };
+      return Result.ok(pom);
+    });
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    throw new Error(`Unknown error: ${error}`);
+  }
+};
