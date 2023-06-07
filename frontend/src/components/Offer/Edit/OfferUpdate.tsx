@@ -8,6 +8,8 @@ import {NavLink, useParams} from "react-router-dom";
 import ItemOverview from "../../Item/Overview/ItemOverview";
 import {useQuery} from "@tanstack/react-query";
 import {data} from "autoprefixer";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
 interface UpdateOfferFormData {
     price: number
@@ -22,6 +24,7 @@ const OfferUpdateSchema = object().shape({
 
 const OfferUpdate: FC = () => {
     const {offerId} = useParams();
+    const [user] = useRecoilState(userState);
     const [reason, setReason] = useState<string | null>(null);
 
     const {data: offer} = useQuery({
@@ -54,8 +57,10 @@ const OfferUpdate: FC = () => {
             setReason("You have to check one item.")
             return;
         }
-        checkedItems[0].blocked = true;
-        await OffersApi.updateOffer(offer?.id ?? "", {price: data.price, itemId: checkedItems[0].id}).then(() => setReason("OK")).catch((reason) => setReason(reason.message));
+        await OffersApi.updateOffer(offer?.id ?? "", {price: data.price, itemId: checkedItems[0].id}).then(() => {
+            setReason("OK");
+            checkedItems[0].blocked = true;
+        }).catch((reason) => setReason(reason.message));
     }
 
     const toggleItem = (item: Item): boolean => {
@@ -72,6 +77,8 @@ const OfferUpdate: FC = () => {
 
     return <>
         {reason === null ?
+            user?.id !== offer?.sellerId ?
+                <span>This is not your offer!</span> :
             <>
                 <h1>Edit offer</h1>
                 <span>Choose your item.</span>

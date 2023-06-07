@@ -32,8 +32,10 @@ const OfferCreate: FC = () => {
             setReason("You have to check one item.")
             return;
         }
-        checkedItems[0].blocked = true;
-        await OffersApi.createOffer({price: data.price, itemId: checkedItems[0].id}).then(() => setReason("OK")).catch((reason) => setReason(reason.message));
+        await OffersApi.createOffer({price: data.price, itemId: checkedItems[0].id}).then(() => {
+            setReason("OK");
+            checkedItems[0].blocked = true;
+        }).catch((reason) => setReason(reason.message));
     }
 
     const toggleItem = (item: Item): boolean => {
