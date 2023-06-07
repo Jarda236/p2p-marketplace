@@ -27,14 +27,14 @@ const ITEMS: Item[] = [
 ]
 /* Vrati iba userove itemy, nie vsetky*/
 export const getItems = async (): Promise<Array<Item>> => {
-    return ITEMS;
+    //return ITEMS;
 
-    /*const response = await axiosInstance.get('/items');
-    return response.data;*/
+    const response = await axiosInstance.get('/items');
+    return response.data;
 }
 
 export const getItemById = async (itemId: string): Promise<Item> => {
-    return ITEMS.find(item => item.id === itemId) ?? {
+    /*return ITEMS.find(item => item.id === itemId) ?? {
         id: "1",
         userId: "1",
 
@@ -44,17 +44,17 @@ export const getItemById = async (itemId: string): Promise<Item> => {
         image: "/pictures/auto.jpg",
         blocked: false,
         deleted: false
-    };
+    };*/
 
-    /*const response = await axiosInstance.get('/items/${itemId}');
-    return response.data;*/
+    const response = await axiosInstance.get('/items/${itemId}');
+    return response.data;
 }
 
 export const deleteItemById = async (itemId: string):Promise<void> => {
-    return;
+    //return;
 
-    /*const response = await axiosInstance.delete('/items/${itemId}');
-    return response.data;*/
+    const response = await axiosInstance.delete('/items/${itemId}');
+    return response.data;
 }
 
 export const createItem = async (item: ItemCreateBody): Promise<void> => {
@@ -63,7 +63,6 @@ export const createItem = async (item: ItemCreateBody): Promise<void> => {
 }
 
 export const updateItem = async (item: ItemUpdateBody): Promise<void> => {
-    console.log(item)
     const response = await axiosInstance.post("/items", item, {
         headers: {
             "Content-Type": "application/json"

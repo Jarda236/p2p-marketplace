@@ -14,8 +14,8 @@ const COUNTERS: CounterOffer[] = [
     }
 ]
 
-export const getCounterOfferById = /*TODO async*/ (counterId: string):/* Promise*/CounterOffer => {
-    return COUNTERS.find(c => c.id === counterId) ??
+export const getCounterOfferById = async (counterId: string): Promise<CounterOffer >=> {
+    /*return COUNTERS.find(c => c.id === counterId) ??
         {
             id: "1",
             offerId: "1",
@@ -25,26 +25,25 @@ export const getCounterOfferById = /*TODO async*/ (counterId: string):/* Promise
             itemsId: [
                 "2"
             ]
-        };
-    /*const response = await axiosInstance.get(`/counter-offers/${offerId}`);
-    return response.data*/
+        };*/
+    const response = await axiosInstance.get(`/counter-offers/${counterId}`);
+    return response.data
 }
 
-export const getCounterOffersByOfferId = /*TODO async*/ (offerId: string):/* Promise*/Array<CounterOffer> => {
-    return COUNTERS.filter(c => c.offerId === offerId);
-    /*const response = await axiosInstance.get(`/counter-offers/offer/${offerId}`);
-    return response.data*/
+export const getCounterOffersByOfferId = async (offerId: string): Promise<Array<CounterOffer>> => {
+    //return COUNTERS.filter(c => c.offerId === offerId);
+    const response = await axiosInstance.get(`/counter-offers/offer/${offerId}`);
+    return response.data
 }
 
 export const getCounterOffersByBuyerId = async (buyerId: string): Promise<Array<CounterOffer>> => {
-    console.log(COUNTERS.filter(c => c.buyerId === buyerId))
-    return COUNTERS.filter(c => c.buyerId === buyerId);
-    /*const response = await axiosInstance.get(`/counter-offers/buyer/${buyerId}`);
-    return response.data*/
+    //return COUNTERS.filter(c => c.buyerId === buyerId);
+    const response = await axiosInstance.get(`/counter-offers/buyer/${buyerId}`);
+    return response.data
 }
 
 export const createCounterOffer = async (counterOffer: CounterOfferCreateBody): Promise<void> => {
-    return;
+    //return;
 
     const response = await axiosInstance.post("/counter-offers", counterOffer, {
         headers: {
@@ -55,7 +54,7 @@ export const createCounterOffer = async (counterOffer: CounterOfferCreateBody): 
 }
 
 export const updateCounterOffer = async (counterId: string, counterOffer: CounterOfferUpdateBody): Promise<void> => {
-    return;
+    //return;
 
     const response = await axiosInstance.put(`/counter-offers/${counterId}`, counterOffer, {
         headers: {
@@ -66,13 +65,13 @@ export const updateCounterOffer = async (counterId: string, counterOffer: Counte
 }
 
 export const acceptCounterOffer = async (counterId: string):Promise<void> => {
-    return;
+    //return;
     const response = await axiosInstance.post(`/counter-offer/${counterId}/accept`);
     return response.data;
 }
 
 export const declineCounterOffer = async (counterId: string):Promise<void> => {
-    return;
+    //return;
     const response = await axiosInstance.post(`/counter-offer/${counterId}/decline`);
     return response.data;
 }

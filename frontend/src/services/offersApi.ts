@@ -61,7 +61,7 @@ export const getOfferById = async (offerId: string): Promise<Offer | null> => {
 }
 
 export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
-    return;
+    //return;
 
     const response = await axiosInstance.post("/offers", offer, {
         headers: {
@@ -72,14 +72,14 @@ export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
 }
 
 export const getOffersBySellerId = async (userId: string): Promise<Array<Offer>> => {
-    return OFFERS.filter(offer => offer.userId === userId);
+    //return OFFERS.filter(offer => offer.userId === userId);
 
     const response = await axiosInstance.get(`/offers/seller/${userId}`);
     return response.data;
 }
 
 export const getOffersByBuyerId = async (userId: string): Promise<Array<Offer>> => {
-    return OFFERS.filter(offer => offer.buyerId === userId && offer.sold);
+    //return OFFERS.filter(offer => offer.buyerId === userId && offer.sold);
 
     const response = await axiosInstance.get(`/offers/buyer/${userId}`);
     return response.data;

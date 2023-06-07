@@ -20,7 +20,7 @@ type LoginResponse = {
 }
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
-    return {
+    /*return {
         user: {
             id: "1",
             name: "username1",
@@ -36,7 +36,7 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
             image: "/icons/user.jpg"
         },
         token: "token"
-    };
+    };*/
     const response = await axiosAuthInstance.post("login", data, {
         headers: {
             "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export const register = async (data: RegistrationRequest):Promise<void> => {
 }
 
 export const isAuthenticated = async ():Promise<User> => {
-    return {
+    /*return {
         id: "1",
         name: "username1",
         email: "user1@a.com",
@@ -71,9 +71,9 @@ export const isAuthenticated = async ():Promise<User> => {
         },
         rating: 4,
         image: "/icons/user.jpg"
-    };
-    /*TODO const response = await axiosAuthInstance.get("", {
+    };*/
+    const response = await axiosAuthInstance.get("", {
         headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}
     });
-    return response.data;*/
+    return response.data;
 }

@@ -33,15 +33,15 @@ const USERS: User[] = [
 ]
 
 export const getUsers = async (): Promise<Array<User>> => {
-    return USERS;
+    //return USERS;
 
     const response = await axiosInstance.get('/users');
     return response.data;
 }
 
-export const getUserById = /*async*/ (userId: string): /*Promise*/User => {
-    return USERS.find(user => user.id === userId) ?? USERS[0];
+export const getUserById = async (userId: string): Promise<User> => {
+    //return USERS.find(user => user.id === userId) ?? USERS[0];
 
-    /*const response = await axiosInstance.get(`/users/${userId}`);
-    return response.data;*/
+    const response = await axiosInstance.get(`/users/${userId}`);
+    return response.data;
 }
