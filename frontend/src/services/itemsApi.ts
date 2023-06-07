@@ -3,17 +3,17 @@ import axiosInstance from "./base";
 
 /* Vrati iba userove itemy, nie vsetky*/
 export const getUserItems = async (): Promise<Array<Item>> => {
-    const response = await axiosInstance.get('/items/logged-user');
+    const response = await axiosInstance.get("/items/logged-user");
     return response.data.data;
 }
 
 export const getItemById = async (itemId: string): Promise<Item> => {
-    const response = await axiosInstance.get('/items/${itemId}');
+    const response = await axiosInstance.get(`/items/${itemId}`);
     return response.data.data;
 }
 
 export const deleteItemById = async (itemId: string):Promise<void> => {
-    const response = await axiosInstance.delete('/items/${itemId}');
+    const response = await axiosInstance.delete(`/items/${itemId}`);
     return response.data.data;
 }
 
