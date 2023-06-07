@@ -60,7 +60,7 @@ const UserDetails: FC = () => {
                             <p>Email: {user.email}</p>
                             <p>Phone number: {user.phone}</p>
                             <p>City: {user.city}</p>
-                            <p>Member from: {user.createdAt}</p>
+                            <p>Member from: {new Date(user.createdAt).toLocaleString()}</p>
                         </div>
                         {(userId === globalUser?.id) && <button type="button" onClick={() => navigate("counter-offers")}>My counter-offers</button>}
                     </div> :

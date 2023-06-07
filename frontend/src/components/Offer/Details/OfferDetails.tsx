@@ -38,7 +38,7 @@ const OfferDetails: FC = () => {
                             <p className=" mt-2">Seller: <NavLink to={"/users/".concat(offer.userId)} className=" font-bold text-black hover:underline mt-4">
                                 {offer.userName}
                                 </NavLink></p>
-                            <p>Created at: {offer.createdAt}</p>
+                            <p>Created at: {new Date(offer.createdAt).toLocaleString()}</p>
                             <p className="  font-bold">Price: {offer.price}</p>
                             <div className=" mt-2">
                             {offer.buyerId ?
