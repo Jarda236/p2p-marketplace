@@ -34,7 +34,7 @@ const ItemCreate: FC = () => {
     const [selectedCategory, changeSelectedCategory] = useState<string[]>([]);
     const {userId} = useParams();
     const [user] = useRecoilState(userState);
-    const [image, setImage] = useState<File | null>(null);
+    const [image, setImage] = useState<string | ArrayBuffer | null>(null);
 
     const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<CreateItemFormData>({
         resolver: yupResolver(ItemCreateSchema)
@@ -65,7 +65,11 @@ const ItemCreate: FC = () => {
     }
 
     const onImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setImage(e.target.files ? e.target.files[0] : null );
+        const reader = new FileReader();
+        if (e.target.files){
+            reader.readAsDataURL(e.target.files[0]);
+        }
+        setImage(reader.result);
     }
 
     if (user?.id !== userId) {
