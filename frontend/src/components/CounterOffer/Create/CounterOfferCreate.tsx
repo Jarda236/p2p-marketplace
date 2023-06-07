@@ -55,31 +55,49 @@ const CounterOfferCreate: FC = () => {
 
     return <>
         {reason === null ?
-            <>
-                <h1>Create counter offer</h1>
-                <span>Choose your items.</span>
+            <div className="mt-4">
+                <span className="mx-10 bg-blue-100 rounded-lg px-2 py-2 shadow-lg shadow-gray-300s">
+                    Creating counter offer, choose your items:
+                </span>
+
                 <ItemOverview
                     checkedItems={checkedItems}
                     toggleItem={toggleItem} />
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div>
-                        <label htmlFor="price">Price:</label>
-                        <input
-                            id="price"
-                            type="number"
-                            {...register("price")} />
-                        {isSubmitted && errors.price && <span>{errors.price.message}</span>}
-                    </div>
-                    <button className="green-button" type="submit">Create counter offer</button>
-                </form>
-            </> :
+
+                <div className="bg-slate-400 rounded-lg shadow shadow-slate-700 ml-10 p-2 max-w-sm">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="flex mb-4">
+                            <label htmlFor="price" className="mb-2 text-sm font-medium text-gray-900 mr-2">Price:</label>
+                            <input
+                                id="price"
+                                type="number"
+                                {...register("price")}
+                                className="mr-4 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block p-1"/>
+                            {isSubmitted && errors.price && <span>{errors.price.message}</span>}
+                        </div>
+                        <button className="center mx-auto text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5" 
+                            type="submit">
+                            Create counter offer
+                        </button>
+                    </form>
+                </div>
+            </div> :
             reason === "OK" ?
-                <h3>Counter offer created!</h3> :
-                <>
+                <div className="mt-4 mx-10 bg-green-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
+                    <h3>Counter offer created!</h3>
+                </div>
+                :
+                <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
                     <h3>Unable to create counter offer.</h3>
                     <p>Reason: {reason}</p>
-                </>}
-        <NavLink to={`/offers/${offerId}`}>Back</NavLink>
+                </div>}
+        
+        <div className=" ml-10 my-5">
+            <NavLink to={`/offers/${offerId}`}
+                className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                Back
+            </NavLink>
+        </div>
     </>
 }
 

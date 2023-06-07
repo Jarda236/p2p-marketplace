@@ -86,7 +86,7 @@ const ItemUpdate:FC = () => {
                         {isSubmitted && errors.description && <span>{errors.description.message}</span>}
                     </div>
                     <button type="button" onClick={() => toggleShowCategories(!showCategories)} >Categories</button>
-                    {showCategories && <CategoryFilter toggleCategory={toggleCategory} categories={categories} />}
+                    {showCategories && <CategoryFilter selectedCategories={selectedCategory} toggleCategory={toggleCategory} categories={categories} />}
                     <button className="green-button" type="submit">Edit item</button>
                 </form>
             </> :
