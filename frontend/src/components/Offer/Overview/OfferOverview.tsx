@@ -35,7 +35,7 @@ const OfferOverview: FC<Props> = (props) => {
     const [showCategoryFilter, toggleShowCategoryFilter] = useState<boolean>(false);
     const [showPriceFilter, toggleShowPriceFilter] = useState<boolean>(false);
 
-    const {data: offers} = useQuery({
+    const {data: offers, refetch} = useQuery({
         queryKey: ['offers'],
         queryFn: () => OffersApi.getOffers()
     })
@@ -124,7 +124,7 @@ const OfferOverview: FC<Props> = (props) => {
             priceToFilter={priceToFilter}
             changePriceToFilter={changePriceToFilter} />
         }
-
+        <button type="button" onClick={() => refetch()}>Refresh</button>
         <div>
             <input
                 id="search-field"

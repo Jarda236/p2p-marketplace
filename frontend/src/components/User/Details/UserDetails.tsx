@@ -8,7 +8,7 @@ import {Item} from "../../../models";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
 
-const UserDetail: FC = () => {
+const UserDetails: FC = () => {
     const {userId} = useParams();
     const [globalUser] = useRecoilState(userState);
 
@@ -111,4 +111,4 @@ const UserDetail: FC = () => {
     );
 }
 
-export default UserDetail;
+export default UserDetails;

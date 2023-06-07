@@ -1,6 +1,8 @@
 import {FC} from "react";
 import {Item, Offer, User} from "../../../../models";
 import {NavLink, useNavigate} from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../../state/atoms";
 
 interface OfferOverviewItemProps {
     offer: Offer,
@@ -9,6 +11,7 @@ interface OfferOverviewItemProps {
 }
 const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) => {
     const navigate = useNavigate();
+    const [user] = useRecoilState(userState);
 
     return (
     <div className=" bg-blue-100 hover:bg-blue-200 flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl
@@ -49,8 +52,10 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
             <NavLink to={"/offers/".concat(offer.id)} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Offer detail</NavLink>
             {offer.buyerId ?
                 <span>SOLD</span> :
+                user?.id === offer.sellerId ?
+                    <NavLink to={`/offers/${offer.id}/counter-offers`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Counter offers</NavLink>:
                 <>
-                    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" onClick={() => navigate(`${offer.id}/create-counter-offer`)}>Price offer</button>
+                    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" onClick={() => navigate(`${offer.id}/create-counter-offer`)}>Counter offer</button>
                     <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">Buy</button>
                 </>
             }
