@@ -20,9 +20,7 @@ router.get(
   "/buyer/:id",
   validate({ params: ParamsWithIdSchema }),
   async (req, res) => {
-    console.log("TADY")
     const { id } = req.params;
-    console.log("TADY")
     const user = await CounterOfferRepository.getAllByBuyerId(id);
     if (user.isErr) return handleErrorResp(500, res, user.error.message);
     return handleOkResp(user.value, res, `Listed offer with id: ${id}`);
