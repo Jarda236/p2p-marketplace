@@ -5,7 +5,7 @@ import { validate } from "../utils/middleware/validate";
 import z from "zod";
 import { CounterOfferRepository } from "../repository";
 import { CounterOfferCreateSchema, CounterOfferUpdateSchema } from "../models";
-import { authenticate } from "../utils/middleware/authenticate";
+import { AuthenticatedRequest, authenticate } from "../utils/middleware/authenticate";
 
 const router = Router();
 
@@ -49,9 +49,9 @@ router.get(
   }
 );
 
-router.post("/", validate({ body: CounterOfferCreateSchema }), async (req, res) => {
+router.post("/", authenticate, validate({ body: CounterOfferCreateSchema }), async (req: AuthenticatedRequest, res) => {
   const data = req.body;
-  const user = await CounterOfferRepository.createSingle(data);
+  const user = await CounterOfferRepository.createSingle(req.user!.id, data);
   if (user.isErr) return handleErrorResp(500, res, user.error.message);
   return handleOkResp(
     user.value,
