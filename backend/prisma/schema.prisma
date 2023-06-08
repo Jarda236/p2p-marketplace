@@ -63,6 +63,7 @@ model CounterOffer {
   status    Boolean?
   price     Decimal
   items     Item[]
+  itemsID   String[]
 }
 
 model Item {
