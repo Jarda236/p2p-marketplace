@@ -5,7 +5,7 @@ import { handleErrorResp, handleOkResp } from "../utils";
 import { ParamsWithIdSchema } from "../models/baseModels";
 import { validate } from "../utils/middleware/validate";
 import z from "zod";
-import { authenticate } from "../utils/middleware/authenticate";
+import { AuthenticatedRequest, authenticate } from "../utils/middleware/authenticate";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 const router = Router();
@@ -61,14 +61,10 @@ router.post("/", validate({ body: OfferCreateSchema }), async (req, res) => {
   );
 });
 
-router.post("/:id/buy", authenticate, validate({ body: OfferCreateSchema }), async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  const decoded = jwt.verify(token!, process.env.JWT_SECRET!) as JwtPayload;
-  const userId = decoded.userId;
-
+router.post("/:id/buy", authenticate, validate({ body: OfferCreateSchema }), async (req: AuthenticatedRequest, res) => {
   const { id } = req.params; 
   const data = req.body;
-  const user = await OfferRepository.buySingle(id, userId, data);
+  const user = await OfferRepository.buySingle(id, req.user!.id, data);
   if (user.isErr) return handleErrorResp(500, res, user.error.message);
   return handleOkResp(
     user.value,

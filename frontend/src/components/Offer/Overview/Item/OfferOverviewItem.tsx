@@ -17,7 +17,7 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
     <div className="mx-2 my-4 sm:pb-2 sm:pr-2 sm:h-auto sm:m-8 md:pb-0 md:pr-0 bg-blue-100 hover:bg-blue-200 flex flex-wrap rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl overflow-hidden">
         <section className=" text-base sm:text-lg grid grid-cols-3 sm:flex sm:flex-row h-auto">
             <figure className="sticky">
-                <img onClick={() => navigate("/offers/".concat(offer.id))} src={item?.image === "" ? "/pictures/auto.jpg" : item?.image}
+                <img onClick={() => navigate("/offers/".concat(offer.id))} src={item?.image === "" ? "/pictures/auto.jpg" : "/pictures/auto.jpg"}
                 className=" w-fit h-32 sm:h-48 sm:w-48 object-cover rounded-md"
                 alt={item?.name.concat("-image")} />
             </figure>
@@ -32,7 +32,7 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
             <span><b>Seller: </b>{seller.name}</span>
             <div className=" flex flex-row">
                 <figure className=" mr-4">
-                    <img onClick={() => navigate("/users/".concat(seller.id))} src={seller.image}
+                    <img onClick={() => navigate("/users/".concat(seller.id))} src={"/icons/user.jpg"}
                     className=" h-12 w-12 object-cover rounded-full"
                     alt={seller.name.concat("-avatar")} />
                 </figure>
