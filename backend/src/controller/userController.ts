@@ -87,7 +87,7 @@ router.post(
     const isMatch = passwordHashed === user.password_hash;
     if (user && isMatch) {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
-      res.cookie('token', token, { httpOnly: true });
+      res.json({ "token" : token, "user" : user});
       return handleOkResp(user, res, `Logged in user with id: ${user.id}`);
     }
     return handleErrorResp(401, res, "Invalid credentials");
@@ -118,7 +118,7 @@ router.post(
     }
     
     const token = jwt.sign({ userId: newUser.value.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
-    res.cookie('token', token, { httpOnly: true });
+    res.json({ "token" : token, "user" : newUser.value});
     return handleOkResp(newUser.value, res, `Registered user with id: ${newUser.value.id}`);
   }
 );
