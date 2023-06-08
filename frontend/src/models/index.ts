@@ -59,21 +59,17 @@ export interface Item {
 }
 
 export interface ItemCreateBody {
-    userId: string;
     name: string;
     description: string;
     category: string;
     image: string;
-    blocked: boolean;
 }
 
 export interface ItemUpdateBody {
-    userId: string;
     name: string;
     description: string;
     category: string;
     image: string;
-    blocked: boolean;
 }
 
 export interface CounterOffer {
