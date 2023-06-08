@@ -72,8 +72,18 @@ const UserDetails: FC = () => {
                             <p>City: {user.city}</p>
                             <p>Member from: {new Date(user.createdAt).toLocaleString()}</p>
                         </div>
-                        {(userId === globalUser?.id) && <button type="button" onClick={() => navigate("counter-offers")}>My counter-offers</button>}
-                        <button type="button" onClick={addCash}>Add 500 cash</button>
+                        {(userId === globalUser?.id) &&
+                        <button type="button" 
+                        onClick={() => navigate("counter-offers")}
+                        className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                            My counter-offers
+                        </button>}
+
+                        <button type="button"
+                        onClick={addCash}
+                        className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                            Add 500 cash
+                        </button>
                     </div> :
                     <p className=" text-center text-lg">Loading...</p>
                 }
