@@ -2,9 +2,10 @@ import { Router } from "express";
 import path from "path";
 import express, { Request, Response } from "express";
 import { Multer } from "multer";
+import multer from "multer";
 
 const router = Router();
-const multer = require("multer");
+
 //app.use(express.json());
 
 const storage = multer.diskStorage({

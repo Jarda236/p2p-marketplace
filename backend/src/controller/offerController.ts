@@ -6,7 +6,6 @@ import { ParamsWithIdSchema } from "../models/baseModels";
 import { validate } from "../utils/middleware/validate";
 import z from "zod";
 import { AuthenticatedRequest, authenticate } from "../utils/middleware/authenticate";
-import jwt, { JwtPayload } from "jsonwebtoken";
 
 const router = Router();
 

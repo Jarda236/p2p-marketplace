@@ -104,10 +104,13 @@ export const getAllByBuyerId = async (
 
 
 export const createSingle = async (
+  userId: string,
   data: CounterOfferCreate
 ): Promise<Result<CounterOffer, Error>> => {
   try {
+    data.userId = userId
     const result = await prisma.counterOffer.create({ data });
+    
     if (result && result.price) {
       var a = { ...result, price: result.price.toNumber() };
       return Result.ok(a);
