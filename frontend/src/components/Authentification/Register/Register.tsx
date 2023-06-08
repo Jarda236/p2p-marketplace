@@ -62,13 +62,15 @@ const Register: FC = () => {
     }
 
     return (
-        <div className="  w-2/4 bg-slate-400 rounded-lg shadow shadow-slate-700 mx-auto p-4 my-4
+        <div className="  sm:w-2/4 bg-slate-400 rounded-lg shadow shadow-slate-700 mx-auto p-4 my-4
         flex flex-col space-y-4 max-w-sm">
         <h2 className=" text-xl font-bold leading-tight tracking-tight" >
             Register account
         </h2>
         {success ?
-            <h3>Successfully registered!</h3> :
+            <div className="mt-4 mx-10 bg-green-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
+            <h3>Successfully registered!</h3>
+            </div> :
             <form action="#" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
                     <label
