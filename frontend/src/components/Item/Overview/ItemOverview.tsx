@@ -15,8 +15,13 @@ const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, toggleItem}) => {
 
     const {data: items} = useQuery({
         queryKey: ['items'],
-        queryFn: () => ItemsApi.getItems()
+        queryFn: () => ItemsApi.getUserItems()
     })
+
+    if (items && items.length === 0) {
+        return <span className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">You have no items.</span>
+    }
+
     return <div>
         {items ?
             <ul>

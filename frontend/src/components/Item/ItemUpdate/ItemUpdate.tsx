@@ -34,10 +34,11 @@ const ItemUpdate:FC = () => {
     const onSubmit: SubmitHandler<UpdateItemFormData> = async (data) => {
         if (selectedCategory.length === 0) {
             setReason("You have to check one category.");
+            return;
         }
         if (image){
             await ImagesApi.postImage(image.data)
-                .then(async (response) => await ItemsApi.updateItem({
+                .then(async (response) => await ItemsApi.updateItem(item?.id ?? "", {
                     name: data.name,
                     description: data.description,
                     image: response,
@@ -48,7 +49,7 @@ const ItemUpdate:FC = () => {
                     .catch((reason) => setReason(reason.message)))
                 .catch((reason) => setReason(reason.message))
         } else {
-            await ItemsApi.updateItem({
+            await ItemsApi.updateItem(item?.id ?? "", {
                 name: data.name,
                 description: data.description,
                 image: "",
@@ -86,12 +87,18 @@ const ItemUpdate:FC = () => {
         return true;
     }
 
-    if (user?.id !== userId || item?.userId !== user?.id) {
-        return(
-        <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
-            <span>You can not edit item of another user!</span>
+    const returnError = (text: string) => {
+        return <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
+            <span>{text}</span>
         </div>
-        )
+    }
+
+    if (user?.id !== userId || item?.userId !== user?.id) {
+        return returnError("You can not edit item of another user!");
+    }
+
+    if (item?.blocked) {
+        return returnError("Item is blocked!");
     }
 
     return <>

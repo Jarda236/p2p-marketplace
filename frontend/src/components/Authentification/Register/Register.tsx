@@ -51,9 +51,9 @@ const Register: FC = () => {
         await AuthApi.register({
             name: data.name,
             email: data.email,
-            phone: data.phone,
+            phone: data.phone.toString(),
             city: data.city,
-            password: data.password
+            password_hash: data.password
         })
             .then(() => {
                 navigate("/auth/login");
@@ -101,7 +101,7 @@ const Register: FC = () => {
                     <input
                         type="number"
                         {...register("phone")}
-                        placeholder="123123123"
+                        placeholder="0949857687"
                         className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-1"/>
                     {isSubmitted && errors.phone && <span>{errors.phone.message}</span>}
                 </div>

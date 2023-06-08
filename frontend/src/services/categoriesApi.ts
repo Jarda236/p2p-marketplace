@@ -1,14 +1,15 @@
 import axiosInstance from "./base";
-import {Item} from "../models";
 
 const CATEGORIES: string[] = [
     "Cars",
     "Boats",
-    "Planes"
+    "Planes",
+    "Electronics",
+    "Furniture"
 ]
 export const getCategories = async (): Promise<Array<string>> => {
-    //return CATEGORIES;
+    return CATEGORIES;
 
-    const response = await axiosInstance.get('/categories');
-    return response.data;
+    /*const response = await axiosInstance.get('/categories');
+    return response.data.data;*/
 }

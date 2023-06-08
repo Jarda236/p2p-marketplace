@@ -2,16 +2,16 @@ import {axiosAuthInstance} from "./base";
 import {User} from "../models";
 
 interface LoginRequest {
-    name: string,
+    username: string,
     password: string
 }
 
 interface RegistrationRequest {
     name: string,
     email: string,
-    phone: number,
+    phone: string,
     city: string,
-    password: string
+    password_hash: string
 }
 
 type LoginResponse = {
@@ -37,24 +37,22 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
         },
         token: "token"
     };*/
-    const response = await axiosAuthInstance.post("login", data, {
+    const response = await axiosAuthInstance.post("users/login", data, {
         headers: {
             "Content-Type": "application/json",
         }
     });
 
-    const header = response.headers["set-cookie"]?.toString();
-    const token = header?.substring(((header?.indexOf("=") ?? 0) + 1), (header?.indexOf(";")));
-    return {user: response.data, token: token};
+    return response.data;
 }
 
 export const register = async (data: RegistrationRequest):Promise<void> => {
-    const response = await axiosAuthInstance.post("register", data, {
+    const response = await axiosAuthInstance.post("users/register", data, {
         headers: {
             "Content-Type": "application/json",
         }
     });
-    return response.data;
+    return response.data.data;
 }
 
 export const isAuthenticated = async ():Promise<User> => {
@@ -72,8 +70,8 @@ export const isAuthenticated = async ():Promise<User> => {
         rating: 4,
         image: "/icons/user.jpg"
     };*/
-    const response = await axiosAuthInstance.get("", {
+    const response = await axiosAuthInstance.get("auth", {
         headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}
     });
-    return response.data;
+    return response.data.data;
 }

@@ -11,7 +11,7 @@ import {userState} from "../../../state/atoms";
 const UserDetails: FC = () => {
     const navigate = useNavigate();
     const {userId} = useParams();
-    const [globalUser] = useRecoilState(userState);
+    const [globalUser, setGlobalUser] = useRecoilState(userState);
 
     const [checkedItems, changeCheckedItems] = useState<Item[]>([]);
 
@@ -38,6 +38,16 @@ const UserDetails: FC = () => {
         changeCheckedItems([]);
     }
 
+    const addCash = () => {
+        if (globalUser) {
+            UsersApi.addCash(500).then(() => {
+                const tempUser = JSON.parse((JSON.stringify(globalUser)));
+                tempUser.fundsAccount.balance += 500;
+                setGlobalUser(tempUser);
+            });
+        }
+    }
+
     useEffect(() => {
         refetch();
     })
@@ -50,7 +60,7 @@ const UserDetails: FC = () => {
                 </h2>
                 {user ?
                     <div className="flex flex-wrap">
-                        <img src={user.image} alt="User image" className=" rounded-lg max-w-xs max-h-xs"/>
+                        <img src={"/icons/user.jpg"} alt="User image" className=" rounded-lg max-w-xs max-h-xs"/>
                         <div className=" ml-4">
                             <p className=" font-bold text-lg" >{user.name}</p>
                             <div className="flex mb-4">
@@ -62,7 +72,18 @@ const UserDetails: FC = () => {
                             <p>City: {user.city}</p>
                             <p>Member from: {new Date(user.createdAt).toLocaleString()}</p>
                         </div>
-                        {(userId === globalUser?.id) && <button type="button" onClick={() => navigate("counter-offers")}>My counter-offers</button>}
+                        {(userId === globalUser?.id) &&
+                        <button type="button" 
+                        onClick={() => navigate("counter-offers")}
+                        className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                            My counter-offers
+                        </button>}
+
+                        <button type="button"
+                        onClick={addCash}
+                        className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5">
+                            Add 500 cash
+                        </button>
                     </div> :
                     <p className=" text-center text-lg">Loading...</p>
                 }

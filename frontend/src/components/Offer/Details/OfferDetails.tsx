@@ -29,7 +29,7 @@ const OfferDetails: FC = () => {
                 {offer ? 
                     <div className="flex flex-wrap justify-center">
                         <div className=" max-w-xs max-h-xs mr-4">
-                            <img src={item?.image} alt="Item image" className=" rounded-lg"/>
+                            <img src={"/pictures/auto.jpg"} alt="Item image" className=" rounded-lg"/>
                         </div>
                         <div className="flex flex-col">
                             <p className=" text-lg  font-bold">{item?.name}</p>
