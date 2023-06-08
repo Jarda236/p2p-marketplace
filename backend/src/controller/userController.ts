@@ -8,6 +8,7 @@ import z from "zod";
 import { LoginRequest } from "../models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { AuthenticatedRequest, authenticate } from "../utils/middleware/authenticate";
 
 require('dotenv').config();
 const router = Router();
@@ -121,5 +122,13 @@ router.post(
     return handleOkResp(newUser.value, res, `Registered user with id: ${newUser.value.id}`);
   }
 );
+
+router.post(
+  "/add-cash/:amount", authenticate, 
+  async (req: AuthenticatedRequest, res) => {
+    const users = await UserRepository.addCash(req.user!.id, req.params.amount);
+    if (users.isErr) return handleErrorResp(500, res, users.error.message);
+    return handleOkResp(users.value, res, `${req.params.amount} added to user with id: ${users.value.id}`);
+});
 
 export default router;

@@ -156,3 +156,20 @@ export const deleteSingle = async (id: string) => {
     return Result.err(new Error(`Unknown error: ${error}`));
   }
 };
+
+
+export const addCash = async (id: string, amount: string) => {
+  try {
+    const user = await prisma.user.update({
+      where: { id },
+      data: { fundsAccount: { update: { balance: { increment: Number(amount) } } } }
+    });
+
+    return Result.ok(user);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};
