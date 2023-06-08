@@ -76,23 +76,23 @@ router.post(
   validate({ body: LoginRequest }),
   async (req, res) => {
     const usersResult = await UserRepository.getAll();
-    if(usersResult.isErr){
+    if (usersResult.isErr) {
       return handleErrorResp(500, res, usersResult.error.message);
     }
-    const user = usersResult.value.find(u => u.name === req.body.username);
-    if(!user){
+    const user = usersResult.value.find((u) => u.name === req.body.username);
+    if (!user) {
       return handleErrorResp(401, res, "Invalid username");
     }
     const passwordHashed = await bcrypt.hash(req.body.password, user.password_salt!);
     const isMatch = passwordHashed === user.password_hash;
     if (user && isMatch) {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
-      res.json({ "token" : token, "user" : user});
-      return handleOkResp(user, res, `Logged in user with id: ${user.id}`);
+      return res.json({ token: token, user: user, message: `Logged in user with id: ${user.id}` });
     }
     return handleErrorResp(401, res, "Invalid credentials");
   }
 );
+
 
 router.post(
   "/register",
