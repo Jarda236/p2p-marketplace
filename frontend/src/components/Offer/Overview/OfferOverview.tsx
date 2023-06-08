@@ -50,7 +50,7 @@ const OfferOverview: FC<Props> = (props) => {
                 queryKey: ["item", offer.itemId],
                 queryFn: () => ItemsApi.getItemById(offer.itemId),
             };
-        }, refetch()) || [],
+        }) || [],
     });
 
     const {data: categories} = useQuery({
@@ -107,19 +107,18 @@ const OfferOverview: FC<Props> = (props) => {
     });
 
     return( 
-        <>
-        <nav className="bg-gray-300 rounded-lg mx-6 my-4 shadow-lg shadow-gray-300 relative z-0">
+        <div>
+        <div className=" h-auto bg-gray-300 rounded-lg mx-2 sm:mx-6 my-4 shadow-lg shadow-gray-300 relative">
             <div className="max-w-screen-xl px-4 py-3 mx-auto">
-                <div className="flex items-center">
-                <ul className="flex flex-row font-medium mt-0 mr-6 space-x-8 text-sm">
-                    <li>
+                <div className="flex flex-col sm:flex-row font-medium mt-0 space-y-2 sm:space-x-2 sm:space-y-0 text-sm whitespace-nowrap sm:items-center">
+                    <div> 
                         <NavLink to="/offers/create"
-                        className="text-black hover:bg-yellow-400 bg-yellow-300 py-1.5 px-1.5 rounded-lg">
+                        className="p-2 text-black hover:bg-yellow-400 bg-yellow-300 rounded-lg">
                             Create offer
                         </NavLink>
-                    </li>
+                    </div>
 
-                    <li className="flex flex-col">
+                    <div className="flex flex-col">
                     <button
                         type="button"
                         onClick={() => toggleFilterComponents(FilterComponents.Sort)}
@@ -130,9 +129,9 @@ const OfferOverview: FC<Props> = (props) => {
                         columnsToSort={columnsToSort}
                         changeColumnsToSort={changeColumnsToSort} />
                     }
-                    </li>
+                    </div>
 
-                    <li className="flex flex-col">
+                    <div className="flex flex-col">
                         <button
                             type="button"
                             onClick={() => toggleFilterComponents(FilterComponents.Category)}
@@ -144,15 +143,14 @@ const OfferOverview: FC<Props> = (props) => {
                             categories={categories}
                             selectedCategories={categoriesToFilter}/>
                         }
-                    </li>
+                    </div>
 
-                    <li>
+                    <div>
                     <PriceFilter
                         priceToFilter={priceToFilter}
                         changePriceToFilter={changePriceToFilter} />
-                    </li>
+                    </div>
 
-                    <li>
                     <div>
                         <input
                             id="search-field"
@@ -163,16 +161,14 @@ const OfferOverview: FC<Props> = (props) => {
                             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-1"
                         />
                     </div>
-                    </li>
 
-                    <li>
+                    <div>
                     <button type="button" onClick={() => refetch()}
                     className="text-black hover:underline">Refresh</button>
-                    </li>
-                </ul>
+                    </div>
                 </div>
             </div>
-        </nav>
+        </div>
 
         <div>
             <section>
@@ -184,7 +180,7 @@ const OfferOverview: FC<Props> = (props) => {
                 </ul>
             </section>
         </div>
-        </>
+        </div>
     );
 }
 

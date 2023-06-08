@@ -17,8 +17,10 @@ const CounterOfferOverview:FC<CounterOfferOverview> = ({buyerId}) => {
     })
 
     return <>
-        <h2>Counter-Offers</h2>
-        <ul>
+        <h2 className=" mt-2 sm:mt-4 mx-2 sm:mx-10 bg-blue-100 rounded-lg px-2 py-2 shadow-lg shadow-gray-300s">
+            Counter-Offers
+        </h2>
+        <ul className="mb-4">
             {counters ?
                 counters.map(counter =>
                     <li key={counter.id}>
@@ -26,7 +28,11 @@ const CounterOfferOverview:FC<CounterOfferOverview> = ({buyerId}) => {
                     </li>) :
                 <span>Loading...</span>}
         </ul>
-        <NavLink to={`/offers/${offerId}`}>Back</NavLink>
+        
+        <NavLink to={`/offers/${offerId}`}
+                className="ml-2 sm:ml-10 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-10 py-2.5 mx-auto">
+                Back
+        </NavLink>
     </>
 }
 

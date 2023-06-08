@@ -14,22 +14,21 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
     const [user] = useRecoilState(userState);
 
     return (
-    <div className=" bg-blue-100 hover:bg-blue-200 flex flex-row h-48 m-8 rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl
-                       pr-2 pb-2">
-        <section className=" text-lg flex flex-row h-auto">
-            <figure>
+    <div className="mx-2 my-4 sm:pb-2 sm:pr-2 sm:h-auto sm:m-8 md:pb-0 md:pr-0 bg-blue-100 hover:bg-blue-200 flex flex-wrap rounded-md justify-between transition-all shadow-lg shadow-gray-300 hover:shadow-xl overflow-hidden">
+        <section className=" text-base sm:text-lg grid grid-cols-3 sm:flex sm:flex-row h-auto">
+            <figure className="sticky">
                 <img onClick={() => navigate("/offers/".concat(offer.id))} src={item?.image}
-                className=" h-48 w-48 object-cover rounded-md"
+                className=" w-fit h-32 sm:h-48 sm:w-48 object-cover rounded-md"
                 alt={item?.name.concat("-image")} />
             </figure>
-            <div className="flex flex-col mx-4 my-2">
+            <div className=" m-2 col-span-2">
                 <p><b>{item?.name}</b></p>
                 <p>{item?.category}</p>
-                <p className="grow text-base">{item?.description}</p>
+                <p className=" text-sm sm:w-80 sm:text-base">{item?.description}</p>
                 <p><b>{offer.price},-</b></p>
             </div>
         </section>
-        <section className=" text-lg flex flex-col my-2 justify-between">
+        <section className=" text-sm sm:text-base sm:mr-4 flex flex-col my-2 ml-2 justify-between">
             <span><b>Seller: </b>{seller.name}</span>
             <div className=" flex flex-row">
                 <figure className=" mr-4">
@@ -37,7 +36,7 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
                     className=" h-12 w-12 object-cover rounded-full"
                     alt={seller.name.concat("-avatar")} />
                 </figure>
-                <span>{seller.rating}</span>
+                <span className=" font-medium">{seller.rating}</span>
                 <figure className=" ml-1">
                     <img src="/pictures/star.png"
                     className=" h-5 w-5 object-cover"
@@ -45,19 +44,30 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
                 </figure>
             </div>
             <NavLink to={"/users/".concat(seller.id)}
-                className=" relative w-fit block after:block after:content-[''] after:absolute after:h-[3px] after:bg-black after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-cente "
+                className=" relative w-fit block after:block after:absolute after:bg-black hover:scale-x-100"
             >Profile</NavLink>
         </section>
-        <section className="flex flex-col my-2 justify-between">
-            <NavLink to={"/offers/".concat(offer.id)} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Offer detail</NavLink>
+        <section className=" ml-2 sm:grow lg:grow-0 sm:max-w-xs sm:mx-auto flex flex-col my-2 justify-between">
+            <NavLink to={"/offers/".concat(offer.id)}
+            className=" text-center text-xs sm:text-sm px-5 py-2.5 mr-2 mb-2 text-white bg-blue-600 focus:ring-4 font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-blue-800" >
+                Offer detail
+            </NavLink>
             {offer.buyerId ?
-                <span>SOLD</span> :
+                <span className=" text-red-500 font-bold text-xl text-center">SOLD</span> :
                 user?.id === offer.userId ?
-                    <NavLink to={`/offers/${offer.id}/counter-offers`} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" >Counter-offers</NavLink>:
+                    <NavLink to={`/offers/${offer.id}/counter-offers`}
+                    className=" text-center text-xs sm:text-sm px-5 py-2.5 mr-2 mb-2 text-white bg-blue-600 focus:ring-4 font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-blue-800">
+                        Counter-offers
+                    </NavLink>:
                 <>
-                    <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" onClick={() => navigate(`${offer.id}/create-counter-offer`)}>Counter-offer</button>
                     <button
-                        className={"text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800".concat((user?.fundsAccount.balance ?? 0) >= offer.price ? "" : " cursor-not-allowed")}
+                        className=" text-xs sm:text-sm px-5 py-2.5 mr-2 mb-2 text-white bg-green-600 focus:ring-4 font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-green-800"
+                        type="button"
+                        onClick={() => navigate(`${offer.id}/create-counter-offer`)}>
+                            Counter-offer
+                    </button>
+                    <button
+                        className={"text-xs sm:text-sm px-5 py-2.5 mr-2 mb-2 text-white focus:ring-4 font-medium rounded-lg  focus:outline-none ".concat((user?.fundsAccount.balance ?? 0) >= offer.price ? "bg-green-700 hover:bg-green-700 focus:ring-green-800" : " cursor-not-allowed bg-black")}
                         type="button"
                         onClick={() => (user?.fundsAccount.balance ?? 0) >= offer.price && navigate(`/offers/${offer.id}/buy`)}>Buy</button>
                 </>
