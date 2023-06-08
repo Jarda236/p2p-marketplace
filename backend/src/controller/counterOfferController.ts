@@ -9,21 +9,6 @@ import { authenticate } from "../utils/middleware/authenticate";
 
 const router = Router();
 
-
-router.get(
-  "buyer/:id",
-  validate({ params: ParamsWithIdSchema }),
-  async (req, res) => {
-    console.log("TADY")
-    const { id } = req.params;
-    console.log("TADY")
-    const user = await CounterOfferRepository.getAllByBuyerId(id);
-    if (user.isErr) return handleErrorResp(500, res, user.error.message);
-    return handleOkResp(user.value, res, `Listed offer with id: ${id}`);
-  }
-);
-
-
 router.get("/", async (_, res) => {
   const users = await CounterOfferRepository.getAll();
   if (users.isErr) return handleErrorResp(500, res, users.error.message);
@@ -31,9 +16,19 @@ router.get("/", async (_, res) => {
   return handleOkResp(users.value, res, `Listed ${users.value.length} offers`);
 });
 
+router.get(
+  "/buyer/:id",
+  validate({ params: ParamsWithIdSchema }),
+  async (req, res) => {
+    const { id } = req.params;
+    const user = await CounterOfferRepository.getAllByBuyerId(id);
+    if (user.isErr) return handleErrorResp(500, res, user.error.message);
+    return handleOkResp(user.value, res, `Listed offer with id: ${id}`);
+  }
+);
 
 router.get(
-  "offer/:id",
+  "/offer/:id",
   validate({ params: ParamsWithIdSchema }),
   async (req, res) => {
     const { id } = req.params;
