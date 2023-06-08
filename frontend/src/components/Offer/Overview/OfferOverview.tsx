@@ -105,7 +105,7 @@ const OfferOverview: FC<Props> = (props) => {
     });
 
     if (offers && offers.length === 0) {
-        return <span className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">No active offers.</span>
+        return <span className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">No offers.</span>
     }
 
     return( 
