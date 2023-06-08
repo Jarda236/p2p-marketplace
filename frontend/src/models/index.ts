@@ -34,11 +34,15 @@ export interface Offer {
 }
 
 export interface OfferCreateBody {
+    userId: string;
+    userName: string;
     price: number;
     itemId: string;
+    image: string;
 }
 
 export interface OfferUpdateBody {
+    userId: string;
     price?: number;
     itemId?: string;
 }
@@ -62,14 +66,14 @@ export interface ItemCreateBody {
     name: string;
     description: string;
     category: string;
-    image: string | ArrayBuffer | null;
+    image: string;
 }
 
 export interface ItemUpdateBody {
     name: string;
     description: string;
     category: string;
-    image: string | ArrayBuffer | null;
+    image: string;
 }
 
 export interface CounterOffer {
@@ -78,16 +82,19 @@ export interface CounterOffer {
     buyerId: string;
     price: number;
     status: boolean | null;
-    itemsId: Array<string>
+    itemsID: Array<string>
 }
 
 export interface CounterOfferCreateBody {
     offerId: string;
+    userId: string;
+    status: boolean | null;
     price: number;
-    itemsId: Array<string>
+    itemsID: Array<string>
 }
 
 export interface CounterOfferUpdateBody {
+    status: boolean | null;
     price: number;
-    itemsId: Array<string>
+    itemsID: Array<string>
 }

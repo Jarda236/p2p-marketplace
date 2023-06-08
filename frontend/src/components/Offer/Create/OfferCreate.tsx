@@ -6,6 +6,8 @@ import {OffersApi} from "../../../services";
 import {Item} from "../../../models";
 import {NavLink} from "react-router-dom";
 import ItemOverview from "../../Item/Overview/ItemOverview";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
 interface CreateOfferFormData {
     price: number
@@ -23,6 +25,8 @@ const OfferCreate: FC = () => {
 
     const [checkedItems, changeCheckedItems] = useState<Item[]>([]);
 
+    const [user] = useRecoilState(userState);
+
     const {register, handleSubmit, formState: {errors, isSubmitted}} = useForm<CreateOfferFormData>({
         resolver: yupResolver(OfferCreateSchema)
     });
@@ -32,7 +36,13 @@ const OfferCreate: FC = () => {
             setReason("You have to check one item.")
             return;
         }
-        await OffersApi.createOffer({price: data.price, itemId: checkedItems[0].id}).then(() => {
+        await OffersApi.createOffer({
+            userId: user?.id ?? "",
+            userName: user?.name ?? "",
+            price: data.price,
+            itemId: checkedItems[0].id,
+            image: "dadsad"
+        }).then(() => {
             setReason("OK");
             checkedItems[0].blocked = true;
         }).catch((reason) => setReason(reason.message));

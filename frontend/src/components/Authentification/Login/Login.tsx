@@ -30,7 +30,7 @@ const Login: FC = () => {
     });
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-        await AuthApi.login({name: data.name, password: data.password})
+        await AuthApi.login({username: data.name, password: data.password})
             .then((response) => {
                 if (response.token === undefined) {
                     return;

@@ -19,7 +19,7 @@ const UserInfo:FC<UserInfoProps> = ({user, setUser}) => {
         <section className=" flex flex-col">
             <div className="  justify-self-center">
                 <NavLink to={user ? "/users/".concat(user.id) : "/auth/login"}>
-                    <img src={user ? user.image : "/icons/user.jpg"}
+                    <img src={"/icons/user.jpg"}
                         onClick={() => user !== undefined && navigate("/users/".concat(user.id))}
                         className="h-0 w-0 sm:h-12 sm:w-12 object-cover rounded-full"
                         alt={user ? user.name.concat("-avatar") : "guest-avatar"}/>

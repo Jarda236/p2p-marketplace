@@ -20,7 +20,7 @@ const CounterOfferDetails: FC = () => {
     })
 
     const items = useQueries({
-        queries: counter?.itemsId.map((itemId) => {
+        queries: counter?.itemsID.map((itemId) => {
             return {
             queryKey: ["item", itemId],
                 queryFn: () => ItemsApi.getItemById(itemId)

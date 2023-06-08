@@ -35,6 +35,7 @@ const ItemCreate: FC = () => {
     const onSubmit: SubmitHandler<CreateItemFormData> = async (data) => {
         if (selectedCategory.length === 0) {
             setReason("You have to check one category.");
+            return;
         }
         if (image){
             await ImagesApi.postImage(image.data)
@@ -42,7 +43,7 @@ const ItemCreate: FC = () => {
                     name: data.name,
                     description: data.description,
                     image: response,
-                    category: selectedCategory[0]
+                    category: selectedCategory[0],
                 }).then(() => {
                 setReason("OK");
                 })
@@ -53,7 +54,7 @@ const ItemCreate: FC = () => {
                 name: data.name,
                 description: data.description,
                 image: "",
-                category: selectedCategory[0]
+                category: selectedCategory[0],
             }).then(() => {
                 setReason("OK");
             })
