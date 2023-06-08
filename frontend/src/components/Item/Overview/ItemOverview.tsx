@@ -15,7 +15,7 @@ const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, toggleItem}) => {
 
     const {data: items} = useQuery({
         queryKey: ['items'],
-        queryFn: () => ItemsApi.getItems()
+        queryFn: () => ItemsApi.getUserItems()
     })
     return <div>
         {items ?

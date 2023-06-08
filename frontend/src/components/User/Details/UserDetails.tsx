@@ -11,7 +11,7 @@ import {userState} from "../../../state/atoms";
 const UserDetails: FC = () => {
     const navigate = useNavigate();
     const {userId} = useParams();
-    const [globalUser] = useRecoilState(userState);
+    const [globalUser, setGlobalUser] = useRecoilState(userState);
 
     const [checkedItems, changeCheckedItems] = useState<Item[]>([]);
 
@@ -36,6 +36,16 @@ const UserDetails: FC = () => {
             await ItemsApi.deleteItemById(item.id);
         })
         changeCheckedItems([]);
+    }
+
+    const addCash = () => {
+        if (globalUser) {
+            UsersApi.addCash(500).then(() => {
+                const tempUser = JSON.parse((JSON.stringify(globalUser)));
+                tempUser.fundsAccount.balance += 500;
+                setGlobalUser(tempUser);
+            });
+        }
     }
 
     useEffect(() => {
@@ -63,6 +73,7 @@ const UserDetails: FC = () => {
                             <p>Member from: {new Date(user.createdAt).toLocaleString()}</p>
                         </div>
                         {(userId === globalUser?.id) && <button type="button" onClick={() => navigate("counter-offers")}>My counter-offers</button>}
+                        <button type="button" onClick={addCash}>Add 500 cash</button>
                     </div> :
                     <p className=" text-center text-lg">Loading...</p>
                 }

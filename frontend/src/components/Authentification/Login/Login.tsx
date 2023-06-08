@@ -6,6 +6,7 @@ import {object, string} from "yup";
 import { AuthApi } from "../../../services";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
+import {updateTokenAndAxiosInstance} from "../../../services/base";
 
 type LoginFormData = {
     name: string;
@@ -30,14 +31,14 @@ const Login: FC = () => {
     });
 
     const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
-        await AuthApi.login({name: data.name, password: data.password})
+        await AuthApi.login({username: data.name, password: data.password})
             .then((response) => {
                 if (response.token === undefined) {
                     return;
                 }
                 setSuccess(true);
                 setUser(response.user);
-                localStorage.setItem('token', response.token);
+                updateTokenAndAxiosInstance(response.token);
                 navigate("/");
             })
             .catch(() => setSuccess(false));

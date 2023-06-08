@@ -35,14 +35,17 @@ const ItemCreate: FC = () => {
     const onSubmit: SubmitHandler<CreateItemFormData> = async (data) => {
         if (selectedCategory.length === 0) {
             setReason("You have to check one category.");
+            return;
         }
         if (image){
             await ImagesApi.postImage(image.data)
                 .then(async (response) => await ItemsApi.createItem({
+                    userId: user?.id ?? "",
                     name: data.name,
                     description: data.description,
                     image: response,
-                    category: selectedCategory[0]
+                    category: selectedCategory[0],
+                    blocked: false
                 }).then(() => {
                 setReason("OK");
                 })
@@ -50,10 +53,12 @@ const ItemCreate: FC = () => {
                 .catch((reason) => setReason(reason.message))
         } else {
             await ItemsApi.createItem({
+                userId: user?.id ?? "",
                 name: data.name,
                 description: data.description,
-                image: "",
-                category: selectedCategory[0]
+                image: "dsad",
+                category: selectedCategory[0],
+                blocked: false
             }).then(() => {
                 setReason("OK");
             })

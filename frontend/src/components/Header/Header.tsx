@@ -12,16 +12,16 @@ const Header:FC = () => {
     const [auth, setAuth] = useRecoilState(initialAuth);
 
     const runInitialAuth = async () => {
-        if (user === undefined && !auth) {
+        if (user === undefined && (localStorage.getItem('token') !== null)) {
             setAuth(true);
             await AuthApi.isAuthenticated()
                 .then(r => setUser(r))
-                .catch();
+                .catch(() => localStorage.removeItem('token'));
         }
     }
 
     useEffect(() => {
-        runInitialAuth();
+        !auth && runInitialAuth();
     })
 
     return ( 
