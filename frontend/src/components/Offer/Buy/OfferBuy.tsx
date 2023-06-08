@@ -40,8 +40,20 @@ const OfferBuy: FC = () => {
 
     return <div>
         <span>Do you really want to buy this item?</span>
-        <button type="button" onClick={buy}>Yes</button>
-        <button type="button" onClick={() => navigate(`/offers/${offerId}`)}>No</button>
+        <span className="mx-10 bg-blue-100 rounded-lg px-2 py-2 shadow-lg shadow-gray-300s">
+            Do you really want to buy this item?
+        </span>
+        <button type="button"
+        onClick={buy}
+        className="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5">
+            Yes
+        </button>
+
+        <button type="button"
+        onClick={() => navigate(`/offers/${offerId}`)}
+        className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-10 py-2.5">
+            No
+        </button>
     </div>
 }
 
