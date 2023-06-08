@@ -9,7 +9,12 @@ const UserCounterOfferOverview:FC = () => {
     const [user] = useRecoilState(userState);
 
     if (user?.id !== userId) {
-        return <span>You can not view other user counter-offers.</span>
+        return(
+            <div className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">
+                    <span>You can not view other user counter-offers.</span>
+                </div>
+        ) 
+        
     }
 
     return <>
