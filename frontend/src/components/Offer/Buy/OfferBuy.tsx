@@ -1,7 +1,9 @@
 import {FC, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
 import { OffersApi } from "../../../services";
 import Popup from "../../Popup/Popup";
+import {useRecoilState} from "recoil";
+import {userState} from "../../../state/atoms";
 
 interface ResultType {
     success: boolean;
@@ -14,6 +16,7 @@ const OfferBuy: FC = () => {
     const navigate = useNavigate();
 
     const [result, changeResult] = useState<ResultType | null>(null);
+    const [user] = useRecoilState(userState);
 
     const buy = async () => {
         await OffersApi.offerBuy(offerId ?? "")
@@ -21,8 +24,20 @@ const OfferBuy: FC = () => {
             .catch(() => changeResult({success: false, text: "Buy unsuccessfull.", fallbackUrl: `/offers`}))
     }
 
+    if (result) {
+        return <>
+            <span>Successfully bought!</span>
+            <NavLink to="/">Back</NavLink>
+        </>
+    }
+    if (result === false) {
+        return <>
+            <span>Buying proccess failed!</span>;
+            <NavLink to="/">Back</NavLink>
+        </>
+    }
+
     return <div>
-        {result !== null && <Popup text={result.text} success={result.success} fallbackUrl={result.fallbackUrl} />}
         <span>Do you really want to buy this item?</span>
         <button type="button" onClick={buy}>Yes</button>
         <button type="button" onClick={() => navigate(`/offers/${offerId}`)}>No</button>
