@@ -23,6 +23,7 @@ export const deleteItemById = async (itemId: string):Promise<void> => {
 }
 
 export const createItem = async (item: ItemCreateBody): Promise<void> => {
+    console.log(item)
     const response = await axiosInstance.post("/items", item, {
         headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}
     });

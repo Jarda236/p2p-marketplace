@@ -60,7 +60,7 @@ const UserDetails: FC = () => {
                 </h2>
                 {user ?
                     <div className="flex flex-wrap">
-                        <img src={user.image} alt="User image" className=" rounded-lg max-w-xs max-h-xs"/>
+                        <img src={"/icons/user.jpg"} alt="User image" className=" rounded-lg max-w-xs max-h-xs"/>
                         <div className=" ml-4">
                             <p className=" font-bold text-lg" >{user.name}</p>
                             <div className="flex mb-4">

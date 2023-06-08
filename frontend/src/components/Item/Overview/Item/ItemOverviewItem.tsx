@@ -18,7 +18,7 @@ const ItemOverviewItem: FC<ItemOverviewItemProps> = ({item, toggleItem, checked}
     }>
         <section className=" text-lg flex flex-row h-auto">
             <figure>
-                <img src={item.image}
+                <img src={item.image === "" ? "/pictures/auto.jgp" : item.image}
                      className=" h-48 w-48 object-cover rounded-md"
                      alt={item.name.concat("-image")} />
             </figure>
