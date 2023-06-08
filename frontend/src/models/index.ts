@@ -34,11 +34,15 @@ export interface Offer {
 }
 
 export interface OfferCreateBody {
+    userId: string;
+    userName: string;
     price: number;
     itemId: string;
+    image: string;
 }
 
 export interface OfferUpdateBody {
+    userId: string;
     price?: number;
     itemId?: string;
 }

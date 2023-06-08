@@ -16,13 +16,14 @@ export const getOfferById = async (offerId: string): Promise<Offer | null> => {
 }
 
 export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
-    console.log(offer)
+    console.log(offer);
     const response = await axiosInstance.post("/offers", offer, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${localStorage.getItem('token')}`
         }
     });
+    console.log(response)
     return response.data.data;
 }
 export const deleteOfferById = async (offerId: string): Promise<void> => {
