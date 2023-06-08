@@ -56,7 +56,7 @@ const ItemCreate: FC = () => {
                 userId: user?.id ?? "",
                 name: data.name,
                 description: data.description,
-                image: "dsad",
+                image: "dsaddsa",
                 category: selectedCategory[0],
                 blocked: false
             }).then(() => {
