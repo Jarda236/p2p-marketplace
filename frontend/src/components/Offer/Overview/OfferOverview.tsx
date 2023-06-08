@@ -104,6 +104,10 @@ const OfferOverview: FC<Props> = (props) => {
         columnsToSort: columnsToSort
     });
 
+    if (offers && offers.length === 0) {
+        return <span className="mt-4 mx-10 bg-red-400 rounded-lg px-2 py-2 shadow-lg shadow-gray-300">No active offers.</span>
+    }
+
     return( 
         <div>
         <div className=" h-auto bg-gray-300 rounded-lg mx-2 sm:mx-6 my-4 shadow-lg shadow-gray-300 relative">
