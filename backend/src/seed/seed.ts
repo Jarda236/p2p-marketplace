@@ -48,7 +48,6 @@ async function main() {
         category: 'Electronics',
         userId: user1.id,
         image: 'item1.jpg',
-        blocked: true,
       },
     });
   
@@ -59,7 +58,6 @@ async function main() {
         category: 'Furniture',
         userId: user2.id,
         image: 'item2.jpg',
-        blocked: true,
       },
     });
   
