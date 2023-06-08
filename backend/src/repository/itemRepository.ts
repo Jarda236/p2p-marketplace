@@ -37,10 +37,12 @@ export const getSingle = async (
 };
 
 export const createSingle = async (
+  userId: string,
   data: ItemCreate
 ): Promise<Result<Item, Error>> => {
   try {
-    const dataa = { ...data, counterOfferId: null, offerId: null };
+    data.blocked = false;
+    const dataa = { ...data, counterOfferId: null, offerId: null, userId: userId };
     const item = await prisma.item.create({ data: dataa });
     return Result.ok(item);
   } catch (error) {

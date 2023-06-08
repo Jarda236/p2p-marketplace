@@ -36,27 +36,29 @@ router.get(
   }
 );
 
-router.post("/", validate({ body: ItemCreateSchema }), async (req, res) => {
-  const data = req.body;
-  const items = await ItemRepository.createSingle(data);
-  if (items.isErr) return handleErrorResp(500, res, items.error.message);
-  return handleOkResp(
-    items.value,
-    res,
-    `Created item with id: ${items.value.id}`
-  );
+router.post("/", authenticate, validate({ body: ItemCreateSchema }),
+  async (req: AuthenticatedRequest, res) => {
+    const data = req.body;
+    const userId = req.user!.id;
+    const items = await ItemRepository.createSingle(userId, data);
+    if (items.isErr) return handleErrorResp(500, res, items.error.message);
+    return handleOkResp(
+      items.value,
+      res,
+      `Created item with id: ${items.value.id}`
+    );
 });
 
 router.put(
-  "/:id",
-  validate({ params: ParamsWithIdSchema, body: ItemUpdateSchema }),
-  async (req, res) => {
+  "/",
+  authenticate,
+  validate({ body: ItemUpdateSchema }),
+  async (req: AuthenticatedRequest, res) => {
     try {
-      const { id } = req.params;
       const data = req.body;
-      const items = await ItemRepository.updateSingle(id, data);
+      const items = await ItemRepository.updateSingle(req.user!.id, data);
       if (items.isErr) return handleErrorResp(500, res, items.error.message);
-      return handleOkResp(items.value, res, `Updated item with id: ${id}`);
+      return handleOkResp(items.value, res, `Updated item with id: ${req.user!.id}`);
     } catch (error) {
       if (error instanceof z.ZodError)
         return handleErrorResp(400, res, error.message);

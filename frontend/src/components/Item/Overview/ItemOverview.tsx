@@ -25,7 +25,11 @@ const ItemOverview: FC<ItemOverviewProps> = ({checkedItems, toggleItem}) => {
                             <ItemOverviewItem item={item} toggleItem={toggleItem} checked={checkedItems.findIndex(i => i.id === item.id) !== -1 && true}/>
                         </li>)}
             </ul> :
-        <span>Loading...</span>}
+        <div className="my-10 p-4 mx-10 text-center bg-slate-100">
+        <span >
+            Loading...
+        </span>
+        </div>}
     </div>
 }
 

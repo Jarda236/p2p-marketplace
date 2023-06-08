@@ -27,7 +27,7 @@ const OfferDetails: FC = () => {
             <h2 className=" text-xl font-bold leading-tight tracking-tight text-center mb-4">Offer details</h2>
             <div>
                 {offer ? 
-                    <div className=" flex flex-wrap">
+                    <div className="flex flex-wrap justify-center">
                         <div className=" max-w-xs max-h-xs mr-4">
                             <img src={item?.image} alt="Item image" className=" rounded-lg"/>
                         </div>

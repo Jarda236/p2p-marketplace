@@ -79,6 +79,6 @@ model Item {
   counterOfferId String?
   user           User          @relation(fields: [userId], references: [id])
   userId         String
-  image          String
+  image          String?
   blocked        Boolean?
 }

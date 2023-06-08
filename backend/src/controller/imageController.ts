@@ -1,15 +1,4 @@
 import { Router } from "express";
-import { ItemCreateSchema, ItemUpdateSchema } from "../models/itemModels";
-import { ItemRepository } from "../repository";
-import { handleErrorResp, handleOkResp } from "../utils";
-import { ParamsWithIdSchema } from "../models/baseModels";
-import { validate } from "../utils/middleware/validate";
-import z from "zod";
-import {
-  AuthenticatedRequest,
-  authenticate,
-} from "../utils/middleware/authenticate";
-
 import path from "path";
 import express, { Request, Response } from "express";
 import { Multer } from "multer";
