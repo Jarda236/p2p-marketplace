@@ -9,9 +9,15 @@ import { authenticate } from "../utils/middleware/authenticate";
 
 const router = Router();
 
+router.get("/", async (_, res) => {
+  const users = await CounterOfferRepository.getAll();
+  if (users.isErr) return handleErrorResp(500, res, users.error.message);
+
+  return handleOkResp(users.value, res, `Listed ${users.value.length} offers`);
+});
 
 router.get(
-  "buyer/:id",
+  "/buyer/:id",
   validate({ params: ParamsWithIdSchema }),
   async (req, res) => {
     console.log("TADY")
@@ -23,17 +29,8 @@ router.get(
   }
 );
 
-
-router.get("/", async (_, res) => {
-  const users = await CounterOfferRepository.getAll();
-  if (users.isErr) return handleErrorResp(500, res, users.error.message);
-
-  return handleOkResp(users.value, res, `Listed ${users.value.length} offers`);
-});
-
-
 router.get(
-  "offer/:id",
+  "/offer/:id",
   validate({ params: ParamsWithIdSchema }),
   async (req, res) => {
     const { id } = req.params;
