@@ -17,6 +17,20 @@ export const getAll = async (): Promise<Result<Item[], Error>> => {
   }
 };
 
+export const getAllbyUser = async (userId: string): Promise<Result<Item[], Error>> => {
+  try {
+    const result = await prisma.item.findMany({
+      where: { userId: userId, deletedAt: null },
+    });
+    return Result.ok(result);
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return Result.err(error);
+    }
+    return Result.err(new Error(`Unknown error: ${error}`));
+  }
+};
+
 export const getSingle = async (
   id: string
 ): Promise<Result<Item | null, Error>> => {

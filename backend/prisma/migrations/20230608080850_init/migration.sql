@@ -6,7 +6,8 @@
 */
 -- AlterTable
 ALTER TABLE "Item" DROP COLUMN "status",
-ADD COLUMN     "blocked" BOOLEAN;
+ADD COLUMN     "blocked" BOOLEAN,
+ALTER COLUMN "image" DROP NOT NULL;
 
 -- AddForeignKey
 ALTER TABLE "Item" ADD CONSTRAINT "Item_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -11,9 +11,9 @@ const router = Router();
 
 router.get("/logged-user", authenticate, 
   async (req: AuthenticatedRequest, res) => {
-    const items = await ItemRepository.getAll();
+    const items = await ItemRepository.getAllbyUser(req.user!.id);
     if(items.isErr) return handleErrorResp(500, res, items.error.message);
-    const result = items.value.filter(x => x.id === req.user!.id);
+    const result = items.value.filter(x => x.userId === req.user!.id);
     return handleOkResp(result, res, `Listed ${result.length}`);
   }
 );

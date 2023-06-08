@@ -186,7 +186,7 @@ export const acceptSingle = async (
       
       const buyer = await transaction.user.update({
         where: { id: counterOffer.userId },
-        data: { items: { connect: items.map(item => ({ id: item.id })) } },
+        data: { items: { connect: items.map(item => ({ id: item.id })) }, fundsAccount: {update: {balance: counterOffer.price}} },
       });
       
       var pom = { ...counterOffer, price: counterOffer.price.toNumber(), items };
