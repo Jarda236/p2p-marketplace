@@ -10,7 +10,11 @@ router.get("/", authenticate, async (req: AuthenticatedRequest, res) => {
     if(!user){
         return handleErrorResp(404, res, "User not found");
     }
-    return handleOkResp(user, res, `User is found with id: ${req.user!.id}`);
+    if(user.isErr){
+        return handleErrorResp(500, res, "Internal server error");
+    }    
+    return handleOkResp(user.value, res, `User is found with id: ${req.user!.id}`)
+
 });
 
   export default router;
