@@ -5,7 +5,7 @@ import { handleErrorResp, handleOkResp } from "../utils";
 import { ParamsWithIdSchema } from "../models/baseModels";
 import { validate } from "../utils/middleware/validate";
 import z from "zod";
-import { LoginRequest } from "../models";
+import { FundsAccount, LoginRequest } from "../models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { AuthenticatedRequest, authenticate } from "../utils/middleware/authenticate";
@@ -116,9 +116,6 @@ router.post(
     if (newUser.isErr) {
       return handleErrorResp(500, res, newUser.error.message);
     }
-    
-    const token = jwt.sign({ userId: newUser.value.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
-    res.json({ "token" : token, "user" : newUser.value});
     return handleOkResp(newUser.value, res, `Registered user with id: ${newUser.value.id}`);
   }
 );
@@ -127,6 +124,7 @@ router.post(
   "/add-cash/:amount", authenticate, 
   async (req: AuthenticatedRequest, res) => {
     const users = await UserRepository.addCash(req.user!.id, req.params.amount);
+    
     if (users.isErr) return handleErrorResp(500, res, users.error.message);
     return handleOkResp(users.value, res, `${req.params.amount} added to user with id: ${users.value.id}`);
 });
