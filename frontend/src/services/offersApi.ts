@@ -16,6 +16,7 @@ export const getOfferById = async (offerId: string): Promise<Offer | null> => {
 }
 
 export const createOffer = async (offer: OfferCreateBody): Promise<void> => {
+    console.log(offer)
     const response = await axiosInstance.post("/offers", offer, {
         headers: {
             "Content-Type": "application/json",
