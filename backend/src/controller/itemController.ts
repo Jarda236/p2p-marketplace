@@ -50,13 +50,14 @@ router.post("/", authenticate, validate({ body: ItemCreateSchema }),
 });
 
 router.put(
-  "/",
+  "/:id",
   authenticate,
-  validate({ body: ItemUpdateSchema }),
+  validate({ body: ItemUpdateSchema, params: ParamsWithIdSchema }),
   async (req: AuthenticatedRequest, res) => {
     try {
       const data = req.body;
-      const items = await ItemRepository.updateSingle(req.user!.id, data);
+      const itemId = req.params.id;
+      const items = await ItemRepository.updateSingle(itemId, req.user!.id, data);
       if (items.isErr) return handleErrorResp(500, res, items.error.message);
       return handleOkResp(items.value, res, `Updated item with id: ${req.user!.id}`);
     } catch (error) {

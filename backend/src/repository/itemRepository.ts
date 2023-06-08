@@ -54,20 +54,20 @@ export const createSingle = async (
 };
 
 export const updateSingle = async (
-  id: string,
+  itemId: string,
+  userId: string,
   data: ItemUpdate
 ): Promise<Result<Item, Error>> => {
   try {
     return Result.ok(
       await prisma.$transaction(async (transaction) => {
-        const i = await transaction.item.findUnique({ where: { id } });
+        const i = await transaction.item.findUnique({ where: { id: itemId } });
         if (!i || i.deletedAt) {
           throw new Error("Item not found");
         }
-
         const item = await transaction.item.update({
-          where: { id },
-          data,
+          where: { id: itemId },
+          data: { ...data, userId: userId },
         });
         return item;
       })
