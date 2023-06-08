@@ -38,7 +38,7 @@ const ItemUpdate:FC = () => {
         }
         if (image){
             await ImagesApi.postImage(image.data)
-                .then(async (response) => await ItemsApi.updateItem({
+                .then(async (response) => await ItemsApi.updateItem(item?.id ?? "", {
                     name: data.name,
                     description: data.description,
                     image: response,
@@ -49,10 +49,10 @@ const ItemUpdate:FC = () => {
                     .catch((reason) => setReason(reason.message)))
                 .catch((reason) => setReason(reason.message))
         } else {
-            await ItemsApi.updateItem({
+            await ItemsApi.updateItem(item?.id ?? "", {
                 name: data.name,
                 description: data.description,
-                image: "dsad",
+                image: "",
                 category: selectedCategory[0]
             }).then(() => {
                 setReason("OK");

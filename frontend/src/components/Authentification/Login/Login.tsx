@@ -6,7 +6,6 @@ import {object, string} from "yup";
 import { AuthApi } from "../../../services";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
-import {updateTokenAndAxiosInstance} from "../../../services/base";
 
 type LoginFormData = {
     name: string;
@@ -38,7 +37,7 @@ const Login: FC = () => {
                 }
                 setSuccess(true);
                 setUser(response.user);
-                updateTokenAndAxiosInstance(response.token);
+                localStorage.setItem('token', response.token);
                 navigate("/");
             })
             .catch(() => setSuccess(false));
