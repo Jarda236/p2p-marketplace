@@ -108,9 +108,9 @@ const OfferOverview: FC<Props> = (props) => {
 
     return( 
         <div>
-        <div className=" h-auto bg-gray-300 rounded-lg mx-6 my-4 shadow-lg shadow-gray-300 relative">
+        <div className=" h-auto bg-gray-300 rounded-lg mx-2 sm:mx-6 my-4 shadow-lg shadow-gray-300 relative">
             <div className="max-w-screen-xl px-4 py-3 mx-auto">
-                <div className="flex flex-col sm:flex-row font-medium mt-0 mr-6 space-y-2 sm:space-x-2 sm:space-y-0 text-sm whitespace-nowrap sm:items-center">
+                <div className="flex flex-col sm:flex-row font-medium mt-0 space-y-2 sm:space-x-2 sm:space-y-0 text-sm whitespace-nowrap sm:items-center">
                     <div> 
                         <NavLink to="/offers/create"
                         className="p-2 text-black hover:bg-yellow-400 bg-yellow-300 rounded-lg">
