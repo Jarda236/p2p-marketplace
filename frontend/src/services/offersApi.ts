@@ -45,7 +45,9 @@ export const updateOffer = async (offerId: string, offer: OfferUpdateBody): Prom
 
 export const offerBuy = async (offerId: string): Promise<void> => {
     const response = await axiosInstance.post(`/offers/${offerId}/buy`, {
-        headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`}
     });
     return response.data.data;
 }

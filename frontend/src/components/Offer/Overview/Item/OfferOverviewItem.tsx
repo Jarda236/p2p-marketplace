@@ -63,7 +63,7 @@ const OfferOverviewItem: FC<OfferOverviewItemProps> = ({offer, seller, item}) =>
                     <button
                         className=" text-xs sm:text-sm px-5 py-2.5 mr-2 mb-2 text-white bg-green-600 focus:ring-4 font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-green-800"
                         type="button"
-                        onClick={() => navigate(`${offer.id}/create-counter-offer`)}>
+                        onClick={() => navigate(`/offers/${offer.id}/create-counter-offer`)}>
                             Counter-offer
                     </button>
                     <button

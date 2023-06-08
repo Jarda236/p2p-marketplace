@@ -23,6 +23,7 @@ export const getCounterOffersByBuyerId = async (buyerId: string): Promise<Array<
 }
 
 export const createCounterOffer = async (counterOffer: CounterOfferCreateBody): Promise<void> => {
+    console.log(counterOffer)
     const response = await axiosInstance.post("/counter-offer", counterOffer, {
         headers: {
             "Content-Type": "application/json",

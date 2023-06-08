@@ -4,6 +4,7 @@ import { OffersApi } from "../../../services";
 import Popup from "../../Popup/Popup";
 import {useRecoilState} from "recoil";
 import {userState} from "../../../state/atoms";
+import {tuple} from "yup";
 
 interface ResultType {
     success: boolean;
@@ -24,7 +25,7 @@ const OfferBuy: FC = () => {
             .catch(() => changeResult({success: false, text: "Buy unsuccessfull.", fallbackUrl: `/offers`}))
     }
 
-    if (result) {
+    if (result !== null && result) {
         return <>
             <span>Successfully bought!</span>
             <NavLink to="/">Back</NavLink>

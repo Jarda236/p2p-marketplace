@@ -17,7 +17,9 @@ export const getUserById = async (userId: string): Promise<User> => {
 
 export const addCash = async (amount: number): Promise<void> => {
     const response = await axiosInstance.post(`/users/add-cash/${amount}`, {
-        headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`}
     });
     return response.data.data;
 }

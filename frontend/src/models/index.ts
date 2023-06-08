@@ -82,16 +82,19 @@ export interface CounterOffer {
     buyerId: string;
     price: number;
     status: boolean | null;
-    itemsId: Array<string>
+    itemsID: Array<string>
 }
 
 export interface CounterOfferCreateBody {
     offerId: string;
+    userId: string;
+    status: boolean | null;
     price: number;
-    itemsId: Array<string>
+    itemsID: Array<string>
 }
 
 export interface CounterOfferUpdateBody {
+    status: boolean | null;
     price: number;
-    itemsId: Array<string>
+    itemsID: Array<string>
 }

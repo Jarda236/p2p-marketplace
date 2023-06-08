@@ -11,7 +11,7 @@ const CounterOfferDetailsItem:FC<CounterOfferDetailsItemProps> = ({item}) => {
         }>
         <section className=" text-lg flex flex-row h-auto">
             <figure>
-                <img src={item.image}
+                <img src={"/pictures/auto.jpg"}
                      className=" h-48 w-48 object-cover rounded-md"
                      alt={item.name.concat("-image")} />
             </figure>

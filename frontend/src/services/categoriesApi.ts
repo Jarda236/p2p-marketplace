@@ -3,7 +3,9 @@ import axiosInstance from "./base";
 const CATEGORIES: string[] = [
     "Cars",
     "Boats",
-    "Planes"
+    "Planes",
+    "Electronics",
+    "Furniture"
 ]
 export const getCategories = async (): Promise<Array<string>> => {
     return CATEGORIES;

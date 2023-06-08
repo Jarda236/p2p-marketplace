@@ -38,7 +38,11 @@ const CounterOfferCreate: FC = () => {
             return;
         }
         await CounterOffersApi.createCounterOffer({
-            offerId: offerId ?? "", price: data.price, itemsId: checkedItems.map(i => {
+            offerId: offerId ?? "",
+            userId: user?.id ?? "",
+            status: null,
+            price: data.price,
+            itemsID: checkedItems.map(i => {
                 i.blocked = true;
                 return i.id;
             })
